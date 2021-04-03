@@ -1,0 +1,133 @@
+/* Selettori generici */
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; height: 100%; font: 100% arial, sans-serif; color: #444; }
+
+
+
+
+
+/* Datepicker */
+div.interval-container {
+  position: relative;
+  margin-top: 10px;
+  user-select: none;
+}
+
+  div.interval-container .interval-background { background-color: #eee; color: #444; }
+  div.interval-container .active-a-background, div.interval-container .active-a-background input { background-color: #fec601; color: #000; }
+  div.interval-container .active-b-background { background-color: #0b6e38; color: #fff; }
+
+  div.interval-container label {
+    display: inline-block;
+    padding: 5px;
+    text-transform: uppercase;
+    font-size: 13px;
+  }
+
+  div.datetime {
+    border-radius: 5px 5px 0 0;
+    width: 100%;
+    font-variant: small-caps;
+    padding: 5px;
+    text-align: center;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+    /* Pulsanti che aprono i pannelli con il calendario o la griglia degli orari */
+    div.datetime div {
+      display: inline-block;
+      width: 50%;
+      height: 50px;
+      cursor: pointer;
+    }
+
+    div.datetime div.time { float: right; }
+    div.datetime span { display: inline-block; margin: 0 -3px; }
+
+    div.date span.week-day { text-align: right; font-size: 18px; }
+    div.date input {
+      -webkit-appearance: none;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      padding: 0;
+      width: 45px;
+      height: auto;
+      text-align: center;
+      font-family: arial, sans-serif;
+      font-size: 36px;
+    }
+    div.date input:focus { background: transparent; }
+    div.date span.month-year { text-align: left; }
+    div.date span em { position: relative; top: 2px; font-style: normal; }
+
+    div.time span:first-child { color: #000; }
+
+      /* Pannelli con il calendario o la griglia degli orari */
+      div.picker {
+        display: none;
+        position: absolute;
+        z-index: 2;
+        border-radius: 0 0 5px 5px;
+        box-shadow: 0 1px 10px #555;
+        background-color: #fff;
+        width: 100%;
+        color: #444;
+      }
+
+      div.picker table {
+        margin: 0 auto;
+        border-collapse: collapse;
+        width: 100%;
+        max-width: 450px;
+      }
+
+      div.picker table a {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        text-decoration: none;
+        color: #000;
+      }
+
+      div.picker table th {
+        font-weight: bold;
+        font-size: 20px;
+      }
+
+      div.picker table th span.number { font-weight: normal; }
+
+      div.picker table th, div.picker table td {
+        border-bottom: 1px solid #ddd;
+        padding: 10px 5px;
+        text-align: center;
+        vertical-align: middle;
+      }
+
+      div.picker table td.day-label { font-variant: small-caps; }
+      div.picker table td.disabled, div.picker table a.disabled { color: #ccc; }
+
+      div.picker table td.start, div.picker table td.end {
+        background-repeat: no-repeat;
+        font-weight: bold;
+      }
+
+      div.picker table td.start {
+        /* background-image: url(../img/datepicker/start_min.svg); */
+        background-position: left center;
+      }
+
+      div.picker table td.end {
+        /* background-image: url(../img/datepicker/end_min.svg); */
+        background-position: right center;
+      }
+
+      div.picker table td.start.end {
+        /* background-image: url(../img/datepicker/start_min.svg), url(../img/datepicker/end_min.svg); */
+        background-position: left center, right center;
+      }
+
+      div.picker table td.selectable { cursor: pointer; }
+      div.picker table td.selectable:hover { font-weight: bold; }

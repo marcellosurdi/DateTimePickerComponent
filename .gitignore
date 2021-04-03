@@ -1,0 +1,5 @@
+/dist
+/jsdoc
+/node_modules
+start-dev.bat
+start-jsdoc.bat

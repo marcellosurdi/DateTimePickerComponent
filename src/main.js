@@ -47,7 +47,8 @@ const i18n = {
 
 const DateTimeIntervalPickerMixin = {
   ms_per_day: 24 * 60 * 60 * 1000,
-  days_label: [ 'lun', 'mar', 'mer', 'gio', 'ven', 'sab', 'dom' ],
+  // days_label: [ 'lun', 'mar', 'mer', 'gio', 'ven', 'sab', 'dom' ],
+  days_label: [ 'dom', 'lun', 'mar', 'mer', 'gio', 'ven', 'sab' ],
   months_fullname: [ 'gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno', 'luglio', 'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre' ],
   months_label: [ 'gen', 'feb', 'mar', 'apr', 'mag', 'giu', 'lug', 'ago', 'set', 'ott', 'nov', 'dic' ],
 
@@ -174,8 +175,9 @@ const DateTimeIntervalPickerMixin = {
    * @return {number} Il giorno della settimana espresso in numero
    */
   getWeekDay( date ) {
-    const week_day = date.getUTCDay();
-    return ( week_day > 0 ) ? ( week_day - 1 ) : 6;
+    const week_day = date.getDay();
+    // return ( week_day > 0 ) ? ( week_day - 1 ) : 6;
+    return week_day;
   },
 
   /**
@@ -196,6 +198,7 @@ const DateTimeIntervalPickerMixin = {
 		let feb = ( ( year % 100 != 0 ) && ( year % 4 == 0 ) || ( year % 400 == 0 ) ) ? 29 : 28;
 		let total_days = [ '31', '' + feb + '', '31', '30', '31', '30', '31', '31', '30', '31', '30', '31' ];
 
+    // Determina il numero del giorno della settimana del primo giorno del mese corrente
 		let week_day = this.getWeekDay( new Date( year, month, 1 ) );
 
 		this.prev_month = new Date( year, ( month - 1 ), 1, date.getHours(), date.getMinutes() );
@@ -204,6 +207,7 @@ const DateTimeIntervalPickerMixin = {
 		let j = week_day;
 
 		let i = 0
+    // Stampa i giorni del mese precedente
 		while( j > 0 ) {
 			i = ( prev_month_total_days - ( j - 1 ) );
 			class_name = this.getDayClassName( i, this.prev_month );
@@ -212,6 +216,7 @@ const DateTimeIntervalPickerMixin = {
 		}
 
 		i = 1;
+    // Stampa i giorni del mese corrente
 		while ( i <= total_days[ month ] ) {
 			// Determina quando comincia una nuova riga
 			if( week_day > 6 ) {
@@ -227,6 +232,7 @@ const DateTimeIntervalPickerMixin = {
 		}
 
 		this.next_month = new Date( year, ( month + 1 ), 1, date.getHours(), date.getMinutes() );
+    // Stampa i giorni del mese successivo
 		for( i = 1; week_day <= 6; week_day++, i++ ) {
 			class_name = this.getDayClassName( i, this.next_month );
 			html += "<td class='next-month " + class_name + "'>" + i + "</td>";

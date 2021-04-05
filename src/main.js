@@ -1,6 +1,6 @@
-import './style.css';
-
 'use strict';
+
+import './style.css';
 
 const i18n = {
   'start_label':'Data e ora partenza',

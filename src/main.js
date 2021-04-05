@@ -29,13 +29,13 @@ const i18n = {
   'ottobre':'Ottobre',
   'novembre':'Novembre',
   'dicembre':'Dicembre',
-  'lun':'lun',
-  'mar':'mar',
-  'mer':'mer',
-  'gio':'gio',
-  'ven':'ven',
-  'sab':'sab',
-  'dom':'dom',
+  'mon':'lun',
+  'tue':'mar',
+  'wed':'mer',
+  'thu':'gio',
+  'fri':'ven',
+  'sat':'sab',
+  'sun':'dom',
   'lunedi':'Lunedì',
   'martedi':'Martedì',
   'mercoledi':'Mercoledì',
@@ -47,10 +47,13 @@ const i18n = {
 
 const DateTimeIntervalPickerMixin = {
   ms_per_day: 24 * 60 * 60 * 1000,
-  // days_label: [ 'lun', 'mar', 'mer', 'gio', 'ven', 'sab', 'dom' ],
-  days_label: [ 'dom', 'lun', 'mar', 'mer', 'gio', 'ven', 'sab' ],
+  default_days_order: [ 'sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat' ],
   months_fullname: [ 'gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno', 'luglio', 'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre' ],
   months_label: [ 'gen', 'feb', 'mar', 'apr', 'mag', 'giu', 'lug', 'ago', 'set', 'ott', 'nov', 'dic' ],
+
+  // Properties defined by checkPickerDefaults method
+  user_days_order: [],
+  days_order: [],
 
   /**
    * It initializes the default values
@@ -59,9 +62,14 @@ const DateTimeIntervalPickerMixin = {
    * @param {Date} [start_date_param] Start selected date
    * @param {Date} [min_start_date_param] First selectable date
    * @param {Date} [max_end_date_param] Last selectable date
+   * @param {number} [first_day_no] Day with which the week must start. Accepted range values are 0-6 where 0 means Sunday, 1 means Monday and so on (accordingly to returned values of Date.getDate() method)
    * @return {object} Object with calculated default values
+   *
+   * @todo cambiare i nomi di min_start_date e max_end_date
+   * @todo modificare i parametri di calcDateDefault
+   * @todo tag label dentro il div e non generata dinamicamente
    */
-  checkPickerDefaults( id_div, start_date_param, min_start_date_param, max_end_date_param ) {
+  checkPickerDefaults( id_div, start_date_param, min_start_date_param, max_end_date_param, first_day_no ) {
     const el = document.getElementById( id_div );
     if( el == null ) {
       return false;
@@ -97,6 +105,15 @@ const DateTimeIntervalPickerMixin = {
     // console.log( min_start_date );
     // console.log( start_date );
     // console.log( max_end_date );
+
+    if( first_day_no != 0 ) {
+      const array2 = this.default_days_order.slice( 0, first_day_no );
+      const array1 = this.default_days_order.slice( first_day_no, this.default_days_order.length );
+      this.user_days_order = array1.concat( array2 );
+    }
+
+    // Actual days order
+    this.days_order = ( this.user_days_order ) ? this.user_days_order : this.default_days_order;
 
     return { el, start_date, min_start_date, max_end_date };
   },
@@ -161,9 +178,9 @@ const DateTimeIntervalPickerMixin = {
    */
   printDate( div, date ) {
     const [ week_day_span, month_day_input, month_year_span ] = div.querySelectorAll( 'div.date > *' );
-    const week_day_number = this.getWeekDay( date );
+    const week_day_number = this.getWeekDayNo( date );
 
-    week_day_span.textContent = i18n[ this.days_label[ week_day_number ] ];
+    week_day_span.textContent = i18n[ this.days_order[ week_day_number ] ];
     month_day_input.value = ( '0' + date.getDate() ).slice( -2 );
     month_year_span.innerHTML = `<em data-i18n="${this.months_label[ date.getMonth() ]}">${i18n[ this.months_label[ date.getMonth() ] ]}</em><br>${date.getFullYear()}`;
   },
@@ -174,9 +191,13 @@ const DateTimeIntervalPickerMixin = {
    * @param {Date} date Oggetto data da cui ricavare il giorno della settimana
    * @return {number} Il giorno della settimana espresso in numero
    */
-  getWeekDay( date ) {
-    const week_day = date.getDay();
-    // return ( week_day > 0 ) ? ( week_day - 1 ) : 6;
+  getWeekDayNo( date ) {
+    let week_day = date.getDay();
+
+    if( this.user_days_order ) {
+      week_day = this.user_days_order.indexOf( this.default_days_order[ week_day ] );
+    }
+
     return week_day;
   },
 
@@ -199,7 +220,7 @@ const DateTimeIntervalPickerMixin = {
 		let total_days = [ '31', '' + feb + '', '31', '30', '31', '30', '31', '31', '30', '31', '30', '31' ];
 
     // Determina il numero del giorno della settimana del primo giorno del mese corrente
-		let week_day = this.getWeekDay( new Date( year, month, 1 ) );
+		let week_day = this.getWeekDayNo( new Date( year, month, 1 ) );
 
 		this.prev_month = new Date( year, ( month - 1 ), 1, date.getHours(), date.getMinutes() );
 		let prev_month_total_days = total_days[ this.prev_month.getMonth() ];
@@ -249,13 +270,13 @@ const DateTimeIntervalPickerMixin = {
 					"<th><a href='javascript:void(0);' class='next-month'>&raquo;</a></th>" +
 				"</tr>" +
 				"<tr>" +
-					"<td class='day-label' data-i18n='" + this.days_label[0] + "'>" + i18n[ this.days_label[0] ] + "</td>" +
-					"<td class='day-label' data-i18n='" + this.days_label[1] + "'>" + i18n[ this.days_label[1] ] + "</td>" +
-					"<td class='day-label' data-i18n='" + this.days_label[2] + "'>" + i18n[ this.days_label[2] ] + "</td>" +
-					"<td class='day-label' data-i18n='" + this.days_label[3] + "'>" + i18n[ this.days_label[3] ] + "</td>" +
-					"<td class='day-label' data-i18n='" + this.days_label[4] + "'>" + i18n[ this.days_label[4] ] + "</td>" +
-					"<td class='day-label' data-i18n='" + this.days_label[5] + "'>" + i18n[ this.days_label[5] ] + "</td>" +
-					"<td class='day-label' data-i18n='" + this.days_label[6] + "'>" + i18n[ this.days_label[6] ] + "</td>" +
+					"<td class='day-label' data-i18n='" + this.days_order[0] + "'>" + i18n[ this.days_order[0] ] + "</td>" +
+					"<td class='day-label' data-i18n='" + this.days_order[1] + "'>" + i18n[ this.days_order[1] ] + "</td>" +
+					"<td class='day-label' data-i18n='" + this.days_order[2] + "'>" + i18n[ this.days_order[2] ] + "</td>" +
+					"<td class='day-label' data-i18n='" + this.days_order[3] + "'>" + i18n[ this.days_order[3] ] + "</td>" +
+					"<td class='day-label' data-i18n='" + this.days_order[4] + "'>" + i18n[ this.days_order[4] ] + "</td>" +
+					"<td class='day-label' data-i18n='" + this.days_order[5] + "'>" + i18n[ this.days_order[5] ] + "</td>" +
+					"<td class='day-label' data-i18n='" + this.days_order[6] + "'>" + i18n[ this.days_order[6] ] + "</td>" +
 				"</tr>" +
 				"<tr>" +
 				html +
@@ -338,9 +359,9 @@ const DateTimeIntervalPickerMixin = {
 
 
 
-function DatePicker( id_div, start_date, min_start_date, max_end_date ) {
+function DatePicker( id_div, start_date, min_start_date, max_end_date, first_day_no ) {
   const self = this;
-  const picker_defaults = self.checkPickerDefaults( id_div, start_date, min_start_date, max_end_date );
+  const picker_defaults = self.checkPickerDefaults( id_div, start_date, min_start_date, max_end_date, first_day_no );
   ( { el: self.el_start, start_date: self.start_date, min_start_date: self.min_start_date, max_end_date: self.max_end_date } = picker_defaults );
 
   /**
@@ -420,5 +441,8 @@ function DatePicker( id_div, start_date, min_start_date, max_end_date ) {
 
 
 Object.assign( DatePicker.prototype, DateTimeIntervalPickerMixin );
-new DatePicker( 'select_date'/*, new Date( 2021, 0, 4, 23, 0, 22 ), new Date( 2021, 0, 2, 23, 0, 22 ), new Date( 2020, 0, 15, 23, 0, 22 )*/ );
+new DatePicker( 'select_date',null,null,null,4/*, new Date( 2021, 0, 4, 23, 0, 22 ), new Date( 2021, 0, 2, 23, 0, 22 ), new Date( 2020, 0, 15, 23, 0, 22 )*/ );
 // console.log( new Date( 2023, 1, 5, 23, 0, 22 ).getTime() / 1000 );
+
+
+new DatePicker( 'select_date_2', null, null, null, 1 );

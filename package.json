@@ -1,8 +1,8 @@
 {
-  "name": "www.dev.projects_datetime",
+  "name": "projects.datetimepicker",
   "description": "Date Time Component",
   "author": "Marcello Surdi",
-  "version": "1.0.0",
+  "version": "0.0.3",
   "keywords": [],
   "main": "main.js",
   "license": "ISC",

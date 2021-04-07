@@ -1,5 +1,6 @@
 /dist
 /jsdoc
 /node_modules
-start-dev.bat
+/src/jsdoc.json
+/src/jsdoc.md
 start-jsdoc.bat

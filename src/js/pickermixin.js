@@ -1,7 +1,19 @@
-'use strict';
+/**
+ * @module js/pickermixin
+ * @author Marcello Surdi
+ * @version 1.0.0
+ *
+ * @desc
+ * This is a *mixin object* that contains methods for other functions. It can be implemented by copying methods into prototype
+ */
 
-import {i18n} from './i18n';
 
+import { i18n } from './i18n';
+
+/**
+ * @namespace
+ * @memberof module:js/pickermixin
+ */
 export const DateTimeIntervalPickerMixin = {
   ms_per_day: 24 * 60 * 60 * 1000,
   default_days_order: [ 'sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat' ],
@@ -9,23 +21,21 @@ export const DateTimeIntervalPickerMixin = {
   months_label: [ 'gen', 'feb', 'mar', 'apr', 'mag', 'giu', 'lug', 'ago', 'set', 'ott', 'nov', 'dic' ],
 
   /**
-   * Initializes the default values
+   * @memberof module:js/pickermixin.exports.DateTimeIntervalPickerMixin
    *
-   * @param {string} id_div id of the <div> element that will contain the button
+   * @desc
+   * Initializes the default values.
+   *
+   * @param {HTMLDivElement} el &lt;div&gt; element that will contain the button
    * @param {Date} [start_date_param] Start selected date
    * @param {Date} [first_date_param] First selectable date
    * @param {Date} [last_date_param] Last selectable date
-   * @param {number} [first_day_no=1] Day with which the week must start. Accepted range values are 0-6 (accordingly to returned values of Date.getDate() method) where 0 means Sunday, 1 means Monday and so on
+   * @param {number} [first_day_no] Day with which the week must start. Accepted range values are 0-6 (accordingly to returned values of Date.getDate() method) where 0 means Sunday, 1 means Monday and so on
    *
-   * @see getDateBetween()
-   * @see roundMinutes()
+   * @see {@link module:js/pickermixin.exports.DateTimeIntervalPickerMixin.getDateBetween|getDateBetween}
+   * @see {@link module:js/pickermixin.exports.DateTimeIntervalPickerMixin.roundMinutes|roundMinutes}
    */
-  setPickerDefaults( id_div, start_date_param, first_date_param, last_date_param, first_day_no = 1 ) {
-    const el = document.getElementById( id_div );
-    if( el == null ) {
-      return false;
-    }
-
+  setPickerProps( el, start_date_param, first_date_param, last_date_param, first_day_no ) {
     // Default start selected date is one day more than current date
     const start_date_default = new Date( Date.now() + this.ms_per_day );
     let start_date = this.getDateBetween( start_date_default, start_date_param, el.querySelector( 'input.start_date' ) );
@@ -71,14 +81,21 @@ export const DateTimeIntervalPickerMixin = {
     this.days_order = ( this.user_days_order ) ? this.user_days_order : this.default_days_order;
   },
 
+
+
+
+
   /**
+   * @memberof module:js/pickermixin.exports.DateTimeIntervalPickerMixin
+   *
+   * @desc
    * Returns a date based on these criteria:
    * - the date provided as timestamp value in a hidden input field (if any) takes priority over other dates;
-   * - then follows the date provided as parameter of setPickerDefaults method;
-   * - default date comes last
+   * - then follows the date provided as parameter of setPickerProps method;
+   * - default date comes last.
    *
    * @param {Date} date_default Default date
-   * @param {Date} date_param The date provided as parameter of setPickerDefaults method
+   * @param {Date} date_param The date provided as parameter of setPickerProps method
    * @param {HTMLInputElement|null} input A hidden input field with timestamp value
    * @return {Date}
    */
@@ -93,11 +110,18 @@ export const DateTimeIntervalPickerMixin = {
     return prev_date || date;
   },
 
+
+
+
+
   /**
-   * Arrotonda i minuti ad intervalli di 30
+   * @memberof module:js/pickermixin.exports.DateTimeIntervalPickerMixin
    *
-   * @param {Date} date La data da arrotondare
-   * @return {Date} La data arrotondata
+   * @desc
+   * Rounds minutes in intervals of 30.
+   *
+   * @param {Date} date The date to be rounded
+   * @return {Date} The rounded date
    */
   roundMinutes( date ) {
     date.setSeconds( 0, 0 );
@@ -109,9 +133,9 @@ export const DateTimeIntervalPickerMixin = {
     }
     else if( m > 30 ) {
       m = 0;
-      // Se arrotonda i minuti a 0 considera un'ora in più
+      // If we round the minutes to 0 we have to take one more hour into account
       h = h + 1;
-      // Se in seguito all'arrotondamento si raggiunge la mezzanotte considera un giorno in più
+      // If, after rounding, midnight is reached, we have to take one more day into account
       if( h == 24 ) {
         h = 0;
         date = new Date( date.getTime() + this.ms_per_day );
@@ -121,6 +145,10 @@ export const DateTimeIntervalPickerMixin = {
 
     return date;
   },
+
+
+
+
 
   /**
    * Visualizza una data in un pulsante

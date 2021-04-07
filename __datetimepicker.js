@@ -1,9 +1,5 @@
 'use strict';
 
-/**
- * Crea un datepicker
- * @class
- */
 DatePicker = function() {
 	let self = this;
 

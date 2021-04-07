@@ -1,7 +1,17 @@
-'use strict';
+/**
+ * @module js/datepicker
+ * @author Marcello Surdi
+ * @version 1.0.0
+ *
+ * @desc
+ * DatePicker function
+ */
 
 import { i18n } from './i18n';
 import { DateTimeIntervalPickerMixin } from './pickermixin';
+
+
+
 
 
 export function DatePicker( id_div, settings ) {

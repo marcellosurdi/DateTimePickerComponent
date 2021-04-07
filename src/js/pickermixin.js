@@ -7,8 +7,11 @@
  * This is a *mixin object* that contains methods for other functions. It can be implemented by copying methods into prototype
  */
 
-
 import { i18n } from './i18n';
+
+
+
+
 
 /**
  * @namespace

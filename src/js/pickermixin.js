@@ -4,7 +4,7 @@
  * @version 1.0.0
  *
  * @desc
- * This is a *mixin object* that contains methods for other functions. It can be implemented by copying methods into prototype
+ * This module contains a mixin object with methods for Date* classes
  */
 
 import { i18n } from './i18n';
@@ -16,6 +16,9 @@ import { i18n } from './i18n';
 /**
  * @namespace
  * @memberof module:js/pickermixin
+ *
+ * @desc
+ * This is a mixin object that contains methods for Date* classes. It can be implemented by copying methods into their prototype
  */
 export const DateTimeIntervalPickerMixin = {
   ms_per_day: 24 * 60 * 60 * 1000,
@@ -27,13 +30,114 @@ export const DateTimeIntervalPickerMixin = {
    * @memberof module:js/pickermixin.exports.DateTimeIntervalPickerMixin
    *
    * @desc
-   * Initializes the default values.
+   * Returns a date based on these criteria:
+   * - the date provided in a hidden input field (if any) takes priority over other dates;
+   * - then follows the date provided as parameter of setPickerProps method;
+   * - default date comes last.
    *
-   * @param {HTMLDivElement} el &lt;div&gt; element that will contain the button
+   * @param {Date} date_default Default date
+   * @param {Date|string} date_param The date provided as parameter of setPickerProps method
+   * @param {HTMLInputElement|null} input A hidden input field with ISO date string in its value attribute
+   * @return {Date}
+   *
+   * @see {@link module:js/pickermixin.exports.DateTimeIntervalPickerMixin.isISOFormat|isISOFormat}
+   */
+  getDateBetween( date_default, date_param, input ) {
+    if( typeof date_param == 'string' && this.isISOFormat( date_param ) ) {
+        date_param = new Date( date_param )
+    }
+
+    // Date may be invalid even if isISOFormat returns true (for istance '2015-13-25T12:00:00'), that's why we have to check it with isNan
+    const date = ( date_param instanceof Date && !isNaN( date_param ) ) ? date_param : date_default;
+
+    let prev_date = input?.value;
+    if( prev_date && this.isISOFormat( prev_date ) ) {
+      prev_date = new Date( prev_date );
+    }
+
+    return ( !isNaN( prev_date ) ) ? prev_date : date;
+  },
+
+
+
+
+
+  /**
+   * @memberof module:js/pickermixin.exports.DateTimeIntervalPickerMixin
+   *
+   * @desc
+   * Checks if the date is in ISO format.
+   *
+   * Accepted values:
+   * - '2015-03-25'
+   * - '2015-03-25T12:00:00'
+   * - '2015-03-25T12:00:00Z'
+   * - '2015-03-25T12:00:00-06:30'
+   *
+   * Rejected values:
+   * - '2015-**3**-25'
+   * - '2015-**13**-25T12:00:00'
+   *
+   * ...and so on
+   *
+   * @param {string} iso_date date string
+   * @return {boolean} `true` if date is valid, `false` otherwise
+   */
+  isISOFormat( iso_date ) {
+		return ( iso_date.match( /^(\d{4})-(\d{2})-(\d{2})(T\d{2}\:\d{2}\:\d{2}[+-]\d{2}\:\d{2})?|Z$/ ) ) ? true : false
+	},
+
+
+
+
+
+  /**
+   * @memberof module:js/pickermixin.exports.DateTimeIntervalPickerMixin
+   *
+   * @desc
+   * Rounds minutes in intervals of 30.
+   *
+   * @param {Date} date The date to be rounded
+   * @return {Date} The rounded date
+   */
+  roundMinutes( date ) {
+    date.setSeconds( 0, 0 );
+
+    let m = date.getMinutes();
+    let h = date.getHours();
+    if( m > 0 && m <= 30 ) {
+      m = 30;
+    }
+    else if( m > 30 ) {
+      m = 0;
+      // If we round the minutes to 0 we have to take one more hour into account
+      h = h + 1;
+      // If, after rounding, midnight is reached, we have to take one more day into account
+      if( h == 24 ) {
+        h = 0;
+        date = new Date( date.getTime() + this.ms_per_day );
+      }
+    }
+    date.setHours( h, m );
+
+    return date;
+  },
+
+
+
+
+
+  /**
+   * @memberof module:js/pickermixin.exports.DateTimeIntervalPickerMixin
+   *
+   * @desc
+   * Initializes picker start values
+   *
+   * @param {HTMLDivElement} el `div` element that will contain the button
    * @param {Date} [start_date_param] Start selected date
    * @param {Date} [first_date_param] First selectable date
    * @param {Date} [last_date_param] Last selectable date
-   * @param {number} [first_day_no] Day with which the week must start. Accepted range values are 0-6 (accordingly to returned values of Date.getDate() method) where 0 means Sunday, 1 means Monday and so on
+   * @param {number} [first_day_no] Day with which the week must start. Accepted range values are 0-6 (accordingly to returned values of `Date.getDate` method) where 0 means Sunday, 1 means Monday and so on
    *
    * @see {@link module:js/pickermixin.exports.DateTimeIntervalPickerMixin.getDateBetween|getDateBetween}
    * @see {@link module:js/pickermixin.exports.DateTimeIntervalPickerMixin.roundMinutes|roundMinutes}
@@ -82,71 +186,6 @@ export const DateTimeIntervalPickerMixin = {
     this.first_date = first_date;
     this.last_date = last_date;
     this.days_order = ( this.user_days_order ) ? this.user_days_order : this.default_days_order;
-  },
-
-
-
-
-
-  /**
-   * @memberof module:js/pickermixin.exports.DateTimeIntervalPickerMixin
-   *
-   * @desc
-   * Returns a date based on these criteria:
-   * - the date provided as timestamp value in a hidden input field (if any) takes priority over other dates;
-   * - then follows the date provided as parameter of setPickerProps method;
-   * - default date comes last.
-   *
-   * @param {Date} date_default Default date
-   * @param {Date} date_param The date provided as parameter of setPickerProps method
-   * @param {HTMLInputElement|null} input A hidden input field with timestamp value
-   * @return {Date}
-   */
-  getDateBetween( date_default, date_param, input ) {
-    const date = ( date_param instanceof Date ) ? date_param : date_default;
-
-    let prev_date = +input?.value;
-    if( prev_date > 0 ) {
-      prev_date = new Date( prev_date * 1000 );
-    }
-
-    return prev_date || date;
-  },
-
-
-
-
-
-  /**
-   * @memberof module:js/pickermixin.exports.DateTimeIntervalPickerMixin
-   *
-   * @desc
-   * Rounds minutes in intervals of 30.
-   *
-   * @param {Date} date The date to be rounded
-   * @return {Date} The rounded date
-   */
-  roundMinutes( date ) {
-    date.setSeconds( 0, 0 );
-
-    let m = date.getMinutes();
-    let h = date.getHours();
-    if( m > 0 && m <= 30 ) {
-      m = 30;
-    }
-    else if( m > 30 ) {
-      m = 0;
-      // If we round the minutes to 0 we have to take one more hour into account
-      h = h + 1;
-      // If, after rounding, midnight is reached, we have to take one more day into account
-      if( h == 24 ) {
-        h = 0;
-        date = new Date( date.getTime() + this.ms_per_day );
-      }
-    }
-    date.setHours( h, m );
-
-    return date;
   },
 
 

@@ -4,7 +4,7 @@
  * @version 1.0.0
  *
  * @desc
- * DatePicker function
+ * This module contains DatePicker class
  */
 
 import { i18n } from './i18n';
@@ -13,12 +13,27 @@ import { DateTimeIntervalPickerMixin } from './pickermixin';
 
 
 
-
+/**
+ * @class
+ *
+ * @desc
+ * Creates a date picker inside the `div` whose id is passed as parameter
+ *
+ * @param {string} id_div Id of a `div` element that will contain the button for date selection
+ * @param {object} [settings] Object with user defined values
+ *
+ * @example
+ * new DatePicker( 'id', {
+ *  start_date: "2021-01-05",
+ *  first_date: "2021-01-02",
+ *  last_date: new Date( 2021, 0, 29 )
+ * } )
+ */
 export function DatePicker( id_div, settings ) {
   const self = this;
 
   const el = document.getElementById( id_div );
-  if( el == null ) {
+  if( el == null || el.nodeName != 'DIV' ) {
     return false;
   }
 

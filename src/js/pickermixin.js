@@ -66,7 +66,7 @@ export const DateTimeIntervalPickerMixin = {
    * @memberof module:js/pickermixin.exports.DateTimeIntervalPickerMixin
    *
    * @desc
-   * Checks if the date is in ISO format.
+   * Checks if `iso_date` has the right ISO format (it doesn't do date validation).
    *
    * Accepted values:
    * - '2015-03-25'
@@ -81,7 +81,7 @@ export const DateTimeIntervalPickerMixin = {
    * ...and so on
    *
    * @param {string} iso_date date string
-   * @return {boolean} `true` if date is valid, `false` otherwise
+   * @return {boolean} `true` if format is valid, `false` otherwise
    */
   isISOFormat( iso_date ) {
 		return ( iso_date.match( /^(\d{4})-(\d{2})-(\d{2})(T\d{2}\:\d{2}\:\d{2}[+-]\d{2}\:\d{2})?|Z$/ ) ) ? true : false

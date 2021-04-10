@@ -248,8 +248,6 @@ export const DatePickerMixin = {
    *
    * @see {@link module:js/datepickermixin.exports.DatePickerMixin.getWeekDayNo|getWeekDayNo}
    * @see {@link module:js/datepickermixin.exports.DatePickerMixin.getDayClassName|getDayClassName}
-   *
-   * @todo To implement addEventOnSelect
 	 */
 	showDateTable( picker, date ) {
 		let class_name, html = '';
@@ -353,10 +351,10 @@ export const DatePickerMixin = {
    * @memberof module:js/datepickermixin.exports.DatePickerMixin
    *
    * @desc
-	 * Ricava le classi da assegnare agli elementi <td> che contengono i giorni nei calendari
+	 * Ricava le classi da assegnare agli elementi `td` che contengono i giorni nei calendari
 	 * Utilizzato all'interno di un ciclo iterativo sia in fase di inizializzazione della tabella sia in fase di aggiornamento della stessa
 	 *
-	 * @param {string} day Il giorno corrente corrente all'interno del ciclo iterativo
+	 * @param {string} day Il giorno corrente all'interno del ciclo iterativo
 	 * @param {Date} date La data che contiene le informazioni relative al mese corrente
 	 * @return {string} Le classi da assegnare all'elemento <td> corrente all'interno del ciclo iterativo
 	 */

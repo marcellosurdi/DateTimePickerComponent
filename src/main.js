@@ -1,5 +1,3 @@
-'use strict';
-
 import './css/style.css';
 import { DatePicker } from './js/datepicker';
 

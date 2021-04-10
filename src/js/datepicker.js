@@ -31,6 +31,9 @@ Object.assign( DatePicker.prototype, DatePickerMixin );
  *  start_date: "2021-01-05",
  *  last_date: new Date( 2021, 0, 29 )
  * } )
+ *
+ * @todo Provide support for disabled days (even if between first_date and last_date)
+ * @todo Provide support for touch events
  */
 export function DatePicker( id_div, settings ) {
   const self = this;

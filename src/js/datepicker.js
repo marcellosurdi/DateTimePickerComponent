@@ -71,10 +71,10 @@ export function DatePicker( id_div, settings ) {
 	 */
 	self.next_month = null;
 
-  self.el_start.classList.add( 'interval-container' );
+  self.el_start.classList.add( 'datetime-container' );
   self.el_start.insertAdjacentHTML( 'afterbegin',
     `<label for="${ 'id-' + self.start_date.getTime() }">${ i18n.start_label }</label>
-    <div class="datetime start date interval-background">
+    <div class="datetime date start">
       <span class="week-day">lun</span>
       <input id="${ 'id-' + self.start_date.getTime() }" value="00">
       <span class="month-year"><em>gen</em><br>2000</span>
@@ -83,7 +83,7 @@ export function DatePicker( id_div, settings ) {
   );
   self.printDate( self.el_start, self.start_date );
 
-  const start_date_btn = self.el_start.querySelector( '.start.date' );
+  const start_date_btn = self.el_start.querySelector( '.date.start' );
   const start_picker_div = start_date_btn.nextElementSibling;
 
   start_date_btn.addEventListener( 'click', onOpenPicker );

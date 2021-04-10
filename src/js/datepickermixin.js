@@ -30,7 +30,7 @@ export const DatePickerMixin = {
    * @memberof module:js/datepickermixin.exports.DatePickerMixin
    *
    * @desc
-   * Returns a date based on these precedence criteria:
+   * Returns a date depending on these precedence criteria:
    * - the date provided in a hidden input field (if any) takes priority over other dates;
    * - then follows the date provided as parameter of setPickerProps method;
    * - default date comes last.
@@ -57,6 +57,62 @@ export const DatePickerMixin = {
 
     return ( !isNaN( prev_date ) ) ? prev_date : date;
   },
+
+
+
+
+
+  /**
+   * @memberof module:js/datepickermixin.exports.DatePickerMixin
+   *
+   * @desc
+	 * Gets the classes for `td` elements that contain the days of calendar.
+	 * It's used inside a loop both when building table and when updating it.
+	 *
+	 * @param {string} day Current day inside a loop
+	 * @param {Date} date Date with the year/month info
+	 * @return {string} Classes to be assigned to the current `td` element
+	 */
+	getDayClassName( day, date ) {
+		let class_name, if_btn;
+
+		// Non tiene conto delle informazioni dell'orario
+		const start_date_ms = new Date( this.start_date.getFullYear(), this.start_date.getMonth(), this.start_date.getDate() ).getTime();
+		const curr_day_ms = new Date( date.getFullYear(), date.getMonth(), day ).getTime();
+		const first_date_ms = new Date( this.first_date.getFullYear(), this.first_date.getMonth(), this.first_date.getDate() ).getTime();
+		const last_date_ms = new Date( this.last_date.getFullYear(), this.last_date.getMonth(), this.last_date.getDate() ).getTime();
+
+		class_name = 'day ';
+		// Selectable or disabled days
+		if( curr_day_ms < first_date_ms || curr_day_ms > last_date_ms ) {
+			class_name += 'disabled';
+		} else {
+			class_name += 'selectable';
+		}
+
+		// Start day
+		if( curr_day_ms == start_date_ms ) {
+			if_btn = ( this?.mode == 'start' ) ? 'active-a-background' : 'active-b-background';
+			class_name += ' start ' + if_btn;
+		}
+
+    // -- Only for intervals--
+    // if( this.end_date ) {
+    //   let end_date_ms = new Date( this.end_date.getFullYear(), this.end_date.getMonth(), this.end_date.getDate() ).getTime();
+    //
+  	// 	// Giorno compreso nell'intervallo
+  	// 	if( curr_day_ms > start_date_ms && curr_day_ms < end_date_ms ) {
+  	// 		class_name += ' interval-background';
+  	// 	}
+  	// 	// Giorno di fine intervallo
+  	// 	if( curr_day_ms == end_date_ms ) {
+  	// 		if_btn = ( mode == 'end' ) ? 'active-a-background' : 'active-b-background';
+  	// 		class_name += ' end ' + if_btn;
+  	// 	}
+    // }
+
+		return class_name;
+	},
 
 
 
@@ -345,57 +401,5 @@ export const DatePickerMixin = {
 		}
 
 		// this.addEventOnSelect();
-	},
-
-  /**
-   * @memberof module:js/datepickermixin.exports.DatePickerMixin
-   *
-   * @desc
-	 * Ricava le classi da assegnare agli elementi `td` che contengono i giorni nei calendari
-	 * Utilizzato all'interno di un ciclo iterativo sia in fase di inizializzazione della tabella sia in fase di aggiornamento della stessa
-	 *
-	 * @param {string} day Il giorno corrente all'interno del ciclo iterativo
-	 * @param {Date} date La data che contiene le informazioni relative al mese corrente
-	 * @return {string} Le classi da assegnare all'elemento <td> corrente all'interno del ciclo iterativo
-	 */
-	getDayClassName( day, date ) {
-		let class_name, if_btn;
-
-		// Non tiene conto delle informazioni dell'orario
-		let start_date_ms = new Date( this.start_date.getFullYear(), this.start_date.getMonth(), this.start_date.getDate() ).getTime();
-		let curr_day_ms = new Date( date.getFullYear(), date.getMonth(), day ).getTime();
-		let min_date_ms = new Date( this.first_date.getFullYear(), this.first_date.getMonth(), this.first_date.getDate() ).getTime();
-		let max_date_ms = new Date( this.last_date.getFullYear(), this.last_date.getMonth(), this.last_date.getDate() ).getTime();
-
-		class_name = 'day ';
-		// Giorni non disponibili per la prenotazione
-		if( curr_day_ms < min_date_ms || curr_day_ms > max_date_ms ) {
-			class_name += 'disabled';
-		} else {
-		  // Giorno disponibile per la prenotazione
-			class_name += 'selectable';
-		}
-
-		// Giorno di inizio intervallo
-		if( curr_day_ms == start_date_ms ) {
-			if_btn = ( this?.mode == 'start' ) ? 'active-a-background' : 'active-b-background';
-			class_name += ' start ' + if_btn;
-		}
-
-    if( this.end_date ) {
-      let end_date_ms = new Date( this.end_date.getFullYear(), this.end_date.getMonth(), this.end_date.getDate() ).getTime();
-
-  		// Giorno compreso nell'intervallo
-  		if( curr_day_ms > start_date_ms && curr_day_ms < end_date_ms ) {
-  			class_name += ' interval-background';
-  		}
-  		// Giorno di fine intervallo
-  		if( curr_day_ms == end_date_ms ) {
-  			if_btn = ( mode == 'end' ) ? 'active-a-background' : 'active-b-background';
-  			class_name += ' end ' + if_btn;
-  		}
-    }
-
-		return class_name;
 	},
 }

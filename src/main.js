@@ -1,4 +1,4 @@
-import './css/style.css';
+import './css/style.scss';
 import { DatePicker } from './js/datepicker';
 
 

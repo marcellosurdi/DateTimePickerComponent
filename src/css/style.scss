@@ -1,27 +1,25 @@
-/* Selettori generici */
-* { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; height: 100%; font: 100% arial, sans-serif; color: #444; }
+$active_color: #2e489e;
+$disabled_color: #222;
+$start_date_color: #4963b9;
+$end_date_color: #444;
+$grey_color: #eee;
+$white_color: #fff;
 
+div.datetime-container, div.datetime-container * { box-sizing: border-box; }
 
-
-
-
-/* Datepicker */
-div.interval-container {
+div.datetime-container {
   position: relative;
   margin-top: 10px;
   user-select: none;
 }
 
-  div.interval-container .interval-background { background-color: #eee; color: #444; }
-  div.interval-container .active-a-background, div.interval-container .active-a-background input { background-color: #fec601; color: #000; }
-  div.interval-container .active-b-background { background-color: #0b6e38; color: #fff; }
+  div.datetime-container .datetime { background-color: $grey_color; }
+  div.datetime-container .active-a-background, div.datetime-container .active-a-background input { background-color: $active_color; color: $white_color; }
+  div.datetime-container .active-b-background { background-color: $start_date_color; color: $white_color; }
 
-  div.interval-container label {
+  div.datetime-container label {
     display: inline-block;
     padding: 5px;
-    text-transform: uppercase;
-    font-size: 13px;
   }
 
   div.datetime {

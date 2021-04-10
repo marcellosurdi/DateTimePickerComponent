@@ -4,7 +4,7 @@
  * @version 1.0.0
  *
  * @desc
- * This module contains a mixin object with methods for Date* classes
+ * This module contains a mixin object with methods for Date*Picker classes
  */
 
 import { i18n } from './i18n';
@@ -18,19 +18,19 @@ import { i18n } from './i18n';
  * @memberof module:js/pickermixin
  *
  * @desc
- * This is a mixin object that contains methods for Date* classes. It can be implemented by copying methods into their prototype
+ * This is a mixin object that contains methods for Date*Picker classes. It can be implemented by copying methods into their prototype
  */
 export const DateTimeIntervalPickerMixin = {
   ms_per_day: 24 * 60 * 60 * 1000,
   default_days_order: [ 'sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat' ],
-  months_fullname: [ 'gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno', 'luglio', 'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre' ],
-  months_label: [ 'gen', 'feb', 'mar', 'apr', 'mag', 'giu', 'lug', 'ago', 'set', 'ott', 'nov', 'dic' ],
+  months_label: [ 'jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec' ],
+  months_fullname: [ 'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december' ],
 
   /**
    * @memberof module:js/pickermixin.exports.DateTimeIntervalPickerMixin
    *
    * @desc
-   * Returns a date based on these criteria:
+   * Returns a date based on these precedence criteria:
    * - the date provided in a hidden input field (if any) takes priority over other dates;
    * - then follows the date provided as parameter of setPickerProps method;
    * - default date comes last.
@@ -66,6 +66,29 @@ export const DateTimeIntervalPickerMixin = {
    * @memberof module:js/pickermixin.exports.DateTimeIntervalPickerMixin
    *
    * @desc
+   * Returns the day of the week as number accordingly to `this.user_days_order` (if any) or `date.getDay` method.
+   *
+   * @param {Date} date Date from which to get the day of the week
+   * @return {number} The day of the week as number
+   */
+  getWeekDayNo( date ) {
+    let week_day = date.getDay();
+
+    if( this.user_days_order ) {
+      week_day = this.user_days_order.indexOf( this.default_days_order[ week_day ] );
+    }
+
+    return week_day;
+  },
+
+
+
+
+
+  /**
+   * @memberof module:js/pickermixin.exports.DateTimeIntervalPickerMixin
+   *
+   * @desc
    * Checks if `iso_date` has the right ISO format (it doesn't do date validation).
    *
    * Accepted values:
@@ -86,6 +109,28 @@ export const DateTimeIntervalPickerMixin = {
   isISOFormat( iso_date ) {
 		return ( iso_date.match( /^(\d{4})-(\d{2})-(\d{2})(T\d{2}\:\d{2}\:\d{2}[+-]\d{2}\:\d{2})?|Z$/ ) ) ? true : false
 	},
+
+
+
+
+
+  /**
+   * @memberof module:js/pickermixin.exports.DateTimeIntervalPickerMixin
+   *
+   * @desc
+   * Displays a date in its own button
+   *
+   * @param {HTMLDivElement} div The `div` element in which to display the date
+   * @param {Date} date The date to be displayed
+   */
+  printDate( div, date ) {
+    const [ week_day_span, month_day_input, month_year_span ] = div.querySelectorAll( 'div.date > *' );
+    const week_day_number = this.getWeekDayNo( date );
+
+    week_day_span.textContent = i18n[ this.days_order[ week_day_number ] ];
+    month_day_input.value = ( '0' + date.getDate() ).slice( -2 );
+    month_year_span.innerHTML = `<em data-i18n="${this.months_label[ date.getMonth() ]}">${i18n[ this.months_label[ date.getMonth() ] ]}</em><br>${date.getFullYear()}`;
+  },
 
 
 
@@ -137,7 +182,7 @@ export const DateTimeIntervalPickerMixin = {
    * @param {Date} [start_date_param] Start selected date
    * @param {Date} [first_date_param] First selectable date
    * @param {Date} [last_date_param] Last selectable date
-   * @param {number} [first_day_no] Day with which the week must start. Accepted range values are 0-6 (accordingly to returned values of `Date.getDate` method) where 0 means Sunday, 1 means Monday and so on
+   * @param {number} [first_day_no] Day with which the week must start. Accordingly to returned values of `Date.getDate` method, accepted range values are 0-6 where 0 means Sunday, 1 means Monday and so on
    *
    * @see {@link module:js/pickermixin.exports.DateTimeIntervalPickerMixin.getDateBetween|getDateBetween}
    * @see {@link module:js/pickermixin.exports.DateTimeIntervalPickerMixin.roundMinutes|roundMinutes}
@@ -191,37 +236,6 @@ export const DateTimeIntervalPickerMixin = {
 
 
 
-
-  /**
-   * Visualizza una data in un pulsante
-   *
-   * @param {HTMLDivElement} div L'elemento <div> in cui visualizzare le informazioni di data
-   * @param {Date} date La data da visualizzare
-   */
-  printDate( div, date ) {
-    const [ week_day_span, month_day_input, month_year_span ] = div.querySelectorAll( 'div.date > *' );
-    const week_day_number = this.getWeekDayNo( date );
-
-    week_day_span.textContent = i18n[ this.days_order[ week_day_number ] ];
-    month_day_input.value = ( '0' + date.getDate() ).slice( -2 );
-    month_year_span.innerHTML = `<em data-i18n="${this.months_label[ date.getMonth() ]}">${i18n[ this.months_label[ date.getMonth() ] ]}</em><br>${date.getFullYear()}`;
-  },
-
-  /**
-   * Restituisce il giorno della settimana come numero (0 - Lunedì, 6 - Domenica)
-   *
-   * @param {Date} date Oggetto data da cui ricavare il giorno della settimana
-   * @return {number} Il giorno della settimana espresso in numero
-   */
-  getWeekDayNo( date ) {
-    let week_day = date.getDay();
-
-    if( this.user_days_order ) {
-      week_day = this.user_days_order.indexOf( this.default_days_order[ week_day ] );
-    }
-
-    return week_day;
-  },
 
   /**
 	 * Genera il calendario per la scelta della data di ritiro o consegna

@@ -8,7 +8,9 @@
  */
 
 import { i18n } from './i18n';
-import { DateTimeIntervalPickerMixin } from './pickermixin';
+import { DatePickerMixin } from './datepickermixin';
+
+Object.assign( DatePicker.prototype, DatePickerMixin );
 
 
 
@@ -23,9 +25,10 @@ import { DateTimeIntervalPickerMixin } from './pickermixin';
  * @param {object} [settings] Object with user defined values
  *
  * @example
+ * // In settings object you can use either a date string (in ISO format) or a date object
  * new DatePicker( 'id', {
- *  start_date: "2021-01-05",
  *  first_date: "2021-01-02",
+ *  start_date: "2021-01-05",
  *  last_date: new Date( 2021, 0, 29 )
  * } )
  */

@@ -1,6 +1,5 @@
 export const i18n = {
   'start_label':'Data e ora partenza',
-  /* Datepicker */
   'jan':'gen',
   'feb':'feb',
   'mar':'mar',
@@ -16,7 +15,7 @@ export const i18n = {
   'january':'Gennaio',
   'february':'Febbraio',
   'march':'Marzo',
-  'aprile':'Aprile',
+  'april':'Aprile',
   'may':'Maggio',
   'june':'Giugno',
   'july':'Luglio',

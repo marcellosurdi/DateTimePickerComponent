@@ -1,10 +1,10 @@
 /**
- * @module js/pickermixin
+ * @module js/datepickermixin
  * @author Marcello Surdi
  * @version 1.0.0
  *
  * @desc
- * This module contains a mixin object with methods for Date*Picker classes
+ * This module contains a mixin object with methods for DatePicker class
  */
 
 import { i18n } from './i18n';
@@ -14,20 +14,20 @@ import { i18n } from './i18n';
 
 
 /**
- * @namespace
- * @memberof module:js/pickermixin
+ * @mixin
+ * @memberof module:js/datepickermixin
  *
  * @desc
- * This is a mixin object that contains methods for Date*Picker classes. It can be implemented by copying methods into their prototype
+ * This is a mixin object that contains methods for DatePicker class. It can be implemented by copying methods into their prototype
  */
-export const DateTimeIntervalPickerMixin = {
+export const DatePickerMixin = {
   ms_per_day: 24 * 60 * 60 * 1000,
   default_days_order: [ 'sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat' ],
   months_label: [ 'jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec' ],
   months_fullname: [ 'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december' ],
 
   /**
-   * @memberof module:js/pickermixin.exports.DateTimeIntervalPickerMixin
+   * @memberof module:js/datepickermixin.exports.DatePickerMixin
    *
    * @desc
    * Returns a date based on these precedence criteria:
@@ -40,7 +40,7 @@ export const DateTimeIntervalPickerMixin = {
    * @param {HTMLInputElement|null} input A hidden input field with ISO date string in its value attribute
    * @return {Date}
    *
-   * @see {@link module:js/pickermixin.exports.DateTimeIntervalPickerMixin.isISOFormat|isISOFormat}
+   * @see {@link module:js/datepickermixin.exports.DatePickerMixin.isISOFormat|isISOFormat}
    */
   getDateBetween( date_default, date_param, input ) {
     if( typeof date_param == 'string' && this.isISOFormat( date_param ) ) {
@@ -63,7 +63,7 @@ export const DateTimeIntervalPickerMixin = {
 
 
   /**
-   * @memberof module:js/pickermixin.exports.DateTimeIntervalPickerMixin
+   * @memberof module:js/datepickermixin.exports.DatePickerMixin
    *
    * @desc
    * Returns the day of the week as number accordingly to `this.user_days_order` (if any) or `date.getDay` method.
@@ -86,7 +86,7 @@ export const DateTimeIntervalPickerMixin = {
 
 
   /**
-   * @memberof module:js/pickermixin.exports.DateTimeIntervalPickerMixin
+   * @memberof module:js/datepickermixin.exports.DatePickerMixin
    *
    * @desc
    * Checks if `iso_date` has the right ISO format (it doesn't do date validation).
@@ -115,7 +115,7 @@ export const DateTimeIntervalPickerMixin = {
 
 
   /**
-   * @memberof module:js/pickermixin.exports.DateTimeIntervalPickerMixin
+   * @memberof module:js/datepickermixin.exports.DatePickerMixin
    *
    * @desc
    * Displays a date in its own button
@@ -137,7 +137,7 @@ export const DateTimeIntervalPickerMixin = {
 
 
   /**
-   * @memberof module:js/pickermixin.exports.DateTimeIntervalPickerMixin
+   * @memberof module:js/datepickermixin.exports.DatePickerMixin
    *
    * @desc
    * Rounds minutes in intervals of 30.
@@ -173,7 +173,7 @@ export const DateTimeIntervalPickerMixin = {
 
 
   /**
-   * @memberof module:js/pickermixin.exports.DateTimeIntervalPickerMixin
+   * @memberof module:js/datepickermixin.exports.DatePickerMixin
    *
    * @desc
    * Initializes picker start values
@@ -184,8 +184,8 @@ export const DateTimeIntervalPickerMixin = {
    * @param {Date} [last_date_param] Last selectable date
    * @param {number} [first_day_no] Day with which the week must start. Accordingly to returned values of `Date.getDate` method, accepted range values are 0-6 where 0 means Sunday, 1 means Monday and so on
    *
-   * @see {@link module:js/pickermixin.exports.DateTimeIntervalPickerMixin.getDateBetween|getDateBetween}
-   * @see {@link module:js/pickermixin.exports.DateTimeIntervalPickerMixin.roundMinutes|roundMinutes}
+   * @see {@link module:js/datepickermixin.exports.DatePickerMixin.getDateBetween|getDateBetween}
+   * @see {@link module:js/datepickermixin.exports.DatePickerMixin.roundMinutes|roundMinutes}
    */
   setPickerProps( el, start_date_param, first_date_param, last_date_param, first_day_no ) {
     // Default start selected date is one day more than current date
@@ -238,110 +238,121 @@ export const DateTimeIntervalPickerMixin = {
 
 
   /**
-	 * Genera il calendario per la scelta della data di ritiro o consegna
+   * @memberof module:js/datepickermixin.exports.DatePickerMixin
+   *
+   * @desc
+	 * Creates the calendar for the current month
 	 *
-	 * @param {HTMLDivElement} picker Il pannello che contiene il calendario per la scelta della data
-	 * @param {Date} date La data che contiene le informazioni relative a mese e anno corrente
+	 * @param {HTMLDivElement} picker The panel that contains the calendar for day selection
+	 * @param {Date} date Current date
+   *
+   * @see {@link module:js/datepickermixin.exports.DatePickerMixin.getWeekDayNo|getWeekDayNo}
+   * @see {@link module:js/datepickermixin.exports.DatePickerMixin.getDayClassName|getDayClassName}
+   *
+   * @todo To implement addEventOnSelect
 	 */
 	showDateTable( picker, date ) {
 		let class_name, html = '';
 
-		let month = date.getMonth();
-		let year = date.getFullYear();
+		const month = date.getMonth();
+		const year = date.getFullYear();
 
-		this.current_month = new Date( date.getTime() );
+		// February length
+		const feb = ( ( year % 100 != 0 ) && ( year % 4 == 0 ) || ( year % 400 == 0 ) ) ? 29 : 28;
+		const total_days = [ '31', feb, '31', '30', '31', '30', '31', '31', '30', '31', '30', '31' ];
 
-		// Determina la durata del mese di Febbraio
-		let feb = ( ( year % 100 != 0 ) && ( year % 4 == 0 ) || ( year % 400 == 0 ) ) ? 29 : 28;
-		let total_days = [ '31', '' + feb + '', '31', '30', '31', '30', '31', '31', '30', '31', '30', '31' ];
-
-    // Determina il numero del giorno della settimana del primo giorno del mese corrente
+    // First day of current month as number
 		let week_day = this.getWeekDayNo( new Date( year, month, 1 ) );
 
-		this.prev_month = new Date( year, ( month - 1 ), 1, date.getHours(), date.getMinutes() );
-		let prev_month_total_days = total_days[ this.prev_month.getMonth() ];
 
-		let j = week_day;
+		this.prev_month = new Date( year, ( month - 1 ), 1, date.getHours(), date.getMinutes() );
+		const prev_month_total_days = total_days[ this.prev_month.getMonth() ];
 
 		let i = 0
-    // Stampa i giorni del mese precedente
+    let j = week_day;
+    // This loop displays the last days of the previous month
 		while( j > 0 ) {
 			i = ( prev_month_total_days - ( j - 1 ) );
 			class_name = this.getDayClassName( i, this.prev_month );
-			html += "<td class='prev-month " + class_name + "'>" + i + "</td>";
+			html += `<td class="prev-month ${ class_name }">${ i }</td>`;
 			j--;
 		}
 
+
+    this.current_month = new Date( date.getTime() );
 		i = 1;
-    // Stampa i giorni del mese corrente
+    // This loop displays the days of the current month
 		while ( i <= total_days[ month ] ) {
-			// Determina quando comincia una nuova riga
+			// Starts a new row
 			if( week_day > 6 ) {
 				week_day = 0;
 				html += "</tr><tr>";
 			}
 
-			class_name = this.getDayClassName( i, date );
-			html += "<td class='" + class_name + "'>" + i + "</td>";
+			class_name = this.getDayClassName( i, this.current_month );
+      html += `<td class="${ class_name }">${ i }</td>`;
 
 			week_day++;
 			i++;
 		}
 
 		this.next_month = new Date( year, ( month + 1 ), 1, date.getHours(), date.getMinutes() );
-    // Stampa i giorni del mese successivo
+    // This loop displays the first days of the next month
 		for( i = 1; week_day <= 6; week_day++, i++ ) {
 			class_name = this.getDayClassName( i, this.next_month );
-			html += "<td class='next-month " + class_name + "'>" + i + "</td>";
+      html += `<td class="next-month ${ class_name }">${ i }</td>`;
 		}
 
 		picker.innerHTML =
-			"<table class='date'>" +
-				"<tr>" +
-					"<th><a href='javascript:void(0);' class='prev-month'>&laquo;</a></th>" +
-					"<th colspan='5'>" +
-						"<span data-i18n='" + this.months_fullname[ month ] + "'>" + i18n[ this.months_fullname[ month ] ] +"</span> " +
-						"<span class='number'>" + year + "</span>" +
-					"</th>" +
-					"<th><a href='javascript:void(0);' class='next-month'>&raquo;</a></th>" +
-				"</tr>" +
-				"<tr>" +
-					"<td class='day-label' data-i18n='" + this.days_order[0] + "'>" + i18n[ this.days_order[0] ] + "</td>" +
-					"<td class='day-label' data-i18n='" + this.days_order[1] + "'>" + i18n[ this.days_order[1] ] + "</td>" +
-					"<td class='day-label' data-i18n='" + this.days_order[2] + "'>" + i18n[ this.days_order[2] ] + "</td>" +
-					"<td class='day-label' data-i18n='" + this.days_order[3] + "'>" + i18n[ this.days_order[3] ] + "</td>" +
-					"<td class='day-label' data-i18n='" + this.days_order[4] + "'>" + i18n[ this.days_order[4] ] + "</td>" +
-					"<td class='day-label' data-i18n='" + this.days_order[5] + "'>" + i18n[ this.days_order[5] ] + "</td>" +
-					"<td class='day-label' data-i18n='" + this.days_order[6] + "'>" + i18n[ this.days_order[6] ] + "</td>" +
-				"</tr>" +
-				"<tr>" +
-				html +
-				"</tr>" +
-			"</table>";
+			`<table class="date">
+				<tr>
+					<th><a href="javascript:void(0);" class="prev-month">&laquo;</a></th>
+					<th colspan="5">
+						<span data-i18n="${ this.months_fullname[ month ] }">${ i18n[ this.months_fullname[ month ] ] }</span>
+						<span class="number">${ year }</span>
+					</th>
+					<th><a href="javascript:void(0);" class="next-month">&raquo;</a></th>
+				</tr>
+				<tr>
+					<td class="day-label" data-i18n="${ this.days_order[0] }">${ i18n[ this.days_order[0] ] }</td>
+					<td class="day-label" data-i18n="${ this.days_order[1] }">${ i18n[ this.days_order[1] ] }</td>
+					<td class="day-label" data-i18n="${ this.days_order[2] }">${ i18n[ this.days_order[2] ] }</td>
+					<td class="day-label" data-i18n="${ this.days_order[3] }">${ i18n[ this.days_order[3] ] }</td>
+					<td class="day-label" data-i18n="${ this.days_order[4] }">${ i18n[ this.days_order[4] ] }</td>
+					<td class="day-label" data-i18n="${ this.days_order[5] }">${ i18n[ this.days_order[5] ] }</td>
+					<td class="day-label" data-i18n="${ this.days_order[6] }">${ i18n[ this.days_order[6] ] }</td>
+				</tr>
+				<tr>
+				${ html }
+				</tr>
+			</table>`;
 
-    return;
-
-		prev_month.setDate( prev_month_total_days );
-		let prev_month_btn = picker.querySelector( '.prev-month' );
-		if( prev_month >= min_date ) {
-			prev_month_btn.addEventListener( 'click', this.showDateTable.bind( this, picker, prev_month ) );
+    // Previous month button
+		this.prev_month.setDate( prev_month_total_days );
+		const prev_month_btn = picker.querySelector( '.prev-month' );
+		if( this.prev_month >= this.first_date ) {
+			prev_month_btn.addEventListener( 'click', () => this.showDateTable( picker, this.prev_month ) );
 		}
 		else {
 			prev_month_btn.classList.add( 'disabled' );
 		}
 
-		let next_month_btn = picker.querySelector( '.next-month' );
-		if( max_date > next_month ) {
-			next_month_btn.addEventListener( 'click', this.showDateTable.bind( this, picker, next_month ) );
+    // Next month button
+		const next_month_btn = picker.querySelector( '.next-month' );
+		if( this.last_date > this.next_month ) {
+			next_month_btn.addEventListener( 'click', () => this.showDateTable( picker, this.next_month ) );
 		}
 		else {
 			next_month_btn.classList.add( 'disabled' );
 		}
 
-		this.addEventOnSelect();
+		// this.addEventOnSelect();
 	},
 
   /**
+   * @memberof module:js/datepickermixin.exports.DatePickerMixin
+   *
+   * @desc
 	 * Ricava le classi da assegnare agli elementi <td> che contengono i giorni nei calendari
 	 * Utilizzato all'interno di un ciclo iterativo sia in fase di inizializzazione della tabella sia in fase di aggiornamento della stessa
 	 *

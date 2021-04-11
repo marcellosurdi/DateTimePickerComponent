@@ -9,6 +9,11 @@
 <style>
   html, body { margin: 0; padding: 0; height: 100%; font: 100% arial, sans-serif; color: #444; }
   div#container { padding: 10px; }
+
+  /* Available classes: prev-month, next-month, today, start-day end-day */
+  div#select_date td.today {
+    background-color: #f9f9ce;
+  }
 </style>
 </head>
 
@@ -23,9 +28,9 @@
 
     <span>HTML hidden values</span>
     <div id="select_date_3">
-        <input type="hidden" class="first_date" value="2022-08-03">
-      <input type="hidden" class="start_date" value="2022-08-05">
-      <input type="hidden" class="last_date" value="2022-08-25">
+      <input type="hidden" class="first_date" value="2022-08-03">
+      <input type="hidden" class="start_date" value="2022-08-23">
+      <input type="hidden" class="last_date" value="2022-08-31">
     </div>
   </div>
 </body>

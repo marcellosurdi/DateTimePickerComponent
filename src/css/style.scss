@@ -1,118 +1,132 @@
 $active_color: #2e489e;
-$disabled_color: #222;
-$start_date_color: #4963b9;
-$end_date_color: #444;
-$grey_color: #eee;
+$disabled_color: #ccc;
+$light_grey_color: #eee;
 $white_color: #fff;
 
-div.datetime-container, div.datetime-container * { box-sizing: border-box; }
 
+
+
+
+// Top level containers
+div.datetime-container, div.datetime-container * { box-sizing: border-box; }
 div.datetime-container {
   position: relative;
+  border-radius: 5px 5px 0 0;
   margin: 5px 0;
+  background-color: $light_grey_color;
   user-select: none;
 }
 
-  div.datetime-container .datetime { background-color: $grey_color; }
-  div.datetime-container .active-a-background { background-color: $active_color; color: $white_color; }
-  div.datetime-container .active-b-background { background-color: $start_date_color; color: $white_color; }
 
-  div.datetime {
-    border-radius: 5px 5px 0 0;
+
+
+
+  // Button containers
+  div.date-container, div.time-container {
     width: 100%;
-    font-variant: small-caps;
-    padding: 5px;
     text-align: center;
     overflow: hidden;
-    cursor: pointer;
+
+      // Buttons
+      button.date, button.time {
+        display: block;
+        -webkit-appearance: none;
+        border: 0;
+        border-radius: 5px 5px 0 0;
+        background-color: $light_grey_color;
+        outline: 0;
+        width: 100%;
+        font-variant: small-caps;
+        cursor: pointer;
+      }
+
+      button.active {
+        background-color: $active_color; color: $white_color;
+      }
+
+        button span { display: inline-block; margin: 0 -2px; }
+        button span.week-day { text-align: right; font-size: 18px; }
+        button span.month-day {
+          width: 45px;
+          text-align: center;
+          font-family: arial, sans-serif;
+          font-size: 36px;
+        }
+        button span.month-year { text-align: left; font-size: 16px; }
+        button span em { position: relative; top: 2px; font-size: 16px; font-style: normal; }
   }
 
-    /* Pulsanti che aprono i pannelli con il calendario o la griglia degli orari */
-    div.datetime div.time { float: right; }
 
-    div.datetime span { display: inline-block; margin: 0 -2px; }
-    div.date span.week-day { text-align: right; font-size: 18px; }
-    div.date span.month-day {
-      // -webkit-appearance: none;
-      // border: 0;
-      // outline: 0;
-      // background: transparent;
-      // padding: 0;
-      width: 45px;
-      // height: auto;
-      text-align: center;
-      font-family: arial, sans-serif;
-      font-size: 36px;
+
+
+
+    // Panels
+    div.picker {
+      display: none;
+      position: absolute;
+      z-index: 2;
+      border-radius: 0 0 5px 5px;
+      box-shadow: 0 1px 10px #555;
+      background-color: #fff;
+      width: 100%;
+
+        table {
+          margin: 0 auto;
+          border-collapse: collapse;
+          width: 100%;
+          max-width: 450px;
+        }
+
+        table a {
+          display: inline-block;
+          width: 20px;
+          height: 20px;
+          line-height: 20px;
+          text-decoration: none;
+          color: #000;
+        }
+
+        table th {
+          font-weight: bold;
+          font-size: 20px;
+        }
+
+        table th span.number { font-weight: normal; }
+
+        table th, table td {
+          border-bottom: 1px solid #ddd;
+          padding: 10px 5px;
+          width: 14.285%;
+          text-align: center;
+          vertical-align: middle;
+        }
+
+        table td.day-label { font-variant: small-caps; }
+
+        table td.selectable { cursor: pointer; }
+        table td.selectable:hover { font-weight: bold; }
+
+        table td.disabled, table a.disabled { color: $disabled_color; }
+
+        table td.start-day, table td.end-day {
+          background-repeat: no-repeat;
+          font-weight: bold;
+        }
+
+        table td.start-day {
+          background-color: $active_color; color: $white_color;
+          // background-image: url(../img/datepicker/start_min.svg);
+          background-position: left center;
+        }
+
+        table td.end-day {
+          background-color: $active_color; color: $white_color;
+          // background-image: url(../img/datepicker/end_min.svg);
+          background-position: right center;
+        }
+
+        table td.start-day.end-day {
+          // background-image: url(../img/datepicker/start_min.svg), url(../img/datepicker/end_min.svg);
+          background-position: left center, right center;
+        }
     }
-    div.date span.month-year { text-align: left; }
-    div.date span em { position: relative; top: 2px; font-style: normal; }
-
-    div.time span:first-child { color: #000; }
-
-      /* Pannelli con il calendario o la griglia degli orari */
-      div.picker {
-        display: none;
-        position: absolute;
-        z-index: 2;
-        border-radius: 0 0 5px 5px;
-        box-shadow: 0 1px 10px #555;
-        background-color: #fff;
-        width: 100%;
-        color: #444;
-      }
-
-      div.picker table {
-        margin: 0 auto;
-        border-collapse: collapse;
-        width: 100%;
-        max-width: 450px;
-      }
-
-      div.picker table a {
-        display: inline-block;
-        width: 20px;
-        height: 20px;
-        line-height: 20px;
-        text-decoration: none;
-        color: #000;
-      }
-
-      div.picker table th {
-        font-weight: bold;
-        font-size: 20px;
-      }
-
-      div.picker table th span.number { font-weight: normal; }
-
-      div.picker table th, div.picker table td {
-        border-bottom: 1px solid #ddd;
-        padding: 10px 5px;
-        text-align: center;
-        vertical-align: middle;
-      }
-
-      div.picker table td.day-label { font-variant: small-caps; }
-      div.picker table td.disabled, div.picker table a.disabled { color: #ccc; }
-
-      div.picker table td.start, div.picker table td.end {
-        background-repeat: no-repeat;
-        font-weight: bold;
-      }
-
-      div.picker table td.start {
-        /* background-image: url(../img/datepicker/start_min.svg); */
-        background-position: left center;
-      }
-
-      div.picker table td.end {
-        /* background-image: url(../img/datepicker/end_min.svg); */
-        background-position: right center;
-      }
-
-      div.picker table td.start.end {
-        /* background-image: url(../img/datepicker/start_min.svg), url(../img/datepicker/end_min.svg); */
-        background-position: left center, right center;
-      }
-
-      div.picker table td.selectable { cursor: pointer; }
-      div.picker table td.selectable:hover { font-weight: bold; }

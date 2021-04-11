@@ -74,26 +74,30 @@ export const DatePickerMixin = {
 	 * @return {string} Classes to be assigned to the current `td` element
 	 */
 	getDayClassName( day, date ) {
-		let class_name, if_btn;
+		let class_name;
 
-		// Non tiene conto delle informazioni dell'orario
+		// We don't take hours/minutes/seconds info into account for subsequent date comparisons
+    const today = new Date();
+    today.setHours( 0, 0, 0, 0 );
+    const today_ms = today.getTime();
 		const start_date_ms = new Date( this.start_date.getFullYear(), this.start_date.getMonth(), this.start_date.getDate() ).getTime();
 		const curr_day_ms = new Date( date.getFullYear(), date.getMonth(), day ).getTime();
 		const first_date_ms = new Date( this.first_date.getFullYear(), this.first_date.getMonth(), this.first_date.getDate() ).getTime();
 		const last_date_ms = new Date( this.last_date.getFullYear(), this.last_date.getMonth(), this.last_date.getDate() ).getTime();
 
 		class_name = 'day ';
-		// Selectable or disabled days
 		if( curr_day_ms < first_date_ms || curr_day_ms > last_date_ms ) {
-			class_name += 'disabled';
+			class_name += 'disabled ';
 		} else {
-			class_name += 'selectable';
+			class_name += 'selectable ';
 		}
 
-		// Start day
+    if( curr_day_ms == today_ms ) {
+      class_name += 'today ';
+    }
+
 		if( curr_day_ms == start_date_ms ) {
-			if_btn = ( this?.mode == 'start' ) ? 'active-a-background' : 'active-b-background';
-			class_name += ' start ' + if_btn;
+			class_name += 'start-day ';
 		}
 
     // -- Only for intervals--
@@ -106,8 +110,7 @@ export const DatePickerMixin = {
   	// 	}
   	// 	// Giorno di fine intervallo
   	// 	if( curr_day_ms == end_date_ms ) {
-  	// 		if_btn = ( mode == 'end' ) ? 'active-a-background' : 'active-b-background';
-  	// 		class_name += ' end ' + if_btn;
+  	// 		class_name += ' end-day ';
   	// 	}
     // }
 
@@ -180,7 +183,7 @@ export const DatePickerMixin = {
    * @param {Date} date The date to be displayed
    */
   printDate( div, date ) {
-    const [ week_day_span, month_day, month_year_span ] = div.querySelectorAll( 'div.date > *' );
+    const [ week_day_span, month_day, month_year_span ] = div.querySelectorAll( 'button.date > *' );
     const week_day_number = this.getWeekDayNo( date );
 
     week_day_span.textContent = i18n[ this.days_order[ week_day_number ] ];

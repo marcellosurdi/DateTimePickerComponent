@@ -73,12 +73,14 @@ export function DatePicker( id_div, settings ) {
 
   self.el_start.classList.add( 'datetime-container' );
   self.el_start.insertAdjacentHTML( 'afterbegin',
-    `<div class="datetime date start">
-      <span class="week-day">lun</span>
-      <span class="month-day">00</span>
-      <span class="month-year"><em>gen</em><br>2000</span>
-    </div>
-    <div class="picker"></div>`
+    `<div class="date-container">
+      <button type="button" class="date start">
+        <span class="week-day">mon</span>
+        <span class="month-day">00</span>
+        <span class="month-year"><em>jan</em><br>2000</span>
+      </button>
+      <div class="picker"></div>
+    </div>`
   );
   self.printDate( self.el_start, self.start_date );
 
@@ -92,9 +94,9 @@ export function DatePicker( id_div, settings ) {
     // document.body.addEventListener( evt, self.ifClickOutside );
 
     // Se il pulsante ha già il focus lo toglie
-		this.classList.toggle( 'active-a-background' );
+		this.classList.toggle( 'active' );
 
-    if( this.classList.contains( 'active-a-background' ) ) {
+    if( this.classList.contains( 'active' ) ) {
 			// Apre il pannello corrente
 			start_picker_div.style.display = 'block';
       self.showDateTable( start_picker_div, self.start_date );

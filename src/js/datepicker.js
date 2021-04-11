@@ -34,6 +34,7 @@ Object.assign( DatePicker.prototype, DatePickerMixin );
  *
  * @todo Provide support for disabled days (even if between first_date and last_date)
  * @todo Provide support for touch events
+ * @todo Provide a year navigation similar to a HTML native select control
  */
 export function DatePicker( id_div, settings ) {
   const self = this;
@@ -43,33 +44,12 @@ export function DatePicker( id_div, settings ) {
     return false;
   }
 
+  // Settings
   let start_date = ( settings ) ? settings.start_date : null;
   let first_date = ( settings ) ? settings.first_date : null;
   let last_date = ( settings ) ? settings.last_date : null;
   let first_day_no = ( settings ) ? settings.first_day_no : 1;
-
   self.setPickerProps( el, start_date, first_date, last_date, first_day_no );
-
-  /**
-	 * La data che contiene tutte le informazioni relative al mese precedente rispetto a quello selezionato
-	 * @member {Date}
-	 * @see DatePicker#showDateTable
-	 */
-	self.prev_month = null;
-
-	/**
-	 * La data che contiene tutte le informazioni relative al mese selezionato
-	 * @member {Date}
-	 * @see DatePicker#showDateTable
-	 */
-	self.current_month = null;
-
-	/**
-	 * La data che contiene tutte le informazioni relative al mese successivo rispetto a quello selezionato
-	 * @member {Date}
-	 * @see DatePicker#showDateTable
-	 */
-	self.next_month = null;
 
   self.el_start.classList.add( 'datetime-container' );
   self.el_start.insertAdjacentHTML( 'afterbegin',
@@ -84,7 +64,7 @@ export function DatePicker( id_div, settings ) {
   );
   self.printDate( self.el_start, self.start_date );
 
-  const start_date_btn = self.el_start.querySelector( '.date.start' );
+  const start_date_btn = self.el_start.querySelector( 'button.date.start' );
   const start_picker_div = start_date_btn.nextElementSibling;
 
   start_date_btn.addEventListener( 'click', onOpenPicker );

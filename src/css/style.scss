@@ -9,18 +9,13 @@ div.datetime-container, div.datetime-container * { box-sizing: border-box; }
 
 div.datetime-container {
   position: relative;
-  margin-top: 10px;
+  margin: 5px 0;
   user-select: none;
 }
 
   div.datetime-container .datetime { background-color: $grey_color; }
-  div.datetime-container .active-a-background, div.datetime-container .active-a-background input { background-color: $active_color; color: $white_color; }
+  div.datetime-container .active-a-background { background-color: $active_color; color: $white_color; }
   div.datetime-container .active-b-background { background-color: $start_date_color; color: $white_color; }
-
-  div.datetime-container label {
-    display: inline-block;
-    padding: 5px;
-  }
 
   div.datetime {
     border-radius: 5px 5px 0 0;
@@ -33,30 +28,22 @@ div.datetime-container {
   }
 
     /* Pulsanti che aprono i pannelli con il calendario o la griglia degli orari */
-    div.datetime div {
-      display: inline-block;
-      width: 50%;
-      height: 50px;
-      cursor: pointer;
-    }
-
     div.datetime div.time { float: right; }
-    div.datetime span { display: inline-block; margin: 0 -3px; }
 
+    div.datetime span { display: inline-block; margin: 0 -2px; }
     div.date span.week-day { text-align: right; font-size: 18px; }
-    div.date input {
-      -webkit-appearance: none;
-      border: 0;
-      outline: 0;
-      background: transparent;
-      padding: 0;
+    div.date span.month-day {
+      // -webkit-appearance: none;
+      // border: 0;
+      // outline: 0;
+      // background: transparent;
+      // padding: 0;
       width: 45px;
-      height: auto;
+      // height: auto;
       text-align: center;
       font-family: arial, sans-serif;
       font-size: 36px;
     }
-    div.date input:focus { background: transparent; }
     div.date span.month-year { text-align: left; }
     div.date span em { position: relative; top: 2px; font-style: normal; }
 

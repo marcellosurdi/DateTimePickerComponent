@@ -1,5 +1,4 @@
 export const i18n = {
-  'start_label':'Data e ora partenza',
   'jan':'gen',
   'feb':'feb',
   'mar':'mar',

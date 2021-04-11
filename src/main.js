@@ -11,3 +11,4 @@ new DatePicker( 'select_date_2', {
   start_date: "2021-01-05",
   last_date: new Date( 2021, 0, 29 )
 } );
+new DatePicker( 'select_date_3' );

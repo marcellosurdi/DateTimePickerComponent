@@ -180,11 +180,11 @@ export const DatePickerMixin = {
    * @param {Date} date The date to be displayed
    */
   printDate( div, date ) {
-    const [ week_day_span, month_day_input, month_year_span ] = div.querySelectorAll( 'div.date > *' );
+    const [ week_day_span, month_day, month_year_span ] = div.querySelectorAll( 'div.date > *' );
     const week_day_number = this.getWeekDayNo( date );
 
     week_day_span.textContent = i18n[ this.days_order[ week_day_number ] ];
-    month_day_input.value = ( '0' + date.getDate() ).slice( -2 );
+    month_day.textContent = ( '0' + date.getDate() ).slice( -2 );
     month_year_span.innerHTML = `<em data-i18n="${this.months_label[ date.getMonth() ]}">${i18n[ this.months_label[ date.getMonth() ] ]}</em><br>${date.getFullYear()}`;
   },
 

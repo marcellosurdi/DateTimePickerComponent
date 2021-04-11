@@ -73,10 +73,9 @@ export function DatePicker( id_div, settings ) {
 
   self.el_start.classList.add( 'datetime-container' );
   self.el_start.insertAdjacentHTML( 'afterbegin',
-    `<label for="${ 'id-' + self.start_date.getTime() }">${ i18n.start_label }</label>
-    <div class="datetime date start">
+    `<div class="datetime date start">
       <span class="week-day">lun</span>
-      <input id="${ 'id-' + self.start_date.getTime() }" value="00">
+      <span class="month-day">00</span>
       <span class="month-year"><em>gen</em><br>2000</span>
     </div>
     <div class="picker"></div>`

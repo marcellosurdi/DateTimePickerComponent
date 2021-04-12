@@ -70,7 +70,7 @@ export const DatePickerMixin = {
 	 * It's used inside a loop both when building table and when updating it.
 	 *
 	 * @param {string} day Current day inside a loop
-	 * @param {Date} date Date with the year/month info
+	 * @param {Date} date Date object with the year/month info
 	 * @return {string} Classes to be assigned to the current `td` element
 	 */
 	getDayClassName( day, date ) {
@@ -285,7 +285,7 @@ export const DatePickerMixin = {
       this.user_days_order = array1.concat( array2 );
     }
 
-    this.el_start = el;
+    this.start_container = el;
     this.start_date = start_date;
     this.first_date = first_date;
     this.last_date = last_date;
@@ -300,7 +300,7 @@ export const DatePickerMixin = {
    * @memberof module:js/datepickermixin.exports.DatePickerMixin
    *
    * @desc
-	 * Creates the calendar for the current month
+	 * Creates the calendar for the current month.
 	 *
 	 * @param {HTMLDivElement} picker The panel that contains the calendar for day selection
 	 * @param {Date} date Current date
@@ -403,6 +403,145 @@ export const DatePickerMixin = {
 			next_month_btn.classList.add( 'disabled' );
 		}
 
-		// this.addEventOnSelect();
+    // Adds click handlers to td.selectable elements
+    const coll = document.querySelectorAll( 'td.selectable' );
+
+		for( let n = coll.length, i = 0; i < n; i++ ) {
+			coll[ i ].addEventListener( 'click', ( e ) => this.onSelectDayOrHour( e ) );
+		}
 	},
+
+
+
+
+
+  /**
+   * @memberof module:js/datepickermixin.exports.DatePickerMixin
+   *
+   * @desc
+   * This is a click handler triggered when user clicks to select either a day or an hour.
+   * It passes an object as parameter to `this.selectDay` or to `this.selectHour` depending on the user clicks a day button or an hour button, respectively.
+   *
+   * If a day button is clicked these are the object properties:
+   * - `btn` {HTMLButtonElement}
+   * - `container` {HTMLDivElement}
+   * - `date` {Date}
+   * - `next_month` {boolean}
+   * - `picker` {HTMLDivElement}
+   * - `prev_month` {boolean}
+   * - `text` {string}
+	 *
+	 * @param {MouseEvent} e
+   *
+   * @see selectDay
+   * @see selectHour
+	 */
+	onSelectDayOrHour( e ) {
+		const o = {};
+    const t = e.target;
+
+		o.text = t.textContent;
+
+		const if_hour = ( o.text.indexOf(':') != -1 ) ? true : false;
+
+		// if( mode == 'start' ) {
+			o.date = this.start_date;
+      o.container = this.start_container;
+      o.btn = ( !if_hour ) ? this.start_date_btn : this.start_time_btn;
+			o.picker = this.start_picker_div;
+		// } else {
+		// 	o.date = end_date;
+		// 	o.div_close = end_picker_div; // => picker
+		// 	o.interval_div = el_end; // => container
+		// 	o.btn = ( !if_hour ) ? end_date_btn : end_time_btn;
+		// }
+    //
+		// if( if_hour ) {
+		// 	let arr = o.text.split(':');
+		// 	o.hour = arr[0];
+		// 	o.minute = arr[1]
+		// } else {
+			o.prev_month = t.classList.contains('prev-month');
+			o.next_month = t.classList.contains('next-month');
+		// }
+
+		const substr = ( t.classList.contains( 'day' ) )? 'Day' : 'Hour';
+		const method = 'select' + substr;
+		this[ method ]( o );
+	},
+
+  /**
+   * @memberof module:js/datepickermixin.exports.DatePickerMixin
+   *
+   * @desc
+	 * Seleziona il giorno scelto dall'utente
+	 *
+	 * @param {object} obj Oggetto contenente tutte le informazioni contestuali calcolate dal metodo chiamante {@link DatePicker#onSelectDayOrHour}
+   *
+	 * @see DatePicker#printDateAndTime
+	 * @see DatePicker#closeDateOrHourTable
+	 */
+	selectDay( o ) {
+    // Updates this.start_date or this.end_date after user selection
+		if( o.prev_month ) {
+			o.date.setFullYear( this.prev_month.getFullYear(), this.prev_month.getMonth(), o.text );
+		} else if( o.next_month ) {
+			o.date.setFullYear( this.next_month.getFullYear(), this.next_month.getMonth(), o.text );
+		} else {
+			o.date.setFullYear( this.current_month.getFullYear(), this.current_month.getMonth(), o.text );
+		}
+
+		// // Ricava le rispettive date senza differenze di orario
+		// let _start_date = new Date( start_date.getFullYear(), start_date.getMonth(), start_date.getDate() );
+		// let _end_date = new Date( end_date.getFullYear(), end_date.getMonth(), end_date.getDate() );
+		// let _curr_date = new Date( obj.date.getFullYear(), obj.date.getMonth(), obj.date.getDate() );
+		// let _min_date = new Date( min_date.getFullYear(), min_date.getMonth(), min_date.getDate() );
+		// let _max_date = new Date( max_date.getFullYear(), max_date.getMonth(), max_date.getDate() );
+    //
+		// this.checkDateTimeContraints( obj, _start_date, _end_date, _curr_date, _min_date, _max_date );
+
+		// Updates day classes after user selection
+		let coll = document.querySelectorAll( 'td.selectable' );
+
+		for( let n = coll.length, i = 0; i < n; i++ ) {
+			let param, class_name = '';
+			if( coll[ i ].classList.contains( 'prev-month' ) ) {
+				param = this.prev_month;
+				class_name += 'prev-month ';
+			}
+			else if( coll[ i ].classList.contains( 'next-month' ) ) {
+				param = this.next_month;
+				class_name += 'next-month ';
+			}
+			else {
+				param = this.current_month;
+			}
+			class_name += this.getDayClassName( coll[ i ].textContent, param );
+			coll[ i ].className = class_name;
+		}
+
+		// // Stampa nella pagina
+		// this.printDateAndTime( obj.interval_div, obj.date );
+
+		// Chiude il pannello attivo e toglie il focus dal pulsante corrispondente
+		this.closeDateOrHourTable( o.btn, o.picker, 500 );
+	},
+
+  /**
+	 * Chiude l'elemento contenente la tabella con le date o gli orari di inizio o fine intervallo
+	 * La chiusura può essere temporizzata
+	 *
+	 * @param {HTMLDivElement} btn Il pulsante che ha aperto la tabella con le date o gli orari
+	 * @param {HTMLDivElement} picker Il pannello corrente che contiene la tabella con le date o gli orari
+	 * @param {int} msec Il numero di millisecondi dopo il quale l'elemento deve essere chiuso
+	 * @see DatePicker#selectDay
+	 * @see DatePicker#selectHour
+	 */
+	closeDateOrHourTable( btn, picker, ms = 0 ) {
+		setTimeout( function() {
+			picker.style.display = 'none';
+			btn.classList.remove( 'active' );
+			// document.body.removeEventListener( evt, self.ifClickOutside );
+		}, ms );
+	}
 }

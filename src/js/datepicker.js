@@ -49,10 +49,10 @@ export function DatePicker( id_div, settings ) {
   let first_date = ( settings ) ? settings.first_date : null;
   let last_date = ( settings ) ? settings.last_date : null;
   let first_day_no = ( settings ) ? settings.first_day_no : 1;
-  self.setPickerProps( el, start_date, first_date, last_date, first_day_no );
+  this.setPickerProps( el, start_date, first_date, last_date, first_day_no );
 
-  self.el_start.classList.add( 'datetime-container' );
-  self.el_start.insertAdjacentHTML( 'afterbegin',
+  this.start_container.classList.add( 'datetime-container' );
+  this.start_container.insertAdjacentHTML( 'afterbegin',
     `<div class="date-container">
       <button type="button" class="date start">
         <span class="week-day">mon</span>
@@ -62,10 +62,13 @@ export function DatePicker( id_div, settings ) {
       <div class="picker"></div>
     </div>`
   );
-  self.printDate( self.el_start, self.start_date );
+  this.printDate( this.start_container, this.start_date );
 
-  const start_date_btn = self.el_start.querySelector( 'button.date.start' );
+  const start_date_btn = this.start_container.querySelector( 'button.date.start' );
   const start_picker_div = start_date_btn.nextElementSibling;
+
+  this.start_date_btn = start_date_btn;
+  this.start_picker_div = start_picker_div;
 
   start_date_btn.addEventListener( 'click', onOpenPicker );
 

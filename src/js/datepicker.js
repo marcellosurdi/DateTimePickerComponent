@@ -37,8 +37,6 @@ Object.assign( DatePicker.prototype, DatePickerMixin );
  * @todo Provide a year navigation similar to a HTML native select control
  */
 export function DatePicker( id_div, settings ) {
-  const self = this;
-
   const el = document.getElementById( id_div );
   if( el == null || el.nodeName != 'DIV' ) {
     return false;
@@ -64,25 +62,22 @@ export function DatePicker( id_div, settings ) {
   );
   this.printDate( this.start_container, this.start_date );
 
-  const start_date_btn = this.start_container.querySelector( 'button.date.start' );
-  const start_picker_div = start_date_btn.nextElementSibling;
+  this.start_date_btn = this.start_container.querySelector( 'button.date.start' );
+  this.start_picker_div = this.start_date_btn.nextElementSibling;
 
-  this.start_date_btn = start_date_btn;
-  this.start_picker_div = start_picker_div;
-
-  start_date_btn.addEventListener( 'click', onOpenPicker );
+  this.start_date_btn.addEventListener( 'click', ( e ) => this.onOpenPicker( e ) );
 
 
-  function onOpenPicker( e ) {
+  this.onOpenPicker = function( e ) {
     // document.body.addEventListener( evt, self.ifClickOutside );
 
     // Se il pulsante ha già il focus lo toglie
-		this.classList.toggle( 'active' );
+		e.target.classList.toggle( 'active' );
 
-    if( this.classList.contains( 'active' ) ) {
+    if( e.target.classList.contains( 'active' ) ) {
 			// Apre il pannello corrente
-			start_picker_div.style.display = 'block';
-      self.showDateTable( start_picker_div, self.start_date );
+			this.start_picker_div.style.display = 'block';
+      this.showDateTable( this.start_picker_div, this.start_date );
 
 			// Rende il contenuto del pannello corrente visibile in caso superi l'altezza del viewport
       // Mettere in un metodo a parte richiamato da this.showDateTable e this.showTimeTable
@@ -95,7 +90,7 @@ export function DatePicker( id_div, settings ) {
 			// }
 		} else {
 			// Se si preme nuovamente il pulsante chiude il pannello aperto
-			start_picker_div.style.display = 'none';
+			this.start_picker_div.style.display = 'none';
 			// document.body.removeEventListener( evt, self.ifClickOutside );
 		}
   }

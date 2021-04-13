@@ -212,6 +212,9 @@ export const DatePickerMixin = {
       case 'DD/MM/YYYY':
         output_date = two_digits_date + '/' + two_digits_month + '/' + date.getFullYear();
       break;
+      case 'DD/MM/YYYY HH:MM':
+
+      break;
       default:
         output_date = Math.round( date.getTime() / 1000 );
       break;
@@ -611,8 +614,8 @@ export const DatePickerMixin = {
 			coll[ i ].className = class_name;
 		}
 
-		// // Stampa nella pagina
-		// this.printDateAndTime( obj.interval_div, obj.date );
+		// Stampa nella pagina
+		this.printDateAndTime( o.container, o.date );
 
 		// Chiude il pannello attivo e toglie il focus dal pulsante corrispondente
 		this.closeDateOrHourTable( o.btn, o.picker, 500 );

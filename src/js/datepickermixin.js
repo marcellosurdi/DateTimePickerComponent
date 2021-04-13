@@ -177,18 +177,47 @@ export const DatePickerMixin = {
    * @memberof module:js/datepickermixin.exports.DatePickerMixin
    *
    * @desc
-   * Displays a date in its own button
+   * Displays date and time in their own button.
+   * output_date...
    *
    * @param {HTMLDivElement} div The `div` element in which to display the date
    * @param {Date} date The date to be displayed
    */
-  printDate( div, date ) {
+  printDateAndTime( div, date ) {
     const [ week_day_span, month_day, month_year_span ] = div.querySelectorAll( 'button.date > *' );
     const week_day_number = this.getWeekDayNo( date );
+    const two_digits_date = ( '0' + date.getDate() ).slice( -2 );
+    const two_digits_month = ( '0' + date.getMonth() ).slice( -2 );
 
     week_day_span.textContent = i18n[ this.days_order[ week_day_number ] ];
-    month_day.textContent = ( '0' + date.getDate() ).slice( -2 );
+    month_day.textContent = two_digits_date;
     month_year_span.innerHTML = `<em data-i18n="${this.months_label[ date.getMonth() ]}">${i18n[ this.months_label[ date.getMonth() ] ]}</em><br>${date.getFullYear()}`;
+
+    // if time
+
+    let output_date;
+    // Offset in milliseconds (Date.getTimezoneOffset returns minutes)
+    var time_zone_offset = ( new Date() ).getTimezoneOffset() * 60000;
+    // toISOString with timezone offset (the slice(0, -1) gets rid of the trailing Z)
+    var full_iso = ( new Date( date.getTime() - time_zone_offset ) ).toISOString().slice( 0, -1 );
+    switch( this.date_output ) {
+      case 'full_ISO':
+      case 'YYYY-MM-DDTHH:mm:ss.sss':
+        output_date = full_iso;
+      break;
+      case 'short_ISO':
+      case 'YYYY-MM-DD':
+        [ output_date, ] = full_iso.split( 'T' );
+      break;
+      case 'DD/MM/YYYY':
+        output_date = two_digits_date + '/' + two_digits_month + '/' + date.getFullYear();
+      break;
+      default:
+        output_date = Math.round( date.getTime() / 1000 );
+      break;
+    }
+
+    div.querySelector( 'input.output_date' ).value = output_date;
   },
 
 
@@ -416,6 +445,68 @@ export const DatePickerMixin = {
 
 
   /**
+	 * Metodo eseguito quando l'utente clicca uno dei quattro pulsanti per selezionare una data o un orario di ritiro o consegna
+	 *
+	 * @param {MouseEvent} e
+	 * @see showDateTable
+	 * @see showTimeTable
+	 */
+	onOpenPicker( e ) {
+    const btn = e.currentTarget;
+		let div_open, div_close, date;
+
+		// document.body.addEventListener( evt, self.ifClickOutside );
+
+		// Se il pulsante ha già il focus lo toglie
+		btn.classList.toggle( 'active' );
+
+		// // Toglie il focus dagli altri pulsanti
+		// let coll = document.querySelectorAll( 'div#' + el_start.id + ' > div, div#' + el_end.id + ' > div' );
+		// for( let i = 0; i < coll.length; i++ ) {
+		// 	if( coll[ i ] != this ) {
+		// 		coll[ i ].classList.remove( 'active' );
+		// 	}
+		// }
+
+    // Stabilisce se occorre impostare la data di inizio o fine intervallo
+    if( btn.classList.contains( 'start' ) ) {
+    	div_open = this.start_picker_div;
+    	// div_close = end_picker_div;
+    	date = this.start_date;
+    	// mode = 'start';
+    } else {
+    	// div_open = end_picker_div;
+    	// div_close = start_picker_div;
+    	// date = end_date;
+    	// mode = 'end';
+    }
+
+		if( btn.classList.contains( 'active' ) ) {
+			// Apre il pannello corrente
+			div_open.style.display = 'block';
+			// // Se un altro pannello è aperto lo chiude
+			// div_close.style.display = 'none';
+			let substr = ( btn.classList.contains( 'date' ) )? 'Date' : 'Time';
+			let method = 'show' + substr + 'Table';
+			this[ method ]( div_open, date );
+
+			// // Rende il contenuto del pannello corrente visibile in caso superi l'altezza del viewport
+			// let box = e.currentTarget.getBoundingClientRect();
+			// let h = box.top + e.currentTarget.offsetHeight + div_open.offsetHeight;
+			// let height_diff = h - document.documentElement.clientHeight
+      //
+			// if( height_diff > 0 ) {
+			// 	window.scrollBy( 0, height_diff );
+			// }
+		} else {
+			// Se si preme nuovamente il pulsante chiude il pannello aperto
+			div_open.style.display = 'none';
+			// document.body.removeEventListener( evt, self.ifClickOutside );
+		}
+	},
+
+
+  /**
    * @memberof module:js/datepickermixin.exports.DatePickerMixin
    *
    * @desc
@@ -423,13 +514,13 @@ export const DatePickerMixin = {
    * It passes an object as parameter to `this.selectDay` or to `this.selectHour` depending on the user clicks a day button or an hour button, respectively.
    *
    * If a day button is clicked these are the object properties:
-   * - `btn` {HTMLButtonElement}
-   * - `container` {HTMLDivElement}
-   * - `date` {Date}
-   * - `next_month` {boolean}
-   * - `picker` {HTMLDivElement}
-   * - `prev_month` {boolean}
-   * - `text` {string}
+   * - `btn` [HTMLButtonElement]
+   * - `container` [HTMLDivElement]
+   * - `date` [Date]
+   * - `next_month` [boolean]
+   * - `picker` [HTMLDivElement]
+   * - `prev_month` [boolean]
+   * - `text` [string]
 	 *
 	 * @param {MouseEvent} e
    *

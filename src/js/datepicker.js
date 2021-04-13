@@ -47,6 +47,7 @@ export function DatePicker( id_div, settings ) {
   let first_date = ( settings ) ? settings.first_date : null;
   let last_date = ( settings ) ? settings.last_date : null;
   let first_day_no = ( settings ) ? settings.first_day_no : 1;
+  this.date_output = ( settings ) ? settings.date_output : 'YYYY-MM-DD';
   this.setPickerProps( el, start_date, first_date, last_date, first_day_no );
 
   this.start_container.classList.add( 'datetime-container' );
@@ -58,40 +59,13 @@ export function DatePicker( id_div, settings ) {
         <span class="month-year"><em>jan</em><br>2000</span>
       </button>
       <div class="picker"></div>
-    </div>`
+    </div>
+    <input type="hidden" class="output_date" value="">`
   );
-  this.printDate( this.start_container, this.start_date );
+  this.printDateAndTime( this.start_container, this.start_date );
 
   this.start_date_btn = this.start_container.querySelector( 'button.date.start' );
   this.start_picker_div = this.start_date_btn.nextElementSibling;
 
   this.start_date_btn.addEventListener( 'click', ( e ) => this.onOpenPicker( e ) );
-
-
-  this.onOpenPicker = function( e ) {
-    // document.body.addEventListener( evt, self.ifClickOutside );
-
-    // Se il pulsante ha già il focus lo toglie
-		e.target.classList.toggle( 'active' );
-
-    if( e.target.classList.contains( 'active' ) ) {
-			// Apre il pannello corrente
-			this.start_picker_div.style.display = 'block';
-      this.showDateTable( this.start_picker_div, this.start_date );
-
-			// Rende il contenuto del pannello corrente visibile in caso superi l'altezza del viewport
-      // Mettere in un metodo a parte richiamato da this.showDateTable e this.showTimeTable
-			// let box = e.currentTarget.getBoundingClientRect();
-			// let h = box.top + e.currentTarget.offsetHeight + start_picker_div.offsetHeight;
-			// let height_diff = h - document.documentElement.clientHeight
-      //
-			// if( height_diff > 0 ) {
-			// 	window.scrollBy( 0, height_diff );
-			// }
-		} else {
-			// Se si preme nuovamente il pulsante chiude il pannello aperto
-			this.start_picker_div.style.display = 'none';
-			// document.body.removeEventListener( evt, self.ifClickOutside );
-		}
-  }
 }

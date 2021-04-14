@@ -47,8 +47,10 @@ export function DatePicker( id_div, settings ) {
   let first_date = ( settings ) ? settings.first_date : null;
   let last_date = ( settings ) ? settings.last_date : null;
   let first_day_no = ( settings ) ? settings.first_day_no : 1;
-  this.date_output = ( settings ) ? settings.date_output : 'YYYY-MM-DD';
   this.setPickerProps( el, start_date, first_date, last_date, first_day_no );
+
+  this.date_output = ( settings ) ? settings.date_output : 'short_ISO';
+  this.mode = 'start';
 
   this.start_container.classList.add( 'datetime-container' );
   this.start_container.insertAdjacentHTML( 'afterbegin',

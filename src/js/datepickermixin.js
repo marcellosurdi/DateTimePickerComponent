@@ -186,11 +186,9 @@ export const DatePickerMixin = {
   printDateAndTime( div, date ) {
     const [ week_day_span, month_day, month_year_span ] = div.querySelectorAll( 'button.date > *' );
     const week_day_number = this.getWeekDayNo( date );
-    const two_digits_date = ( '0' + date.getDate() ).slice( -2 );
-    const two_digits_month = ( '0' + date.getMonth() ).slice( -2 );
 
     week_day_span.textContent = i18n[ this.days_order[ week_day_number ] ];
-    month_day.textContent = two_digits_date;
+    month_day.textContent = ( '0' + date.getDate() ).slice( -2 );
     month_year_span.innerHTML = `<em data-i18n="${this.months_label[ date.getMonth() ]}">${i18n[ this.months_label[ date.getMonth() ] ]}</em><br>${date.getFullYear()}`;
 
     // if time
@@ -201,20 +199,11 @@ export const DatePickerMixin = {
     // toISOString with timezone offset (the slice(0, -1) gets rid of the trailing Z)
     var full_iso = ( new Date( date.getTime() - time_zone_offset ) ).toISOString().slice( 0, -1 );
     switch( this.date_output ) {
-      case 'full_ISO':
-      case 'YYYY-MM-DDTHH:mm:ss.sss':
-        output_date = full_iso;
-      break;
-      case 'short_ISO':
-      case 'YYYY-MM-DD':
-        [ output_date, ] = full_iso.split( 'T' );
-      break;
-      case 'DD/MM/YYYY':
-        output_date = two_digits_date + '/' + two_digits_month + '/' + date.getFullYear();
-      break;
-      case 'DD/MM/YYYY HH:MM':
-
-      break;
+      // YYYY-MM-DDTHH:mm:ss.sss
+      case 'full_ISO': output_date = full_iso; break;
+      // YYYY-MM-DD
+      case 'short_ISO': [ output_date, ] = full_iso.split( 'T' ); break;
+      case 'timestamp':
       default:
         output_date = Math.round( date.getTime() / 1000 );
       break;
@@ -458,8 +447,6 @@ export const DatePickerMixin = {
     const btn = e.currentTarget;
 		let div_open, div_close, date;
 
-		// document.body.addEventListener( evt, self.ifClickOutside );
-
 		// Se il pulsante ha già il focus lo toglie
 		btn.classList.toggle( 'active' );
 
@@ -484,6 +471,11 @@ export const DatePickerMixin = {
     	// mode = 'end';
     }
 
+    if( !div_open.ifOutside ) {
+      div_open.ifOutside = ( e ) => this.ifOutside( e );
+    }
+		document.body.addEventListener( 'click', div_open.ifOutside );
+
 		if( btn.classList.contains( 'active' ) ) {
 			// Apre il pannello corrente
 			div_open.style.display = 'block';
@@ -504,10 +496,36 @@ export const DatePickerMixin = {
 		} else {
 			// Se si preme nuovamente il pulsante chiude il pannello aperto
 			div_open.style.display = 'none';
-			// document.body.removeEventListener( evt, self.ifClickOutside );
+			document.body.removeEventListener( 'click', div_open.ifOutside );
 		}
 	},
 
+  /**
+	 * Chiude il pannello se l'utente clicca fuori da questo
+	 *
+	 * @param {Event} e
+	 */
+	ifOutside( e ) {
+    console.log( 'ese' );
+		let div = ( this.mode == 'start' ) ? this.start_picker_div : this.end_picker_div;
+
+		let el = document.elementFromPoint( e.clientX, e.clientY );
+		let inside = false;
+
+    do {
+      if( el.matches( `#${ this.start_container.id }.datetime-container` ) ) {
+        inside = true;
+      }
+      el = el.parentElement || el.parentNode;
+    } while( el !== null && el.nodeType === 1 );
+
+		if( !inside )  {
+      div.previousElementSibling.classList.remove( 'active' );
+  		div.style.display = 'none';
+
+  		document.body.removeEventListener( 'click', div.ifOutside );
+		}
+	},
 
   /**
    * @memberof module:js/datepickermixin.exports.DatePickerMixin
@@ -627,7 +645,7 @@ export const DatePickerMixin = {
 	 *
 	 * @param {HTMLDivElement} btn Il pulsante che ha aperto la tabella con le date o gli orari
 	 * @param {HTMLDivElement} picker Il pannello corrente che contiene la tabella con le date o gli orari
-	 * @param {int} msec Il numero di millisecondi dopo il quale l'elemento deve essere chiuso
+	 * @param {int} [msec:0] Il numero di millisecondi dopo il quale l'elemento deve essere chiuso
 	 * @see DatePicker#selectDay
 	 * @see DatePicker#selectHour
 	 */
@@ -635,7 +653,7 @@ export const DatePickerMixin = {
 		setTimeout( function() {
 			picker.style.display = 'none';
 			btn.classList.remove( 'active' );
-			// document.body.removeEventListener( evt, self.ifClickOutside );
+			document.body.removeEventListener( 'click', picker.ifOutside );
 		}, ms );
 	}
 }

@@ -7,7 +7,6 @@
  * This module contains a mixin object with methods for DatePicker class
  */
 
-import { i18n } from './i18n';
 
 
 
@@ -22,9 +21,50 @@ import { i18n } from './i18n';
  */
 export const DatePickerMixin = {
   ms_per_day: 24 * 60 * 60 * 1000,
+  i18n: {
+    'jan':'jan',
+    'feb':'feb',
+    'mar':'mar',
+    'apr':'apr',
+    'may':'may',
+    'jun':'jun',
+    'jul':'jul',
+    'aug':'aug',
+    'sep':'set',
+    'oct':'sep',
+    'nov':'nov',
+    'dec':'dec',
+    'january':'January',
+    'february':'February',
+    'march':'March',
+    'april':'April',
+    'may':'May',
+    'june':'June',
+    'july':'July',
+    'august':'August',
+    'september':'September',
+    'october':'October',
+    'november':'November',
+    'december':'December',
+    'mon':'mon',
+    'tue':'tue',
+    'wed':'wed',
+    'thu':'thu',
+    'fri':'fri',
+    'sat':'sat',
+    'sun':'sun',
+    'lunedi':'Monday',
+    'martedi':'Tuesday',
+    'mercoledi':'Wednesday',
+    'giovedi':'Thursday',
+    'venerdi':'Friday',
+    'sabato':'Saturday',
+    'domenica':'Sunday',
+  },
   default_days_order: [ 'sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat' ],
   months_label: [ 'jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec' ],
   months_fullname: [ 'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december' ],
+  click: ( navigator.userAgent.match( /(iPad|iPhone|iPod)/g ) ) ? 'touchstart' : 'click',
 
   /**
    * @memberof module:js/datepickermixin.exports.DatePickerMixin
@@ -187,9 +227,9 @@ export const DatePickerMixin = {
     const [ week_day_span, month_day, month_year_span ] = div.querySelectorAll( 'button.date > *' );
     const week_day_number = this.getWeekDayNo( date );
 
-    week_day_span.textContent = i18n[ this.days_order[ week_day_number ] ];
+    week_day_span.textContent = this.i18n[ this.days_order[ week_day_number ] ];
     month_day.textContent = ( '0' + date.getDate() ).slice( -2 );
-    month_year_span.innerHTML = `<em data-i18n="${this.months_label[ date.getMonth() ]}">${i18n[ this.months_label[ date.getMonth() ] ]}</em><br>${date.getFullYear()}`;
+    month_year_span.innerHTML = `<em data-i18n="${this.months_label[ date.getMonth() ]}">${this.i18n[ this.months_label[ date.getMonth() ] ]}</em><br>${date.getFullYear()}`;
 
     // if time
 
@@ -386,19 +426,19 @@ export const DatePickerMixin = {
 				<tr>
 					<th><a href="javascript:void(0);" class="prev-month">&laquo;</a></th>
 					<th colspan="5">
-						<span data-i18n="${ this.months_fullname[ month ] }">${ i18n[ this.months_fullname[ month ] ] }</span>
+						<span data-i18n="${ this.months_fullname[ month ] }">${ this.i18n[ this.months_fullname[ month ] ] }</span>
 						<span class="number">${ year }</span>
 					</th>
 					<th><a href="javascript:void(0);" class="next-month">&raquo;</a></th>
 				</tr>
 				<tr>
-					<td class="day-label" data-i18n="${ this.days_order[0] }">${ i18n[ this.days_order[0] ] }</td>
-					<td class="day-label" data-i18n="${ this.days_order[1] }">${ i18n[ this.days_order[1] ] }</td>
-					<td class="day-label" data-i18n="${ this.days_order[2] }">${ i18n[ this.days_order[2] ] }</td>
-					<td class="day-label" data-i18n="${ this.days_order[3] }">${ i18n[ this.days_order[3] ] }</td>
-					<td class="day-label" data-i18n="${ this.days_order[4] }">${ i18n[ this.days_order[4] ] }</td>
-					<td class="day-label" data-i18n="${ this.days_order[5] }">${ i18n[ this.days_order[5] ] }</td>
-					<td class="day-label" data-i18n="${ this.days_order[6] }">${ i18n[ this.days_order[6] ] }</td>
+					<td class="day-label" data-i18n="${ this.days_order[0] }">${ this.i18n[ this.days_order[0] ] }</td>
+					<td class="day-label" data-i18n="${ this.days_order[1] }">${ this.i18n[ this.days_order[1] ] }</td>
+					<td class="day-label" data-i18n="${ this.days_order[2] }">${ this.i18n[ this.days_order[2] ] }</td>
+					<td class="day-label" data-i18n="${ this.days_order[3] }">${ this.i18n[ this.days_order[3] ] }</td>
+					<td class="day-label" data-i18n="${ this.days_order[4] }">${ this.i18n[ this.days_order[4] ] }</td>
+					<td class="day-label" data-i18n="${ this.days_order[5] }">${ this.i18n[ this.days_order[5] ] }</td>
+					<td class="day-label" data-i18n="${ this.days_order[6] }">${ this.i18n[ this.days_order[6] ] }</td>
 				</tr>
 				<tr>
 				${ html }
@@ -474,7 +514,7 @@ export const DatePickerMixin = {
     if( !div_open.ifOutside ) {
       div_open.ifOutside = ( e ) => this.ifOutside( e );
     }
-		document.body.addEventListener( 'click', div_open.ifOutside );
+		document.body.addEventListener( this.click, div_open.ifOutside );
 
 		if( btn.classList.contains( 'active' ) ) {
 			// Apre il pannello corrente
@@ -496,7 +536,7 @@ export const DatePickerMixin = {
 		} else {
 			// Se si preme nuovamente il pulsante chiude il pannello aperto
 			div_open.style.display = 'none';
-			document.body.removeEventListener( 'click', div_open.ifOutside );
+			document.body.removeEventListener( this.click, div_open.ifOutside );
 		}
 	},
 
@@ -506,7 +546,6 @@ export const DatePickerMixin = {
 	 * @param {Event} e
 	 */
 	ifOutside( e ) {
-    console.log( 'ese' );
 		let div = ( this.mode == 'start' ) ? this.start_picker_div : this.end_picker_div;
 
 		let el = document.elementFromPoint( e.clientX, e.clientY );
@@ -520,10 +559,10 @@ export const DatePickerMixin = {
     } while( el !== null && el.nodeType === 1 );
 
 		if( !inside )  {
-      div.previousElementSibling.classList.remove( 'active' );
-  		div.style.display = 'none';
+      document.body.removeEventListener( this.click, div.ifOutside );
 
-  		document.body.removeEventListener( 'click', div.ifOutside );
+      div.previousElementSibling.querySelector( '.active' ).classList.remove( 'active' );
+  		div.style.display = 'none';
 		}
 	},
 
@@ -650,10 +689,10 @@ export const DatePickerMixin = {
 	 * @see DatePicker#selectHour
 	 */
 	closeDateOrHourTable( btn, picker, ms = 0 ) {
-		setTimeout( function() {
+		setTimeout( () => {
 			picker.style.display = 'none';
 			btn.classList.remove( 'active' );
-			document.body.removeEventListener( 'click', picker.ifOutside );
+			document.body.removeEventListener( this.click, picker.ifOutside );
 		}, ms );
 	}
 }

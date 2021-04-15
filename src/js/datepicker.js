@@ -7,7 +7,6 @@
  * This module contains DatePicker class
  */
 
-import { i18n } from './i18n';
 import { DatePickerMixin } from './datepickermixin';
 
 Object.assign( DatePicker.prototype, DatePickerMixin );
@@ -43,31 +42,32 @@ export function DatePicker( id_div, settings ) {
   }
 
   // Settings
-  let start_date = ( settings ) ? settings.start_date : null;
-  let first_date = ( settings ) ? settings.first_date : null;
-  let last_date = ( settings ) ? settings.last_date : null;
-  let first_day_no = ( settings ) ? settings.first_day_no : 1;
+  let start_date = ( settings?.start_date ) ? settings.start_date : null;
+  let first_date = ( settings?.first_date ) ? settings.first_date : null;
+  let last_date = ( settings?.last_date ) ? settings.last_date : null;
+  let first_day_no = ( typeof settings?.first_day_no !== 'undefined' ) ? settings.first_day_no : 1;
   this.setPickerProps( el, start_date, first_date, last_date, first_day_no );
 
-  this.date_output = ( settings ) ? settings.date_output : 'short_ISO';
+  this.i18n = ( settings?.i18n ) ? settings.i18n : this.i18n;
+  this.date_output = ( settings?.date_output ) ? settings.date_output : 'short_ISO';
   this.mode = 'start';
 
-  this.start_container.classList.add( 'datetime-container' );
+  this.start_container.classList.add( 'datetime-container', 'fix-float' );
   this.start_container.insertAdjacentHTML( 'afterbegin',
-    `<div class="date-container">
-      <button type="button" class="date start">
-        <span class="week-day">mon</span>
-        <span class="month-day">00</span>
-        <span class="month-year"><em>jan</em><br>2000</span>
-      </button>
-      <div class="picker"></div>
-    </div>
-    <input type="hidden" class="output_date" value="">`
+  `<div class="buttons-container fix-float">
+    <button type="button" class="date start">
+      <span class="week-day">mon</span>
+      <span class="month-day">00</span>
+      <span class="month-year"><em>jan</em><br>2000</span>
+    </button>
+  </div>
+  <div class="picker"></div>
+  <input type="hidden" class="output_date" value="">`
   );
   this.printDateAndTime( this.start_container, this.start_date );
 
   this.start_date_btn = this.start_container.querySelector( 'button.date.start' );
-  this.start_picker_div = this.start_date_btn.nextElementSibling;
+  this.start_picker_div = this.start_container.querySelector( 'div.picker' );
 
   this.start_date_btn.addEventListener( 'click', ( e ) => this.onOpenPicker( e ) );
 }

@@ -1,6 +1,6 @@
 $active_color: #2e489e;
 $disabled_color: #ccc;
-$light_grey_color: #eee;
+$light_grey_color: #f4f4f4;
 $white_color: #fff;
 
 
@@ -9,52 +9,49 @@ $white_color: #fff;
 
 // Top level containers
 div.datetime-container, div.datetime-container * { box-sizing: border-box; }
+.fix-float::after { content: ''; display: table; clear: both; }
 div.datetime-container {
   position: relative;
   border-radius: 5px 5px 0 0;
   margin: 5px 0;
   background-color: $light_grey_color;
+  max-width: 640px;
+  text-align: center;
   user-select: none;
-}
 
-
-
-
-
-  // Button containers
-  div.date-container, div.time-container {
+  // Buttons
+  button.date, button.time {
+    -webkit-appearance: none;
+    border: 0;
+    border-radius: 5px 5px 0 0;
+    background-color: $light_grey_color;
+    padding: 0;
     width: 100%;
-    text-align: center;
-    overflow: hidden;
-
-      // Buttons
-      button.date, button.time {
-        display: block;
-        -webkit-appearance: none;
-        border: 0;
-        border-radius: 5px 5px 0 0;
-        background-color: $light_grey_color;
-        outline: 0;
-        width: 100%;
-        font-variant: small-caps;
-        cursor: pointer;
-      }
-
-      button.active {
-        background-color: $active_color; color: $white_color;
-      }
-
-        button span { display: inline-block; margin: 0 -2px; }
-        button span.week-day { text-align: right; font-size: 18px; }
-        button span.month-day {
-          width: 45px;
-          text-align: center;
-          font-family: arial, sans-serif;
-          font-size: 36px;
-        }
-        button span.month-year { text-align: left; font-size: 16px; }
-        button span em { position: relative; top: 2px; font-size: 16px; font-style: normal; }
+    outline: 0;
+    font-variant: small-caps;
+    cursor: pointer;
   }
+
+  button.w-50 {
+    float: left;
+    width: 50%;
+  }
+
+  button.active {
+    background-color: $active_color; color: $white_color;
+  }
+
+    button span { display: inline-block; margin: 0 -2px; }
+    button span.week-day { text-align: right; font-size: 18px; }
+    button span.month-day {
+      width: 45px;
+      text-align: center;
+      font-family: arial, sans-serif;
+      font-size: 36px;
+    }
+    button span.month-year { text-align: left; font-size: 16px; }
+    button span em { position: relative; top: 2px; font-size: 16px; font-style: normal; }
+}
 
 
 
@@ -74,7 +71,6 @@ div.datetime-container {
           margin: 0 auto;
           border-collapse: collapse;
           width: 100%;
-          max-width: 450px;
         }
 
         table a {

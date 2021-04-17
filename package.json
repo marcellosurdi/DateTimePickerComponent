@@ -2,19 +2,20 @@
   "name": "projects.datetimepicker",
   "description": "Date Time Interval Component",
   "author": "Marcello Surdi",
-  "version": "0.0.22",
+  "version": "0.0.23",
   "keywords": [],
   "main": "main.js",
   "license": "ISC",
   "scripts": {
     "start": "webpack serve --config config/webpack.dev.js --open chrome",
     "current": "webpack serve --config config/webpack.dev.js --open chrome --open-page index.html",
-    "build": "webpack --config config/webpack.prod.js --env BUILD"
+    "build": "webpack --config config/webpack.prod.js --output-public-path /www/project.datetimepicker/dist/ --env BUILD"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.1",
-    "@babel/preset-env": "^7.12.1",
-    "babel-loader": "^8.1.0",
+    "@babel/core": "^7.13.15",
+    "@babel/preset-env": "^7.13.15",
+    "@babel/register": "^7.13.14",
+    "babel-loader": "^8.2.2",
     "clean-webpack-plugin": "^3.0.0",
     "copy-webpack-plugin": "^6.2.1",
     "css-loader": "^5.0.0",
@@ -31,5 +32,7 @@
     "webpack-dev-server": "^3.11.0",
     "webpack-merge": "^5.2.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@babel/polyfill": "^7.12.1"
+  }
 }

@@ -8,8 +8,14 @@
  */
 
 
-
-
+ if( !Element.prototype.matches ) {
+   Element.prototype.matches =
+     Element.prototype.matchesSelector ||
+     Element.prototype.mozMatchesSelector ||
+     Element.prototype.msMatchesSelector ||
+     Element.prototype.oMatchesSelector ||
+     Element.prototype.webkitMatchesSelector
+ }
 
 
 /**
@@ -190,15 +196,9 @@ export const DatePickerMixin = {
    * @desc
    * Checks if `iso_date` has the right ISO format (it doesn't do date validation).
    *
-   * Accepted values:
-   * - '2015-03-25'
-   * - '2015-03-25T12:00:00'
-   * - '2015-03-25T12:00:00Z'
-   * - '2015-03-25T12:00:00-06:30'
+   * Accepted values: '2015-03-25', '2015-03-25T12:00:00', '2015-03-25T12:00:00Z', '2015-03-25T12:00:00-06:30'
    *
-   * Rejected values:
-   * - '2015-**3**-25'
-   * - '2015-**13**-25T12:00:00'
+   * Rejected values: '2015-**3**-25', '2015-**13**-25T12:00:00'
    *
    * ...and so on
    *
@@ -525,14 +525,22 @@ export const DatePickerMixin = {
 			let method = 'show' + substr + 'Table';
 			this[ method ]( div_open, date );
 
-			// // Rende il contenuto del pannello corrente visibile in caso superi l'altezza del viewport
-			// let box = e.currentTarget.getBoundingClientRect();
-			// let h = box.top + e.currentTarget.offsetHeight + div_open.offsetHeight;
-			// let height_diff = h - document.documentElement.clientHeight
-      //
-			// if( height_diff > 0 ) {
-			// 	window.scrollBy( 0, height_diff );
-			// }
+			// Check if panel exceeds viewport height
+      const rect = div_open.getBoundingClientRect();
+      const diff = ( rect.top + div_open.offsetHeight ) - document.documentElement.clientHeight
+
+			if( diff > 0 ) {
+        // If scroll behavior is supported
+        if( 'scrollBehavior' in document.documentElement.style ) {
+          window.scrollBy( {
+            top: diff,
+            left: 0,
+            behavior: 'smooth'
+          } );
+        } else {
+  				window.scrollBy( 0, diff );
+        }
+			}
 		} else {
 			// Se si preme nuovamente il pulsante chiude il pannello aperto
 			div_open.style.display = 'none';
@@ -548,6 +556,10 @@ export const DatePickerMixin = {
 	ifOutside( e ) {
 		let div = ( this.mode == 'start' ) ? this.start_picker_div : this.end_picker_div;
 
+    if( e.type == 'touchstart' ) {
+      e.clientX = e.touches[0].clientX;
+      e.clientY = e.touches[0].clientY;
+    }
 		let el = document.elementFromPoint( e.clientX, e.clientY );
 		let inside = false;
 

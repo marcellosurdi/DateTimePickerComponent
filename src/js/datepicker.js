@@ -9,7 +9,15 @@
 
 import { DatePickerMixin } from './datepickermixin';
 
-Object.assign( DatePicker.prototype, DatePickerMixin );
+// Object.assign( DatePicker.prototype, DatePickerMixin );
+var objs = [ DatePickerMixin ],
+    result =  objs.reduce(function (r, o) {
+        Object.keys(o).forEach(function (k) {
+            r[k] = o[k];
+        });
+        return r;
+    }, DatePicker.prototype);
+
 
 
 
@@ -31,9 +39,9 @@ Object.assign( DatePicker.prototype, DatePickerMixin );
  *  last_date: new Date( 2021, 0, 29 )
  * } )
  *
- * @todo Provide support for disabled days (even if between first_date and last_date)
+ * @todo Provide support for disabled days (even if these are between first_date and last_date)
  * @todo Provide support for touch events
- * @todo Provide a year navigation similar to a HTML native select control
+ * @todo Provide a year picker similar to a HTML native select control
  */
 export function DatePicker( id_div, settings ) {
   const el = document.getElementById( id_div );
@@ -42,10 +50,10 @@ export function DatePicker( id_div, settings ) {
   }
 
   // Settings
-  let start_date = ( settings?.start_date ) ? settings.start_date : null;
-  let first_date = ( settings?.first_date ) ? settings.first_date : null;
-  let last_date = ( settings?.last_date ) ? settings.last_date : null;
-  let first_day_no = ( typeof settings?.first_day_no !== 'undefined' ) ? settings.first_day_no : 1;
+  const start_date = ( settings?.start_date ) ? settings.start_date : null;
+  const first_date = ( settings?.first_date ) ? settings.first_date : null;
+  const last_date = ( settings?.last_date ) ? settings.last_date : null;
+  const first_day_no = ( typeof settings?.first_day_no !== 'undefined' ) ? settings.first_day_no : 1;
   this.setPickerProps( el, start_date, first_date, last_date, first_day_no );
 
   this.i18n = ( settings?.i18n ) ? settings.i18n : this.i18n;

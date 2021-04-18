@@ -9,14 +9,8 @@
 
 import { DatePickerMixin } from './datepickermixin';
 
-// Object.assign( DatePicker.prototype, DatePickerMixin );
-var objs = [ DatePickerMixin ],
-    result =  objs.reduce(function (r, o) {
-        Object.keys(o).forEach(function (k) {
-            r[k] = o[k];
-        });
-        return r;
-    }, DatePicker.prototype);
+DatePicker.prototype = Object.create( DatePickerMixin.prototype );
+DatePicker.prototype.constructor = DatePicker;
 
 
 
@@ -44,6 +38,8 @@ var objs = [ DatePickerMixin ],
  * @todo Provide a year picker similar to a HTML native select control
  */
 export function DatePicker( id_div, settings ) {
+  DatePickerMixin.call(this);
+
   const el = document.getElementById( id_div );
   if( el == null || el.nodeName != 'DIV' ) {
     return false;
@@ -58,7 +54,6 @@ export function DatePicker( id_div, settings ) {
 
   this.i18n = ( settings?.i18n ) ? settings.i18n : this.i18n;
   this.date_output = ( settings?.date_output ) ? settings.date_output : 'short_ISO';
-  this.mode = 'start';
 
   this.start_container.classList.add( 'datetime-container', 'fix-float' );
   this.start_container.insertAdjacentHTML( 'afterbegin',

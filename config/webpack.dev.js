@@ -40,7 +40,7 @@ module.exports = ( env, argv ) => {
         // Hot Module Replacement consente un aggiornamento dei moduli a runtime senza un ricaricamento di pagina completo
         hot: true,
 
-        port: 3001,
+        port: 3003,
 
         // openPage: 'www/www.dev.dragosailor/dist/',
 

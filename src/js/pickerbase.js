@@ -1,12 +1,11 @@
 /**
- * @module js/datepickermixin
+ * @module js/pickerbase
  * @author Marcello Surdi
  * @version 1.0.0
  *
  * @desc
- * This module contains a mixin object with methods for DatePicker class
+ * This module contains the class base for Date*Picker classes
  */
-
 
 // Polyfill for Element.prototype.matches (backcompatibility with IE11)
  if( !Element.prototype.matches ) {
@@ -19,14 +18,20 @@
  }
 
 
+
+
+
 /**
- * @mixin
- * @memberof module:js/datepickermixin
+ * @class
  *
  * @desc
- * This is a mixin object that contains methods for DatePicker class. It can be implemented by copying methods into their prototype
+ * This is the class for Date*Picker classes
+ *
+ * @todo Provide support for disabled days (even if these are between first_date and last_date)
+ * @todo Provide support for touch events
+ * @todo Provide a year picker similar to a HTML native select control
  */
-export function DatePickerMixin() {
+export function PickerBase() {
   this.i18n = {
     'jan':'jan',
     'feb':'feb',
@@ -73,8 +78,8 @@ export function DatePickerMixin() {
   const months_label = [ 'jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec' ];
   const months_fullname = [ 'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december' ];
   const click = ( navigator.userAgent.match( /(iPad|iPhone|iPod)/g ) ) ? 'touchstart' : 'click';
-  let mode = 'start';
   let user_days_order, days_order;
+  let mode = 'start';
 
   /**
 	 * Chiude l'elemento contenente la tabella con le date o gli orari di inizio o fine intervallo
@@ -99,8 +104,6 @@ export function DatePickerMixin() {
 
 
   /**
-   * @memberof module:js/datepickermixin.exports.DatePickerMixin
-   *
    * @desc
 	 * Gets the classes for `td` elements that contain the days of calendar.
 	 * It's used inside a loop both when building table and when updating it.
@@ -269,8 +272,6 @@ export function DatePickerMixin() {
 
 
   /**
-   * @memberof module:js/datepickermixin.exports.DatePickerMixin
-   *
    * @desc
    * This is a click handler triggered when user clicks to select either a day or an hour.
    * It passes an object as parameter to `this.selectDay` or to `this.selectHour` depending on the user clicks a day button or an hour button, respectively.
@@ -328,8 +329,6 @@ export function DatePickerMixin() {
 
 
   /**
-   * @memberof module:js/datepickermixin.exports.DatePickerMixin
-   *
    * @desc
    * Displays date and time in their own button.
    * output_date...
@@ -379,8 +378,6 @@ export function DatePickerMixin() {
 
 
   /**
-   * @memberof module:js/datepickermixin.exports.DatePickerMixin
-   *
    * @desc
 	 * Seleziona il giorno scelto dall'utente
 	 *
@@ -440,8 +437,6 @@ export function DatePickerMixin() {
 
 
   /**
-   * @memberof module:js/datepickermixin.exports.DatePickerMixin
-   *
    * @desc
    * Initializes picker start values
    *
@@ -505,8 +500,6 @@ export function DatePickerMixin() {
 
 
   /**
-   * @memberof module:js/datepickermixin.exports.DatePickerMixin
-   *
    * @desc
 	 * Creates the calendar for the current month.
 	 *
@@ -623,8 +616,6 @@ export function DatePickerMixin() {
 
 
   /**
-   * @memberof module:js/datepickermixin.exports.DatePickerMixin
-   *
    * @desc
    * Returns a date depending on these precedence criteria:
    * - the date provided in a hidden input field (if any) takes priority over other dates;
@@ -659,8 +650,6 @@ export function DatePickerMixin() {
 
 
   /**
-   * @memberof module:js/datepickermixin.exports.DatePickerMixin
-   *
    * @desc
    * Returns the day of the week as number accordingly to `this.user_days_order` (if any) or `date.getDay` method.
    *
@@ -682,8 +671,6 @@ export function DatePickerMixin() {
 
 
   /**
-   * @memberof module:js/datepickermixin.exports.DatePickerMixin
-   *
    * @desc
    * Checks if `iso_date` has the right ISO format (it doesn't do date validation).
    *
@@ -705,8 +692,6 @@ export function DatePickerMixin() {
 
 
   /**
-   * @memberof module:js/datepickermixin.exports.DatePickerMixin
-   *
    * @desc
    * Rounds minutes in intervals of 30.
    *

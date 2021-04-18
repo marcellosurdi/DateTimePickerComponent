@@ -7,9 +7,9 @@
  * This module contains DatePicker class
  */
 
-import { DatePickerMixin } from './datepickermixin';
+import { PickerBase } from './pickerbase';
 
-DatePicker.prototype = Object.create( DatePickerMixin.prototype );
+DatePicker.prototype = Object.create( PickerBase.prototype );
 DatePicker.prototype.constructor = DatePicker;
 
 
@@ -32,13 +32,9 @@ DatePicker.prototype.constructor = DatePicker;
  *  start_date: "2021-01-05",
  *  last_date: new Date( 2021, 0, 29 )
  * } )
- *
- * @todo Provide support for disabled days (even if these are between first_date and last_date)
- * @todo Provide support for touch events
- * @todo Provide a year picker similar to a HTML native select control
  */
 export function DatePicker( id_div, settings ) {
-  DatePickerMixin.call(this);
+  PickerBase.call( this );
 
   const el = document.getElementById( id_div );
   if( el == null || el.nodeName != 'DIV' ) {

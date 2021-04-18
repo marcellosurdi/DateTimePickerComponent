@@ -2,7 +2,7 @@
   "name": "projects.datetimepicker",
   "description": "Date Time Interval Component",
   "author": "Marcello Surdi",
-  "version": "0.0.25",
+  "version": "0.0.26",
   "keywords": [],
   "main": "main.js",
   "license": "ISC",

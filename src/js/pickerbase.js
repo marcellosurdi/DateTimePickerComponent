@@ -4,10 +4,10 @@
  * @version 1.0.0
  *
  * @desc
- * This module contains the class base for Date*Picker classes
+ * This module contains the base class for Date*Picker classes
  */
 
-// Polyfill for Element.prototype.matches (backcompatibility with IE11)
+// Element.prototype.matches polyfill for backcompatibility with IE11
  if( !Element.prototype.matches ) {
    Element.prototype.matches =
      Element.prototype.matchesSelector ||
@@ -25,9 +25,9 @@
  * @class
  *
  * @desc
- * This is the class for Date*Picker classes
+ * This is the base class for Date*Picker classes
  *
- * @todo Provide support for disabled days (even if these are between first_date and last_date)
+ * @todo Provide support to disable days even if these are between first_date and last_date
  * @todo Provide support for touch events
  * @todo Provide a year picker similar to a HTML native select control
  */
@@ -82,20 +82,17 @@ export function PickerBase() {
   let mode = 'start';
 
   /**
-	 * Chiude l'elemento contenente la tabella con le date o gli orari di inizio o fine intervallo
-	 * La chiusura può essere temporizzata
+	 * Closes the currently open picker and removes the active state from the corresponding button.
 	 *
-	 * @param {HTMLDivElement} btn Il pulsante che ha aperto la tabella con le date o gli orari
-	 * @param {HTMLDivElement} picker Il pannello corrente che contiene la tabella con le date o gli orari
-	 * @param {int} [msec:0] Il numero di millisecondi dopo il quale l'elemento deve essere chiuso
-	 * @see DatePicker#selectDay
-	 * @see DatePicker#selectHour
+	 * @param {HTMLDivElement} btn Active button
+	 * @param {HTMLDivElement} picker Currently open picker
+	 * @param {int} [msec=0] Number of milliseconds after which the picker is closed
 	 */
-	this.closeDateOrHourTable = function( btn, picker, ms = 0 ) {
+	this.closePicker = function( btn, picker, ms = 0 ) {
 		setTimeout( () => {
+      btn.classList.remove( 'active' );
 			picker.style.display = 'none';
-			btn.classList.remove( 'active' );
-			document.body.removeEventListener( click, picker.isOutside );
+			document.body.removeEventListener( click, this.isOutside );
 		}, ms );
 	}
 
@@ -105,7 +102,7 @@ export function PickerBase() {
 
   /**
    * @desc
-	 * Gets the classes for `td` elements that contain the days of calendar.
+	 * Returns the classes for `td` elements that contain the days of calendar.
 	 * It's used inside a loop both when building table and when updating it.
 	 *
 	 * @param {string} day Current day inside a loop
@@ -161,11 +158,12 @@ export function PickerBase() {
 
 
   /**
-	 * Chiude il pannello se l'utente clicca fuori da questo
+	 * Closes the picker if the user clicks outside the panel
 	 *
 	 * @param {Event} e
+   * @see {@link module:js/pickerbase.PickerBase#closePicker|closePicker}
 	 */
-	this.isOutside = function( e ) {
+	this.isOutside = ( e ) => {
 		let div = ( mode == 'start' ) ? this.start_picker_div : this.end_picker_div;
 
     if( e.type == 'touchstart' ) {
@@ -179,14 +177,11 @@ export function PickerBase() {
       if( el.matches( `#${ this.start_container.id }.datetime-container` ) ) {
         inside = true;
       }
-      el = el.parentElement || el.parentNode;
+      el = el.parentElement;
     } while( el !== null && el.nodeType === 1 );
 
 		if( !inside )  {
-      document.body.removeEventListener( click, div.isOutside );
-
-      div.previousElementSibling.querySelector( '.active' ).classList.remove( 'active' );
-  		div.style.display = 'none';
+      this.closePicker( div.previousElementSibling.querySelector( '.active' ), div );
 		}
 	}
 
@@ -197,11 +192,11 @@ export function PickerBase() {
   /**
 	 * Metodo eseguito quando l'utente clicca uno dei quattro pulsanti per selezionare una data o un orario di ritiro o consegna
 	 *
-	 * @param {MouseEvent} e
+	 * @param {Event} e
 	 * @see showDateTable
 	 * @see showTimeTable
 	 */
-	this.onOpenPicker = function( e ) {
+	this.onOpenPicker = ( e ) => {
     const btn = e.currentTarget;
 		let div_open, div_close, date;
 
@@ -229,11 +224,7 @@ export function PickerBase() {
     	// mode = 'end';
     }
 
-    if( !div_open.isOutside ) {
-      div_open.isOutside = ( e ) => this.isOutside( e );
-    }
-
-		document.body.addEventListener( click, div_open.isOutside );
+		document.body.addEventListener( click, this.isOutside );
 
 		if( btn.classList.contains( 'active' ) ) {
 			// Apre il pannello corrente
@@ -263,7 +254,7 @@ export function PickerBase() {
 		} else {
 			// Se si preme nuovamente il pulsante chiude il pannello aperto
 			div_open.style.display = 'none';
-			document.body.removeEventListener( click, div_open.isOutside );
+			document.body.removeEventListener( click, this.isOutside );
 		}
 	}
 
@@ -273,7 +264,7 @@ export function PickerBase() {
 
   /**
    * @desc
-   * This is a click handler triggered when user clicks to select either a day or an hour.
+   * Click handler triggered when user clicks to select either a day or an hour.
    * It passes an object as parameter to `this.selectDay` or to `this.selectHour` depending on the user clicks a day button or an hour button, respectively.
    *
    * If a day button is clicked these are the object properties:
@@ -285,12 +276,12 @@ export function PickerBase() {
    * - `prev_month` [boolean]
    * - `text` [string]
 	 *
-	 * @param {MouseEvent} e
+	 * @param {Event} e
    *
    * @see selectDay
    * @see selectHour
 	 */
-	this.onSelectDayOrHour = function( e ) {
+	this.onSelectDayOrHour = ( e ) => {
 		const o = {};
     const t = e.target;
 
@@ -384,7 +375,7 @@ export function PickerBase() {
 	 * @param {object} obj Oggetto contenente tutte le informazioni contestuali calcolate dal metodo chiamante {@link DatePicker#onSelectDayOrHour}
    *
 	 * @see DatePicker#printDateAndTime
-	 * @see DatePicker#closeDateOrHourTable
+	 * @see DatePicker#closePicker
 	 */
 	this.selectDay = function( o ) {
     // Updates this.start_date or this.end_date after user selection
@@ -429,7 +420,7 @@ export function PickerBase() {
 		this.printDateAndTime( o.container, o.date );
 
 		// Chiude il pannello attivo e toglie il focus dal pulsante corrispondente
-		this.closeDateOrHourTable( o.btn, o.picker, 500 );
+		this.closePicker( o.btn, o.picker, 500 );
 	}
 
 
@@ -603,11 +594,11 @@ export function PickerBase() {
 			next_month_btn.classList.add( 'disabled' );
 		}
 
-    // Adds click handlers to td.selectable elements
+    // Adds click handler to td.selectable elements
     const coll = document.querySelectorAll( 'td.selectable' );
 
 		for( let n = coll.length, i = 0; i < n; i++ ) {
-			coll[ i ].addEventListener( 'click', ( e ) => this.onSelectDayOrHour( e ) );
+			coll[ i ].addEventListener( 'click', this.onSelectDayOrHour );
 		}
 	}
 
@@ -619,7 +610,7 @@ export function PickerBase() {
    * @desc
    * Returns a date depending on these precedence criteria:
    * - the date provided in a hidden input field (if any) takes priority over other dates;
-   * - then follows the date provided as parameter of setPickerProps method;
+   * - then follows the date provided as parameter of {@link module:js/pickerbase.PickerBase#setPickerProps|setPickerProps} method;
    * - default date comes last.
    *
    * @param {Date} date_default Default date
@@ -651,7 +642,7 @@ export function PickerBase() {
 
   /**
    * @desc
-   * Returns the day of the week as number accordingly to `this.user_days_order` (if any) or `date.getDay` method.
+   * Returns the day of the week as number accordingly to `user_days_order` (if any) or `date.getDay` method.
    *
    * @param {Date} date Date from which to get the day of the week
    * @return {number} The day of the week as number
@@ -673,14 +664,9 @@ export function PickerBase() {
   /**
    * @desc
    * Checks if `iso_date` has the right ISO format (it doesn't do date validation).
+   * Accepted values: '2015-03-25', '2015-03-25T12:00:00', '2015-03-25T12:00:00Z', '2015-03-25T12:00:00-06:30'.
    *
-   * Accepted values: '2015-03-25', '2015-03-25T12:00:00', '2015-03-25T12:00:00Z', '2015-03-25T12:00:00-06:30'
-   *
-   * Rejected values: '2015-**3**-25', '2015-**13**-25T12:00:00'
-   *
-   * ...and so on
-   *
-   * @param {string} iso_date date string
+   * @param {string} iso_date Date string
    * @return {boolean} `true` if format is valid, `false` otherwise
    */
   function isISOFormat( iso_date ) {

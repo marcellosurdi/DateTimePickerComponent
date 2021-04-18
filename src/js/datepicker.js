@@ -68,5 +68,5 @@ export function DatePicker( id_div, settings ) {
   this.start_date_btn = this.start_container.querySelector( 'button.date.start' );
   this.start_picker_div = this.start_container.querySelector( 'div.picker' );
 
-  this.start_date_btn.addEventListener( 'click', ( e ) => this.onOpenPicker( e ) );
+  this.start_date_btn.addEventListener( 'click', this.onOpenPicker );
 }

@@ -4,7 +4,7 @@
  * @version 1.0.0
  *
  * @desc
- * This module contains DatePicker class
+ * This module contains the DatePicker class
  */
 
 import { PickerBase } from './pickerbase';
@@ -19,7 +19,7 @@ DatePicker.prototype.constructor = DatePicker;
 /**
  * @class
  *
- * @desc
+ * @classdesc
  * Creates a date picker inside a `div` passed as parameter
  *
  * @param {string} id_div Id of the `div` element

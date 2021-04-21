@@ -4,7 +4,7 @@
  * @version 1.0.0
  *
  * @desc
- * This module contains the base class for Date*Picker classes
+ * This module contains the PickerBase class that serves as a base for Date*Picker classes.
  */
 
 // Element.prototype.matches polyfill for backcompatibility with IE11
@@ -24,14 +24,17 @@
 /**
  * @class
  *
- * @desc
- * This is the base class for Date*Picker classes
+ * @classdesc
+ * It's the base class for Date*Picker classes. Objects of this class are **never** created.
  *
- * @todo Provide support to disable days even if these are between first_date and last_date
+ * @todo Provide support to disable days and hours even if these are between first_date and last_date
  * @todo Provide support for touch events
  * @todo Provide a year picker similar to a HTML native select control
  */
 export function PickerBase() {
+  /**
+   * @property {object} i18n Strings for translation
+   */
   this.i18n = {
     'jan':'jan',
     'feb':'feb',
@@ -85,7 +88,7 @@ export function PickerBase() {
 	 * Closes the panel and removes the active state from the active button.
 	 *
 	 * @param {HTMLDivElement} btn Active button
-	 * @param {HTMLDivElement} panel Currently open panel
+	 * @param {HTMLDivElement} panel Open panel
 	 * @param {int} [msec=0] Number of milliseconds after which the panel is closed
 	 */
 	this.closePanel = function( btn, panel, ms = 0 ) {
@@ -103,7 +106,8 @@ export function PickerBase() {
   /**
    * @desc
 	 * Returns the classes for `td` elements that contain the days of calendar.
-	 * It's used inside a loop both when building table and when updating it.
+	 * It's used inside a loop both when {@link module:js/pickerbase.PickerBase#onOpenPanel|building table}
+   * and when {@link module:js/pickerbase.PickerBase#selectDay|updating it}.
 	 *
 	 * @param {string} day Current day inside a loop
 	 * @param {Date} date Date object with the year/month info
@@ -158,7 +162,7 @@ export function PickerBase() {
 
 
   /**
-	 * Closes the panel if the user clicks outside.
+	 * Click handler that closes the panel if the user clicks outside.
 	 *
 	 * @param {Event} e
    * @see {@link module:js/pickerbase.PickerBase#closePanel|closePanel}
@@ -186,7 +190,7 @@ export function PickerBase() {
 	}
 
 
-
+  // ---
 
 
   /**

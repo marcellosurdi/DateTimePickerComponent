@@ -1,4 +1,5 @@
-$active_color: #2e489e;
+$active_background: #fec601;
+$active_color: #000;
 $disabled_color: #ccc;
 $light_grey_color: #f4f4f4;
 $white_color: #fff;
@@ -38,10 +39,10 @@ div.datetime-container {
   }
 
   button.active {
-    background-color: $active_color; color: $white_color;
+    background-color: $active_background; color: $active_color;
   }
 
-    button span { display: inline-block; margin: 0 -2px; }
+    button > span { display: inline-block; margin: 0 -2px; }
     button span.week-day { text-align: right; font-size: 18px; }
     button span.month-day {
       width: 45px;
@@ -50,7 +51,7 @@ div.datetime-container {
       font-size: 36px;
     }
     button span.month-year { text-align: left; font-size: 16px; }
-    button span em { position: relative; top: 2px; font-size: 16px; font-style: normal; }
+    button span span { position: relative; top: 2px; }
 }
 
 
@@ -110,13 +111,13 @@ div.datetime-container {
         }
 
         table td.start-day {
-          background-color: $active_color; color: $white_color;
+          background-color: $active_background; color: $active_color;
           // background-image: url(../img/datepicker/start_min.svg);
           background-position: left center;
         }
 
         table td.end-day {
-          background-color: $active_color; color: $white_color;
+          background-color: $active_background; color: $active_color;
           // background-image: url(../img/datepicker/end_min.svg);
           background-position: right center;
         }

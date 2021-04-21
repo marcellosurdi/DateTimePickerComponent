@@ -82,16 +82,16 @@ export function PickerBase() {
   let mode = 'start';
 
   /**
-	 * Closes the currently open picker and removes the active state from the corresponding button.
+	 * Closes the panel and removes the active state from the active button.
 	 *
 	 * @param {HTMLDivElement} btn Active button
-	 * @param {HTMLDivElement} picker Currently open picker
-	 * @param {int} [msec=0] Number of milliseconds after which the picker is closed
+	 * @param {HTMLDivElement} panel Currently open panel
+	 * @param {int} [msec=0] Number of milliseconds after which the panel is closed
 	 */
-	this.closePicker = function( btn, picker, ms = 0 ) {
+	this.closePanel = function( btn, panel, ms = 0 ) {
 		setTimeout( () => {
       btn.classList.remove( 'active' );
-			picker.style.display = 'none';
+			panel.style.display = 'none';
 			document.body.removeEventListener( click, this.isOutside );
 		}, ms );
 	}
@@ -158,10 +158,10 @@ export function PickerBase() {
 
 
   /**
-	 * Closes the picker if the user clicks outside the panel
+	 * Closes the panel if the user clicks outside.
 	 *
 	 * @param {Event} e
-   * @see {@link module:js/pickerbase.PickerBase#closePicker|closePicker}
+   * @see {@link module:js/pickerbase.PickerBase#closePanel|closePanel}
 	 */
 	this.isOutside = ( e ) => {
 		let div = ( mode == 'start' ) ? this.start_picker_div : this.end_picker_div;
@@ -181,7 +181,7 @@ export function PickerBase() {
     } while( el !== null && el.nodeType === 1 );
 
 		if( !inside )  {
-      this.closePicker( div.previousElementSibling.querySelector( '.active' ), div );
+      this.closePanel( div.previousElementSibling.querySelector( '.active' ), div );
 		}
 	}
 
@@ -190,13 +190,13 @@ export function PickerBase() {
 
 
   /**
-	 * Metodo eseguito quando l'utente clicca uno dei quattro pulsanti per selezionare una data o un orario di ritiro o consegna
+   * Click handler triggered when user clicks either a date button or a time button to open the panel.
 	 *
 	 * @param {Event} e
 	 * @see showDateTable
 	 * @see showTimeTable
 	 */
-	this.onOpenPicker = ( e ) => {
+	this.onOpenPanel = ( e ) => {
     const btn = e.currentTarget;
 		let div_open, div_close, date;
 
@@ -265,9 +265,9 @@ export function PickerBase() {
   /**
    * @desc
    * Click handler triggered when user clicks to select either a day or an hour.
-   * It passes an object as parameter to `this.selectDay` or to `this.selectHour` depending on the user clicks a day button or an hour button, respectively.
+   * It passes an object as parameter to `this.selectDay` or to `this.selectHour` depending on the user clicks on a day button or on an hour button respectively.
    *
-   * If a day button is clicked these are the object properties:
+   * These are the object properties if a day button is clicked:
    * - `btn` [HTMLButtonElement]
    * - `container` [HTMLDivElement]
    * - `date` [Date]
@@ -321,11 +321,11 @@ export function PickerBase() {
 
   /**
    * @desc
-   * Displays date and time in their own button.
-   * output_date...
+   * Displays date and time in their buttons.
+   * According to `setting.date_output` property, it outputs the date to the value attribute of `input.date_output`.
    *
-   * @param {HTMLDivElement} div The `div` element in which to display the date
-   * @param {Date} date The date to be displayed
+   * @param {HTMLDivElement} div `div` element where to display the date
+   * @param {Date} date Date to be displayed
    *
    * getWeekDayNo
    */
@@ -341,7 +341,7 @@ export function PickerBase() {
 
     week_day_span.textContent = this.i18n[ days_order[ week_day_number ] ];
     month_day.textContent = ( '0' + date.getDate() ).slice( -2 );
-    month_year_span.innerHTML = `<em data-i18n="${months_label[ date.getMonth() ]}">${this.i18n[ months_label[ date.getMonth() ] ]}</em><br>${date.getFullYear()}`;
+    month_year_span.innerHTML = `<span data-i18n="${months_label[ date.getMonth() ]}">${this.i18n[ months_label[ date.getMonth() ] ]}</span><br>${date.getFullYear()}`;
 
     // if time
 
@@ -361,7 +361,7 @@ export function PickerBase() {
       break;
     }
 
-    div.querySelector( 'input.output_date' ).value = output_date;
+    div.querySelector( 'input.date_output' ).value = output_date;
   }
 
 
@@ -370,12 +370,13 @@ export function PickerBase() {
 
   /**
    * @desc
-	 * Seleziona il giorno scelto dall'utente
+	 * Selects the day clicked by the user and then closes the panel,
+   * it's called by {@link module:js/pickerbase.PickerBase#onSelectDayOrHour|onSelectDayOrHour} method.
 	 *
-	 * @param {object} obj Oggetto contenente tutte le informazioni contestuali calcolate dal metodo chiamante {@link DatePicker#onSelectDayOrHour}
+	 * @param {object} o Object with contextual info.
    *
 	 * @see DatePicker#printDateAndTime
-	 * @see DatePicker#closePicker
+	 * @see DatePicker#closePanel
 	 */
 	this.selectDay = function( o ) {
     // Updates this.start_date or this.end_date after user selection
@@ -420,7 +421,7 @@ export function PickerBase() {
 		this.printDateAndTime( o.container, o.date );
 
 		// Chiude il pannello attivo e toglie il focus dal pulsante corrispondente
-		this.closePicker( o.btn, o.picker, 500 );
+		this.closePanel( o.btn, o.picker, 500 );
 	}
 
 
@@ -429,7 +430,7 @@ export function PickerBase() {
 
   /**
    * @desc
-   * Initializes picker start values
+   * Initializes the start date picker properties.
    *
    * @param {HTMLDivElement} el `div` element that will contain the button
    * @param {Date} [start_date_param] Start selected date
@@ -492,7 +493,7 @@ export function PickerBase() {
 
   /**
    * @desc
-	 * Creates the calendar for the current month.
+	 * Creates the calendar for the current month inside the panel.
 	 *
 	 * @param {HTMLDivElement} picker The panel that contains the calendar for day selection
 	 * @param {Date} date Current date

@@ -20,9 +20,9 @@ DatePicker.prototype.constructor = DatePicker;
  * @class
  *
  * @desc
- * Creates a date picker inside the `div` whose id is passed as parameter
+ * Creates a date picker inside a `div` passed as parameter
  *
- * @param {string} id_div Id of a `div` element that will contain the button for date selection
+ * @param {string} id_div Id of the `div` element
  * @param {object} [settings] Object with user defined values
  *
  * @example
@@ -57,16 +57,16 @@ export function DatePicker( id_div, settings ) {
     <button type="button" class="date start">
       <span class="week-day">mon</span>
       <span class="month-day">00</span>
-      <span class="month-year"><em>jan</em><br>2000</span>
+      <span class="month-year"><span>jan</span><br>2000</span>
     </button>
   </div>
   <div class="picker"></div>
-  <input type="hidden" class="output_date" value="">`
+  <input type="hidden" class="date_output" value="">`
   );
   this.printDateAndTime( this.start_container, this.start_date );
 
   this.start_date_btn = this.start_container.querySelector( 'button.date.start' );
   this.start_picker_div = this.start_container.querySelector( 'div.picker' );
 
-  this.start_date_btn.addEventListener( 'click', this.onOpenPicker );
+  this.start_date_btn.addEventListener( 'click', this.onOpenPanel );
 }

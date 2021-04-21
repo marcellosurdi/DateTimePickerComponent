@@ -664,7 +664,7 @@ export function PickerBase() {
 
   /**
    * @desc
-   * Checks if `iso_date` has the right ISO format (it doesn't do date validation).
+   * Checks if `iso_date` has the right ISO format, it doesn't do date validation.
    * Accepted values: '2015-03-25', '2015-03-25T12:00:00', '2015-03-25T12:00:00Z', '2015-03-25T12:00:00-06:30'.
    *
    * @param {string} iso_date Date string

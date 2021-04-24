@@ -8,7 +8,7 @@
  */
 
 // IE11 backcompatibility notes
-// Element.prototype.matches polyfill
+// Polyfill for Element.prototype.matches
  if( !Element.prototype.matches ) {
    Element.prototype.matches =
      Element.prototype.matchesSelector ||
@@ -93,10 +93,29 @@ export function PickerBase() {
   let mode = 'start';
 
   /**
+   * Adds an event handler to the `td.selectable` elements.
+   * It's called by {@link module:js/pickerbase.PickerBase#showDateTable|showDateTable} and
+   * {@link module:js/pickerbase.PickerBase#showTimeTable|showTimeTable} methods.
+   *
+   * @param {HTMLDivElement} picker The picker currently open
+  */
+  this.addEventOnSelect = function( div ) {
+    let coll = div.querySelectorAll( 'td.selectable' );
+
+		for( let i = 0, n = coll.length; i < n; i++ ) {
+			coll[ i ].addEventListener( 'click', this.onSelectDayOrHour );
+		}
+  }
+
+
+
+
+
+  /**
    * Closes the picker and removes the active state from the active button.
    *
    * @param {HTMLDivElement} btn Active button
-   * @param {HTMLDivElement} picker Open picker
+   * @param {HTMLDivElement} picker The picker currently open
    * @param {int} [msec=0] Number of milliseconds, then the picker is closed
   */
   this.closePicker = function( btn, picker, ms = 0 ) {
@@ -113,7 +132,7 @@ export function PickerBase() {
 
   /**
    * @desc
-   * Returns the classes for `td` elements that contain the days of calendar.
+   * Returns the classes for the `td` elements that contain the days of calendar.
    * It's used inside a loop both when building table ({@link module:js/pickerbase.PickerBase#onOpenPicker|onOpenPicker})
    * and when updating it ({@link module:js/pickerbase.PickerBase#selectDay|selectDay}).
    *
@@ -170,7 +189,7 @@ export function PickerBase() {
 
 
   /**
-   * Returns the classes for `td` elements that contain the hours and the minutes (HH:mm).
+   * Returns the classes for the `td` elements that contain the hours/minutes pair (HH:mm).
    * It's used inside a loop both when building table ({@link module:js/pickerbase.PickerBase#onOpenPicker|onOpenPicker})
    * and when updating it ({@link module:js/pickerbase.PickerBase#selectHour|selectHour}).
    *
@@ -368,18 +387,18 @@ export function PickerBase() {
   }
 
 
-  // ---
+
 
 
   /**
    * @desc
-   * Displays date and time in their buttons.
+   * Displays date and time in their own buttons.
    * Outputs the date to the value attribute of `input.date_output` according to `setting.date_output` property.
    *
    * @param {HTMLDivElement} div `div` element where to display the date
    * @param {Date} date Date to be displayed
    *
-   * getWeekDayNo
+   * @see {@link module:js/pickerbase.PickerBase~getWeekDayNo|getWeekDayNo}
    */
   this.printDateAndTime = function( div, date ) {
     const date_coll = div.querySelectorAll( 'button.date > *' );
@@ -406,7 +425,7 @@ export function PickerBase() {
     }
 
     let output_date;
-    // Offset in milliseconds (Date.getTimezoneOffset returns minutes)
+    // Offset in milliseconds (because Date.getTimezoneOffset returns minutes)
     var time_zone_offset = ( new Date() ).getTimezoneOffset() * 60000;
     // toISOString with timezone offset, the slice(0, -1) gets rid of the trailing Z
     var full_iso = ( new Date( date.getTime() - time_zone_offset ) ).toISOString().slice( 0, -1 );
@@ -417,7 +436,7 @@ export function PickerBase() {
       case 'short_ISO': [ output_date, ] = full_iso.split( 'T' ); break;
       case 'timestamp':
       default:
-        output_date = Math.round( date.getTime() / 1000 );
+      output_date = Math.round( date.getTime() / 1000 );
       break;
     }
 
@@ -425,7 +444,7 @@ export function PickerBase() {
   }
 
 
-
+  // ---
 
 
   /**
@@ -435,8 +454,8 @@ export function PickerBase() {
 	 *
 	 * @param {object} o Object with contextual info.
    *
-	 * @see DatePicker#printDateAndTime
-	 * @see DatePicker#closePicker
+	 * @see printDateAndTime
+	 * @see closePicker
 	 */
 	this.selectDay = function( o ) {
     // Updates this.start_date or this.end_date after user selection
@@ -482,6 +501,45 @@ export function PickerBase() {
 
 		// Chiude il pannello attivo e toglie il focus dal pulsante corrispondente
 		this.closePicker( o.btn, o.picker, 500 );
+	}
+
+
+
+
+
+  /**
+	 * Selects the hour/minute pair clicked by the user and then closes the picker
+	 *
+	 * @param {object} obj Oggetto contenente tutte le informazioni contestuali calcolate dal metodo chiamante {@link DatePicker#onSelectDayOrHour}
+   *
+   * @see printDateAndTime
+	 * @see closePicker
+	 */
+	this.selectHour = function( obj ) {
+    return;
+		// Aggiorna l'orario in memoria di inizio o fine intervallo
+		obj.date.setHours( obj.hour, obj.minute, 0, 0 );
+
+		// // Ricava le rispettive date tenendo conto del tempo minimo di intervallo
+		// let _start_date = new Date( start_date.getTime() + min_time );
+		// let _end_date = new Date( end_date.getTime() - min_time );
+		// let _curr_date = new Date( obj.date.getTime() );
+		// let _min_date = new Date( min_date.getTime() + min_time );
+		// let _max_date = new Date( max_date.getTime() - min_time );
+		// this.checkDateTimeContraints( obj, _start_date, _end_date, _curr_date, _min_date, _max_date );
+
+		// Aggiorna la tabella contenente gli orari di inizio o fine intervallo
+		let coll = document.querySelectorAll( 'td.selectable' );
+		let l = coll.length
+		for( let i = 0; i < l; i++ ) {
+			coll[i].className = this.getHourClassName( coll[i].textContent, obj.date );
+		}
+
+		// Stampa nella pagina
+		this.printDateAndTime( obj.interval_div, obj.date );
+
+		// Chiude il pannello
+		this.closeDateOrHourTable( obj.btn, obj.div_close, 500 );
 	}
 
 
@@ -655,12 +713,7 @@ export function PickerBase() {
 			next_month_btn.classList.add( 'disabled' );
 		}
 
-    // Adds click handler to td.selectable elements
-    const coll = document.querySelectorAll( 'td.selectable' );
-
-		for( let n = coll.length, i = 0; i < n; i++ ) {
-			coll[ i ].addEventListener( 'click', this.onSelectDayOrHour );
-		}
+    this.addEventOnSelect( picker );
 	}
 
 
@@ -673,7 +726,8 @@ export function PickerBase() {
 	 * @param {HTMLDivElement} picker The picker that contains the table
 	 * @param {Date} day Current day
    *
-	 * @see DatePicker#getHourClassName
+	 * @see getHourClassName
+	 * @see addEventOnSelect
 	 */
 	this.showTimeTable = function( picker, day ) {
 		let i = 0, html = '', class_name;
@@ -688,9 +742,9 @@ export function PickerBase() {
           class_name = ''
 					class_name = this.getHourClassName( hours[ i ], day );
 
-					html += "<td class='" + class_name + "'>" + hours[ i ] + "</td>";
+					html += `<td class="${ class_name }">${ hours[ i ] }</td>`;
 				} else {
-					html += "<td class='white-background disabled'></td>";
+					html += `<td class="white-background disabled"></td>`;
 				}
 			}
 
@@ -708,7 +762,7 @@ export function PickerBase() {
         ${ html }
       </table>`;
 
-			// this.addEventOnSelect();
+		this.addEventOnSelect( picker );
 	}
 
 

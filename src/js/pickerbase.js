@@ -87,19 +87,19 @@ export function PickerBase() {
   let mode = 'start';
 
   /**
-	 * Closes the picker and removes the active state from the active button.
-	 *
-	 * @param {HTMLDivElement} btn Active button
-	 * @param {HTMLDivElement} picker Open picker
-	 * @param {int} [msec=0] Number of milliseconds, then the picker is closed
-	 */
-	this.closePicker = function( btn, picker, ms = 0 ) {
-		setTimeout( () => {
+   * Closes the picker and removes the active state from the active button.
+   *
+   * @param {HTMLDivElement} btn Active button
+   * @param {HTMLDivElement} picker Open picker
+   * @param {int} [msec=0] Number of milliseconds, then the picker is closed
+  */
+  this.closePicker = function( btn, picker, ms = 0 ) {
+    setTimeout( () => {
       btn.classList.remove( 'active' );
-			picker.style.display = 'none';
-			document.body.removeEventListener( click, this.onClickOutside );
-		}, ms );
-	}
+      picker.style.display = 'none';
+      document.body.removeEventListener( click, this.onClickOutside );
+    }, ms );
+  }
 
 
 

@@ -107,57 +107,57 @@ export function PickerBase() {
 
   /**
    * @desc
-	 * Returns the classes for `td` elements that contain the days of calendar.
-	 * It's used inside a loop both when building table ({@link module:js/pickerbase.PickerBase#onOpenPicker|onOpenPicker})
+   * Returns the classes for `td` elements that contain the days of calendar.
+   * It's used inside a loop both when building table ({@link module:js/pickerbase.PickerBase#onOpenPicker|onOpenPicker})
    * and when updating it ({@link module:js/pickerbase.PickerBase#selectDay|selectDay}).
-	 *
-	 * @param {string} day Current day inside a loop
-	 * @param {Date} date Date object with the year/month info
-	 * @return {string} Classes to be assigned to the current `td` element
-	 */
-	this.getDayClassName = function( day, date ) {
-		let class_name;
+   *
+   * @param {string} day Current day inside a loop
+   * @param {Date} date Date object with the year/month info
+   * @return {string} Classes to be assigned to the current `td` element
+  */
+  this.getDayClassName = function( day, date ) {
+    let class_name;
 
-		// We don't take hours/minutes/seconds info into account for subsequent date comparisons
+    // We don't take hours/minutes/seconds info into account for subsequent date comparisons
     const today = new Date();
     today.setHours( 0, 0, 0, 0 );
     const today_ms = today.getTime();
-		const start_date_ms = new Date( this.start_date.getFullYear(), this.start_date.getMonth(), this.start_date.getDate() ).getTime();
-		const curr_day_ms = new Date( date.getFullYear(), date.getMonth(), day ).getTime();
-		const first_date_ms = new Date( this.first_date.getFullYear(), this.first_date.getMonth(), this.first_date.getDate() ).getTime();
-		const last_date_ms = new Date( this.last_date.getFullYear(), this.last_date.getMonth(), this.last_date.getDate() ).getTime();
+    const start_date_ms = new Date( this.start_date.getFullYear(), this.start_date.getMonth(), this.start_date.getDate() ).getTime();
+    const curr_day_ms = new Date( date.getFullYear(), date.getMonth(), day ).getTime();
+    const first_date_ms = new Date( this.first_date.getFullYear(), this.first_date.getMonth(), this.first_date.getDate() ).getTime();
+    const last_date_ms = new Date( this.last_date.getFullYear(), this.last_date.getMonth(), this.last_date.getDate() ).getTime();
 
-		class_name = 'day ';
-		if( curr_day_ms < first_date_ms || curr_day_ms > last_date_ms ) {
-			class_name += 'disabled ';
-		} else {
-			class_name += 'selectable ';
-		}
+    class_name = 'day ';
+    if( curr_day_ms < first_date_ms || curr_day_ms > last_date_ms ) {
+      class_name += 'disabled ';
+    } else {
+      class_name += 'selectable ';
+    }
 
     if( curr_day_ms == today_ms ) {
       class_name += 'today ';
     }
 
-		if( curr_day_ms == start_date_ms ) {
-			class_name += 'start-day ';
-		}
+    if( curr_day_ms == start_date_ms ) {
+      class_name += 'start-day ';
+    }
 
     // // Only for intervals
     // if( this.end_date ) {
     //   let end_date_ms = new Date( this.end_date.getFullYear(), this.end_date.getMonth(), this.end_date.getDate() ).getTime();
     //
-  	// 	// Giorno compreso nell'intervallo
-  	// 	if( curr_day_ms > start_date_ms && curr_day_ms < end_date_ms ) {
-  	// 		class_name += ' interval-background';
-  	// 	}
-  	// 	// Giorno di fine intervallo
-  	// 	if( curr_day_ms == end_date_ms ) {
-  	// 		class_name += ' end-day ';
-  	// 	}
+    // 	// Giorno compreso nell'intervallo
+    // 	if( curr_day_ms > start_date_ms && curr_day_ms < end_date_ms ) {
+    // 		class_name += ' interval-background';
+    // 	}
+    // 	// Giorno di fine intervallo
+    // 	if( curr_day_ms == end_date_ms ) {
+    // 		class_name += ' end-day ';
+    // 	}
     // }
 
-		return class_name;
-	}
+    return class_name;
+  }
 
 
 

@@ -694,7 +694,7 @@ export function PickerBase() {
    * @return {Date}
    *
    * @see {@link module:js/datepickermixin.exports.DatePickerMixin.isISOFormat|isISOFormat}
-  */
+   */
   function getDateBetween( date_default, date_param, input ) {
     if( typeof date_param == 'string' && isISOFormat( date_param ) ) {
       date_param = new Date( date_param )
@@ -721,7 +721,7 @@ export function PickerBase() {
    *
    * @param {Date} date Date we get the day of the week from
    * @return {number} The day of the week as number
-  */
+   */
   function getWeekDayNo( date ) {
     let week_day = date.getDay();
 
@@ -743,7 +743,7 @@ export function PickerBase() {
    *
    * @param {string} iso_date Date string
    * @return {boolean} `true` if format is valid, `false` otherwise
-  */
+   */
   function isISOFormat( iso_date ) {
     return ( iso_date.match( /^(\d{4})-(\d{2})-(\d{2})(T\d{2}\:\d{2}\:\d{2}[+-]\d{2}\:\d{2})?|Z$/ ) ) ? true : false
   }
@@ -758,7 +758,7 @@ export function PickerBase() {
    *
    * @param {Date} date The date to be rounded
    * @return {Date} The rounded date
-  */
+   */
   function roundMinutes( date ) {
     date.setSeconds( 0, 0 );
 

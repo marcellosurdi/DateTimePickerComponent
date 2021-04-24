@@ -1,5 +1,6 @@
 import './css/style.scss';
 import { DatePicker } from './js/datepicker';
+import { DateTimePicker } from './js/datetimepicker';
 
 
 let it = {
@@ -53,3 +54,9 @@ new DatePicker( 'select_date_2', {
 } );
 
 new DatePicker( 'select_date_3', { first_day_no: 0 } );
+
+
+
+
+
+new DateTimePicker( 'select_datetime', { first_day_no: 0 } );

@@ -38,13 +38,13 @@ div.datetime-container {
     width: 50%;
   }
 
-  button.active {
+  button.active, button.active span {
     background-color: $active_background; color: $active_color;
   }
 
     button > span { display: inline-block; margin: 0 -2px; }
-    button span.week-day { text-align: right; font-size: 18px; }
-    button span.month-day {
+    button span.week-day, button span.minutes { text-align: right; font-size: 18px; }
+    button span.month-day, button span.hours {
       width: 45px;
       text-align: center;
       font-family: arial, sans-serif;

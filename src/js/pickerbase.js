@@ -7,7 +7,8 @@
  * This module contains the PickerBase class that serves as a base for Date*Picker classes.
  */
 
-// Element.prototype.matches polyfill for backcompatibility with IE11
+// IE11 backcompatibility notes
+// Element.prototype.matches polyfill
  if( !Element.prototype.matches ) {
    Element.prototype.matches =
      Element.prototype.matchesSelector ||
@@ -16,7 +17,8 @@
      Element.prototype.oMatchesSelector ||
      Element.prototype.webkitMatchesSelector
  }
-
+// Please note, if you want to use destructuring assignment but you need IE11 backcompatibility, you must use @babel/polyfill
+// Somewhere, in the code below, you'll find the alternative destructuring assignment syntax commented
 
 
 
@@ -85,17 +87,17 @@ export function PickerBase() {
   let mode = 'start';
 
   /**
-	 * Closes the panel and removes the active state from the active button.
+	 * Closes the picker and removes the active state from the active button.
 	 *
 	 * @param {HTMLDivElement} btn Active button
-	 * @param {HTMLDivElement} panel Open panel
-	 * @param {int} [msec=0] Number of milliseconds after which the panel is closed
+	 * @param {HTMLDivElement} picker Open picker
+	 * @param {int} [msec=0] Number of milliseconds, then the picker is closed
 	 */
-	this.closePanel = function( btn, panel, ms = 0 ) {
+	this.closePicker = function( btn, picker, ms = 0 ) {
 		setTimeout( () => {
       btn.classList.remove( 'active' );
-			panel.style.display = 'none';
-			document.body.removeEventListener( click, this.isOutside );
+			picker.style.display = 'none';
+			document.body.removeEventListener( click, this.onClickOutside );
 		}, ms );
 	}
 
@@ -106,8 +108,8 @@ export function PickerBase() {
   /**
    * @desc
 	 * Returns the classes for `td` elements that contain the days of calendar.
-	 * It's used inside a loop both when {@link module:js/pickerbase.PickerBase#onOpenPanel|building table}
-   * and when {@link module:js/pickerbase.PickerBase#selectDay|updating it}.
+	 * It's used inside a loop both when building table ({@link module:js/pickerbase.PickerBase#onOpenPicker|onOpenPicker})
+   * and when updating it ({@link module:js/pickerbase.PickerBase#selectDay|selectDay}).
 	 *
 	 * @param {string} day Current day inside a loop
 	 * @param {Date} date Date object with the year/month info
@@ -140,7 +142,7 @@ export function PickerBase() {
 			class_name += 'start-day ';
 		}
 
-    // -- Only for intervals--
+    // // Only for intervals
     // if( this.end_date ) {
     //   let end_date_ms = new Date( this.end_date.getFullYear(), this.end_date.getMonth(), this.end_date.getDate() ).getTime();
     //
@@ -162,12 +164,13 @@ export function PickerBase() {
 
 
   /**
-	 * Click handler that closes the panel if the user clicks outside.
+	 * This is a click handler that closes the picker if the user clicks outside.
 	 *
 	 * @param {Event} e
-   * @see {@link module:js/pickerbase.PickerBase#closePanel|closePanel}
+   *
+   * @see {@link module:js/pickerbase.PickerBase#closePicker|closePicker}
 	 */
-	this.isOutside = ( e ) => {
+	this.onClickOutside = ( e ) => {
 		let div = ( mode == 'start' ) ? this.start_picker_div : this.end_picker_div;
 
     if( e.type == 'touchstart' ) {
@@ -178,73 +181,73 @@ export function PickerBase() {
 		let inside = false;
 
     do {
-      if( el.matches( `#${ this.start_container.id }.datetime-container` ) ) {
+      if( el.matches( `#${ div.parentElement.id }.datetime-container` ) ) {
         inside = true;
       }
       el = el.parentElement;
     } while( el !== null && el.nodeType === 1 );
 
 		if( !inside )  {
-      this.closePanel( div.previousElementSibling.querySelector( '.active' ), div );
+      this.closePicker( div.previousElementSibling.querySelector( '.active' ), div );
 		}
 	}
 
 
-  // ---
+
 
 
   /**
-   * Click handler triggered when user clicks either a date button or a time button to open the panel.
+   * This is a click handler triggered when the user opens the picker by clicking either a date button or a time button.
 	 *
 	 * @param {Event} e
-	 * @see showDateTable
-	 * @see showTimeTable
+   *
+	 * @see {@link module:js/pickerbase.PickerBase#showDateTable|showDateTable}
+	 * @see {@link module:js/pickerbase.PickerBase#showTimeTable|showTimeTable}
 	 */
-	this.onOpenPanel = ( e ) => {
+	this.onOpenPicker = ( e ) => {
     const btn = e.currentTarget;
-		let div_open, div_close, date;
+		let picker, date;
 
-		// Se il pulsante ha già il focus lo toglie
+		// Adds or removes the active state from current button when it's clicked
 		btn.classList.toggle( 'active' );
 
-		// // Toglie il focus dagli altri pulsanti
-		// let coll = document.querySelectorAll( 'div#' + el_start.id + ' > div, div#' + el_end.id + ' > div' );
-		// for( let i = 0; i < coll.length; i++ ) {
-		// 	if( coll[ i ] != this ) {
-		// 		coll[ i ].classList.remove( 'active' );
-		// 	}
-		// }
+		// Removes the active state from the other buttons except the current one
+    let css_selector = `div#${ this.start_container.id } button`;
+    css_selector += ( this.end_container?.id ) ? `, div#${ this.end_container.id } button` : '';
+		[].slice.call( document.querySelectorAll( css_selector ) ).forEach( ( item ) => {
+      if( item != btn ) {
+        item.classList.remove( 'active' )
+      }
+    } );
 
-    // Stabilisce se occorre impostare la data di inizio o fine intervallo
+    // Is the start or the end date of the interval?
+    // Please note, if there is not an interval, only the start date exists
     if( btn.classList.contains( 'start' ) ) {
-    	div_open = this.start_picker_div;
-    	// div_close = end_picker_div;
+    	picker = this.start_picker_div;
     	date = this.start_date;
-    	// mode = 'start';
+    	mode = 'start';
     } else {
-    	// div_open = end_picker_div;
-    	// div_close = start_picker_div;
-    	// date = end_date;
-    	// mode = 'end';
+    	picker = this.end_picker_div;
+    	date = this.end_date;
+    	mode = 'end';
     }
 
-		document.body.addEventListener( click, this.isOutside );
+		document.body.addEventListener( click, this.onClickOutside );
 
+    // If the button has the active state...
 		if( btn.classList.contains( 'active' ) ) {
-			// Apre il pannello corrente
-			div_open.style.display = 'block';
-			// // Se un altro pannello è aperto lo chiude
-			// div_close.style.display = 'none';
+			picker.style.display = 'block';
+
 			let substr = ( btn.classList.contains( 'date' ) )? 'Date' : 'Time';
 			let method = 'show' + substr + 'Table';
-			this[ method ]( div_open, date );
+			this[ method ]( picker, date );
 
-			// Check if panel exceeds viewport height
-      const rect = div_open.getBoundingClientRect();
-      const diff = ( rect.top + div_open.offsetHeight ) - document.documentElement.clientHeight
+			// Checks if the picker exceeds the viewport height
+      const rect = picker.getBoundingClientRect();
+      const diff = ( rect.top + picker.offsetHeight ) - document.documentElement.clientHeight
 
 			if( diff > 0 ) {
-        // If scroll behavior is supported
+        // Checks if scroll behavior is supported
         if( 'scrollBehavior' in document.documentElement.style ) {
           window.scrollBy( {
             top: diff,
@@ -255,20 +258,23 @@ export function PickerBase() {
   				window.scrollBy( 0, diff );
         }
 			}
-		} else {
-			// Se si preme nuovamente il pulsante chiude il pannello aperto
-			div_open.style.display = 'none';
-			document.body.removeEventListener( click, this.isOutside );
+		}
+
+    // ...otherwise
+    else {
+      // The picker was already open, so we close it
+			picker.style.display = 'none';
+			document.body.removeEventListener( click, this.onClickOutside );
 		}
 	}
 
 
-
+  // ---
 
 
   /**
    * @desc
-   * Click handler triggered when user clicks to select either a day or an hour.
+   * This is a click handler triggered when the user clicks to select either a day or an hour.
    * It passes an object as parameter to `this.selectDay` or to `this.selectHour` depending on the user clicks on a day button or on an hour button respectively.
    *
    * These are the object properties if a day button is clicked:
@@ -326,7 +332,7 @@ export function PickerBase() {
   /**
    * @desc
    * Displays date and time in their buttons.
-   * According to `setting.date_output` property, it outputs the date to the value attribute of `input.date_output`.
+   * Outputs the date to the value attribute of `input.date_output` according to `setting.date_output` property.
    *
    * @param {HTMLDivElement} div `div` element where to display the date
    * @param {Date} date Date to be displayed
@@ -334,11 +340,10 @@ export function PickerBase() {
    * getWeekDayNo
    */
   this.printDateAndTime = function( div, date ) {
-    const coll = div.querySelectorAll( 'button.date > *' );
-    const week_day_span = coll[0];
-    const month_day = coll[1];
-    const month_year_span = coll[2];
-    // If we're using destructuring assignment
+    const date_coll = div.querySelectorAll( 'button.date > *' );
+    const week_day_span = date_coll[ 0 ];
+    const month_day = date_coll[ 1 ];
+    const month_year_span = date_coll[ 2 ];
     // const [ week_day_span, month_day, month_year_span ] = div.querySelectorAll( 'button.date > *' );
 
     const week_day_number = getWeekDayNo( date );
@@ -347,12 +352,21 @@ export function PickerBase() {
     month_day.textContent = ( '0' + date.getDate() ).slice( -2 );
     month_year_span.innerHTML = `<span data-i18n="${months_label[ date.getMonth() ]}">${this.i18n[ months_label[ date.getMonth() ] ]}</span><br>${date.getFullYear()}`;
 
-    // if time
+    // If there's a time button
+    const time_coll = div.querySelectorAll( 'button.time > *' );
+    if( time_coll.length > 0 ) {
+      const hours = time_coll[ 0 ];
+      const minutes = time_coll[ 1 ];
+      // const [ hours, minutes ] = time_coll;
+
+      hours.textContent = ( '0' + date.getHours() ).slice( -2 );
+      minutes.textContent = `:${ ( '0' + date.getMinutes() ).slice( -2 ) }`;
+    }
 
     let output_date;
     // Offset in milliseconds (Date.getTimezoneOffset returns minutes)
     var time_zone_offset = ( new Date() ).getTimezoneOffset() * 60000;
-    // toISOString with timezone offset (the slice(0, -1) gets rid of the trailing Z)
+    // toISOString with timezone offset, the slice(0, -1) gets rid of the trailing Z
     var full_iso = ( new Date( date.getTime() - time_zone_offset ) ).toISOString().slice( 0, -1 );
     switch( this.date_output ) {
       // YYYY-MM-DDTHH:mm:ss.sss
@@ -374,13 +388,13 @@ export function PickerBase() {
 
   /**
    * @desc
-	 * Selects the day clicked by the user and then closes the panel,
+	 * Selects the day clicked by the user and then closes the picker,
    * it's called by {@link module:js/pickerbase.PickerBase#onSelectDayOrHour|onSelectDayOrHour} method.
 	 *
 	 * @param {object} o Object with contextual info.
    *
 	 * @see DatePicker#printDateAndTime
-	 * @see DatePicker#closePanel
+	 * @see DatePicker#closePicker
 	 */
 	this.selectDay = function( o ) {
     // Updates this.start_date or this.end_date after user selection
@@ -425,7 +439,7 @@ export function PickerBase() {
 		this.printDateAndTime( o.container, o.date );
 
 		// Chiude il pannello attivo e toglie il focus dal pulsante corrispondente
-		this.closePanel( o.btn, o.picker, 500 );
+		this.closePicker( o.btn, o.picker, 500 );
 	}
 
 
@@ -440,7 +454,7 @@ export function PickerBase() {
    * @param {Date} [start_date_param] Start selected date
    * @param {Date} [first_date_param] First selectable date
    * @param {Date} [last_date_param] Last selectable date
-   * @param {number} [first_day_no] Day with which the week must start. Accordingly to returned values of `Date.getDate` method, accepted range values are 0-6 where 0 means Sunday, 1 means Monday and so on
+   * @param {number} [first_day_no] Day the week must start with. Accordingly to returned values of `Date.getDate` method, accepted range values are 0-6 where 0 means Sunday, 1 means Monday and so on
    *
    * @see {@link module:js/datepickermixin.exports.DatePickerMixin.getDateBetween|getDateBetween}
    * @see {@link module:js/datepickermixin.exports.DatePickerMixin.roundMinutes|roundMinutes}
@@ -497,9 +511,9 @@ export function PickerBase() {
 
   /**
    * @desc
-	 * Creates the calendar for the current month inside the panel.
+	 * Creates the calendar for the current month inside the picker.
 	 *
-	 * @param {HTMLDivElement} picker The panel that contains the calendar for day selection
+	 * @param {HTMLDivElement} picker The picker that contains the calendar
 	 * @param {Date} date Current date
    *
    * @see {@link module:js/datepickermixin.exports.DatePickerMixin.getWeekDayNo|getWeekDayNo}
@@ -610,6 +624,52 @@ export function PickerBase() {
 
 
 
+  /**
+   * @desc
+   * Creates the table of hours inside the picker
+	 *
+	 * @param {HTMLDivElement} picker The picker that contains the table
+	 * @param {Date} day Current day
+   *
+	 * @see DatePicker#getHourClassName
+	 */
+	this.showTimeTable = function( picker, day ) {
+    return;
+		let j, i = 0, html = '', class_name;
+
+		for( j = 1; j < 9; j++ ) {
+			html += "<tr>";
+
+			for( i = 1 * i ; i < 6 * j; i++ ) {
+				if( hours[i] ) {
+					class_name = this.getHourClassName( hours[i], day );
+
+					html += "<td class='" + class_name + "'>" + hours[i] + "</td>";
+				} else {
+					html += "<td class='white-background disabled'></td>";
+				}
+			}
+
+			html += "</tr>";
+		}
+
+		picker.innerHTML =
+			"<table class='time'>" +
+			"<tr>" +
+				"<th colspan='7'>" +
+					"<span class='number'>" + day.getDate() + "</span> " +
+					"<span data-i18n='" + months_fullname[ day.getMonth() ] + "'>" + i18n[ months_fullname[ day.getMonth() ] ] + "</span>" +
+				"</th>" +
+			"</tr>" +
+			html +
+			"</table>";
+
+			this.addEventOnSelect();
+	}
+
+
+
+
 
   /**
    * @desc
@@ -649,7 +709,7 @@ export function PickerBase() {
    * @desc
    * Returns the day of the week as number accordingly to `user_days_order` (if any) or `date.getDay` method.
    *
-   * @param {Date} date Date from which to get the day of the week
+   * @param {Date} date Date to get the day of the week from
    * @return {number} The day of the week as number
    */
   function getWeekDayNo( date ) {
@@ -684,7 +744,7 @@ export function PickerBase() {
 
   /**
    * @desc
-   * Rounds minutes in intervals of 30.
+   * Rounds minutes to the next half hour.
    *
    * @param {Date} date The date to be rounded
    * @return {Date} The rounded date

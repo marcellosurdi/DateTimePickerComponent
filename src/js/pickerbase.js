@@ -232,11 +232,11 @@ export function PickerBase() {
       mode = 'end';
     }
 
-    document.body.addEventListener( click, this.onClickOutside );
 
     // If the button has the active state...
     if( btn.classList.contains( 'active' ) ) {
       picker.style.display = 'block';
+      document.body.addEventListener( click, this.onClickOutside );
 
       let substr = ( btn.classList.contains( 'date' ) )? 'Date' : 'Time';
       let method = 'show' + substr + 'Table';
@@ -275,7 +275,9 @@ export function PickerBase() {
   /**
   * @desc
   * This is a click handler triggered when the user clicks to select either a day or an hour.
-  * It passes an object as parameter depending on the user clicks on a day button or on an hour button respectively.
+  * It passes an object as parameter to {@link module:js/pickerbase.PickerBase#selectDay|selectDay} or
+  * to {@link module:js/pickerbase.PickerBase#selectHour|selectHour} depending on the user clicks or to
+  * on a day button or on an hour button respectively.
   *
   * These are the object properties if a day button is clicked:
   * - `btn` [HTMLButtonElement] Active button

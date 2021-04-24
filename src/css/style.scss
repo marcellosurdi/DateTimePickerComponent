@@ -105,12 +105,12 @@ div.datetime-container {
 
         table td.disabled, table a.disabled { color: $disabled_color; }
 
-        table td.start-day, table td.end-day {
+        table td.start-day, table td.end-day, table td.time-selected {
           background-repeat: no-repeat;
           font-weight: bold;
         }
 
-        table td.start-day {
+        table td.start-day, table td.time-selected {
           background-color: $active_background; color: $active_color;
           // background-image: url(../img/datepicker/start_min.svg);
           background-position: left center;

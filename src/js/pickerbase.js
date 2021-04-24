@@ -17,8 +17,9 @@
      Element.prototype.oMatchesSelector ||
      Element.prototype.webkitMatchesSelector
  }
-// Please note, if you want to use destructuring assignment but you need IE11 backcompatibility, you must use @babel/polyfill
-// Somewhere, in the code below, you'll find the alternative destructuring assignment syntax commented
+// Please note, the following code will be transpiled with WebPack/Babel for IE11 backcompatibility.
+// If you want to use destructuring assignment too, you also need to install @babel/polyfill.
+// Somewhere, in the code below, you can find the alternative syntax commented.
 
 
 
@@ -160,6 +161,39 @@ export function PickerBase() {
     // 		class_name += ' end-day ';
     // 	}
     // }
+
+    return class_name;
+  }
+
+
+
+
+
+  /**
+   * Returns the classes for `td` elements that contain the hours and the minutes (HH:mm).
+   * It's used inside a loop both when building table ({@link module:js/pickerbase.PickerBase#onOpenPicker|onOpenPicker})
+   * and when updating it ({@link module:js/pickerbase.PickerBase#selectHour|selectHour}).
+   *
+   * @param {string} hour Current hour inside a loop
+   * @param {Date} date Date object with the hour/minutes info
+   * @return {string} Classes to be assigned to the current `td` element
+   */
+  this.getHourClassName = function( hour, date ) {
+    let selected_hour = ( '0' + date.getHours() ).slice( -2 ) + ':' + ( '0' + date.getMinutes() ).slice( -2 );
+
+    let h = hour.split( ':' );
+    // let [ h, m ] = hour.split( ':' );
+
+    let tmp_day = new Date( date.getTime() );
+    tmp_day.setHours( h[0], h[1], 0, 0 );
+
+    let class_name = 'hour ';
+    if( tmp_day < this.first_date || tmp_day > this.last_date ) {
+      class_name += 'disabled';
+    } else {
+      class_name += 'selectable';
+      class_name += ( selected_hour == hour ) ? ' time-selected '+ mode : '';
+    }
 
     return class_name;
   }
@@ -652,7 +686,7 @@ export function PickerBase() {
 			for( i = 1 * i ; i < 6 * j; i++ ) {
 				if( hours[ i ] ) {
           class_name = ''
-					// class_name = this.getHourClassName( hours[ i ], day );
+					class_name = this.getHourClassName( hours[ i ], day );
 
 					html += "<td class='" + class_name + "'>" + hours[ i ] + "</td>";
 				} else {
@@ -664,15 +698,15 @@ export function PickerBase() {
 		}
 
 		picker.innerHTML =
-			"<table class='time'>" +
-			"<tr>" +
-				"<th colspan='7'>" +
-					"<span class='number'>" + day.getDate() + "</span> " +
-					"<span data-i18n='" + months_fullname[ day.getMonth() ] + "'>" + this.i18n[ months_fullname[ day.getMonth() ] ] + "</span>" +
-				"</th>" +
-			"</tr>" +
-			html +
-			"</table>";
+      `<table class="time">
+        <tr>
+          <th colspan="7">
+            <span class="number">${ day.getDate() }</span>
+            <span data-i18n="${ months_fullname[ day.getMonth() ] }">${ this.i18n[ months_fullname[ day.getMonth() ] ] }</span>
+          </th>
+        </tr>
+        ${ html }
+      </table>`;
 
 			// this.addEventOnSelect();
 	}

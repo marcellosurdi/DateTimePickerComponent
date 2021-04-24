@@ -82,6 +82,11 @@ export function PickerBase() {
   const default_days_order = [ 'sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat' ];
   const months_label = [ 'jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec' ];
   const months_fullname = [ 'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december' ];
+  const hours = [
+    '00:00', '00:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:30', '04:00', '04:30', '05:00', '05:30', '06:00', '06:30', '07:00', '07:30',
+    '08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30',
+    '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30', '22:00', '22:30', '23:00', '23:30'
+  ];
   const click = ( navigator.userAgent.match( /(iPad|iPhone|iPod)/g ) ) ? 'touchstart' : 'click';
   let user_days_order, days_order;
   let mode = 'start';
@@ -281,8 +286,8 @@ export function PickerBase() {
   *
   * These are the object properties if a day button is clicked:
   * - `btn` [HTMLButtonElement] Active button
-  * - `container` [HTMLDivElement] The container of buttons and picker
-  * - `date` [Date] Start date or end date depending on which button was clicked
+  * - `container` [HTMLDivElement] Start or end top level container depending on which button was clicked
+  * - `date` [Date] Start date or end date
   * - `next_month` [boolean] Is a next month day?
   * - `picker` [HTMLDivElement] Picker to be closed
   * - `prev_month` [boolean] Is a previous month day?
@@ -637,17 +642,19 @@ export function PickerBase() {
 	 * @see DatePicker#getHourClassName
 	 */
 	this.showTimeTable = function( picker, day ) {
-    return;
-		let j, i = 0, html = '', class_name;
+		let i = 0, html = '', class_name;
 
-		for( j = 1; j < 9; j++ ) {
+    // Nine rows
+		for( let j = 1; j < 9; j++ ) {
 			html += "<tr>";
 
+      // Six columns
 			for( i = 1 * i ; i < 6 * j; i++ ) {
-				if( hours[i] ) {
-					class_name = this.getHourClassName( hours[i], day );
+				if( hours[ i ] ) {
+          class_name = ''
+					// class_name = this.getHourClassName( hours[ i ], day );
 
-					html += "<td class='" + class_name + "'>" + hours[i] + "</td>";
+					html += "<td class='" + class_name + "'>" + hours[ i ] + "</td>";
 				} else {
 					html += "<td class='white-background disabled'></td>";
 				}
@@ -661,13 +668,13 @@ export function PickerBase() {
 			"<tr>" +
 				"<th colspan='7'>" +
 					"<span class='number'>" + day.getDate() + "</span> " +
-					"<span data-i18n='" + months_fullname[ day.getMonth() ] + "'>" + i18n[ months_fullname[ day.getMonth() ] ] + "</span>" +
+					"<span data-i18n='" + months_fullname[ day.getMonth() ] + "'>" + this.i18n[ months_fullname[ day.getMonth() ] ] + "</span>" +
 				"</th>" +
 			"</tr>" +
 			html +
 			"</table>";
 
-			this.addEventOnSelect();
+			// this.addEventOnSelect();
 	}
 
 
@@ -687,10 +694,10 @@ export function PickerBase() {
    * @return {Date}
    *
    * @see {@link module:js/datepickermixin.exports.DatePickerMixin.isISOFormat|isISOFormat}
-   */
+  */
   function getDateBetween( date_default, date_param, input ) {
     if( typeof date_param == 'string' && isISOFormat( date_param ) ) {
-        date_param = new Date( date_param )
+      date_param = new Date( date_param )
     }
 
     // Date may be invalid even if isISOFormat returns true (for istance '2015-13-25T12:00:00'), that's why we have to check it with isNan
@@ -714,7 +721,7 @@ export function PickerBase() {
    *
    * @param {Date} date Date we get the day of the week from
    * @return {number} The day of the week as number
-   */
+  */
   function getWeekDayNo( date ) {
     let week_day = date.getDay();
 
@@ -736,10 +743,10 @@ export function PickerBase() {
    *
    * @param {string} iso_date Date string
    * @return {boolean} `true` if format is valid, `false` otherwise
-   */
+  */
   function isISOFormat( iso_date ) {
-		return ( iso_date.match( /^(\d{4})-(\d{2})-(\d{2})(T\d{2}\:\d{2}\:\d{2}[+-]\d{2}\:\d{2})?|Z$/ ) ) ? true : false
-	}
+    return ( iso_date.match( /^(\d{4})-(\d{2})-(\d{2})(T\d{2}\:\d{2}\:\d{2}[+-]\d{2}\:\d{2})?|Z$/ ) ) ? true : false
+  }
 
 
 
@@ -751,7 +758,7 @@ export function PickerBase() {
    *
    * @param {Date} date The date to be rounded
    * @return {Date} The rounded date
-   */
+  */
   function roundMinutes( date ) {
     date.setSeconds( 0, 0 );
 

@@ -269,64 +269,65 @@ export function PickerBase() {
   }
 
 
-  // ---
+
 
 
   /**
-   * @desc
-   * This is a click handler triggered when the user clicks to select either a day or an hour.
-   * It passes an object as parameter to `this.selectDay` or to `this.selectHour` depending on the user clicks on a day button or on an hour button respectively.
-   *
-   * These are the object properties if a day button is clicked:
-   * - `btn` [HTMLButtonElement]
-   * - `container` [HTMLDivElement]
-   * - `date` [Date]
-   * - `next_month` [boolean]
-   * - `picker` [HTMLDivElement]
-   * - `prev_month` [boolean]
-   * - `text` [string]
-	 *
-	 * @param {Event} e
-   *
-   * @see selectDay
-   * @see selectHour
-	 */
-	this.onSelectDayOrHour = ( e ) => {
-		const o = {};
+  * @desc
+  * This is a click handler triggered when the user clicks to select either a day or an hour.
+  * It passes an object as parameter depending on the user clicks on a day button or on an hour button respectively.
+  *
+  * These are the object properties if a day button is clicked:
+  * - `btn` [HTMLButtonElement] Active button
+  * - `container` [HTMLDivElement] The container of buttons and picker
+  * - `date` [Date] Start date or end date depending on which button was clicked
+  * - `next_month` [boolean] Is a next month day?
+  * - `picker` [HTMLDivElement] Picker to be closed
+  * - `prev_month` [boolean] Is a previous month day?
+  * - `text` [string] The day number inside `td` element
+  *
+  * @param {Event} e
+  *
+  * @see {@link module:js/pickerbase.PickerBase#selectDay|selectDay}
+  * @see {@link module:js/pickerbase.PickerBase#selectHour|selectHour}
+  */
+  this.onSelectDayOrHour = ( e ) => {
+    const o = {};
     const t = e.target;
 
-		o.text = t.textContent;
+    o.text = t.textContent;
 
-		const if_hour = ( o.text.indexOf(':') != -1 ) ? true : false;
+    const if_hour = ( o.text.indexOf(':') != -1 ) ? true : false;
 
-		// if( mode == 'start' ) {
-			o.date = this.start_date;
+    if( mode == 'start' ) {
+      o.date = this.start_date;
       o.container = this.start_container;
       o.btn = ( !if_hour ) ? this.start_date_btn : this.start_time_btn;
-			o.picker = this.start_picker_div;
-		// } else {
-		// 	o.date = end_date;
-		// 	o.div_close = end_picker_div; // => picker
-		// 	o.interval_div = el_end; // => container
-		// 	o.btn = ( !if_hour ) ? end_date_btn : end_time_btn;
-		// }
+      o.picker = this.start_picker_div;
+    }
+    // else {
+    // 	o.date = end_date;
+    // 	o.div_close = end_picker_div; // => picker
+    // 	o.interval_div = el_end; // => container
+    // 	o.btn = ( !if_hour ) ? end_date_btn : end_time_btn;
+    // }
     //
-		// if( if_hour ) {
-		// 	let arr = o.text.split(':');
-		// 	o.hour = arr[0];
-		// 	o.minute = arr[1]
-		// } else {
-			o.prev_month = t.classList.contains('prev-month');
-			o.next_month = t.classList.contains('next-month');
-		// }
+    if( if_hour ) {
+      // 	let arr = o.text.split(':');
+      // 	o.hour = arr[0];
+      // 	o.minute = arr[1]
+    } else {
+      o.prev_month = t.classList.contains('prev-month');
+      o.next_month = t.classList.contains('next-month');
+    }
 
-		const substr = ( t.classList.contains( 'day' ) )? 'Day' : 'Hour';
-		const method = 'select' + substr;
-		this[ method ]( o );
-	}
+    const substr = ( t.classList.contains( 'day' ) )? 'Day' : 'Hour';
+    const method = 'select' + substr;
+    this[ method ]( o );
+  }
 
 
-
+  // ---
 
 
   /**
@@ -709,7 +710,7 @@ export function PickerBase() {
    * @desc
    * Returns the day of the week as number accordingly to `user_days_order` (if any) or `date.getDay` method.
    *
-   * @param {Date} date Date to get the day of the week from
+   * @param {Date} date Date we get the day of the week from
    * @return {number} The day of the week as number
    */
   function getWeekDayNo( date ) {

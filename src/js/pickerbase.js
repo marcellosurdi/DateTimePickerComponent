@@ -164,21 +164,21 @@ export function PickerBase() {
 
 
   /**
-	 * This is a click handler that closes the picker if the user clicks outside.
-	 *
-	 * @param {Event} e
+   * This is a click handler that closes the picker if the user clicks outside.
+   *
+   * @param {Event} e
    *
    * @see {@link module:js/pickerbase.PickerBase#closePicker|closePicker}
-	 */
-	this.onClickOutside = ( e ) => {
-		let div = ( mode == 'start' ) ? this.start_picker_div : this.end_picker_div;
+  */
+  this.onClickOutside = ( e ) => {
+    let div = ( mode == 'start' ) ? this.start_picker_div : this.end_picker_div;
 
     if( e.type == 'touchstart' ) {
       e.clientX = e.touches[0].clientX;
       e.clientY = e.touches[0].clientY;
     }
-		let el = document.elementFromPoint( e.clientX, e.clientY );
-		let inside = false;
+    let el = document.elementFromPoint( e.clientX, e.clientY );
+    let inside = false;
 
     do {
       if( el.matches( `#${ div.parentElement.id }.datetime-container` ) ) {
@@ -187,10 +187,10 @@ export function PickerBase() {
       el = el.parentElement;
     } while( el !== null && el.nodeType === 1 );
 
-		if( !inside )  {
+    if( !inside )  {
       this.closePicker( div.previousElementSibling.querySelector( '.active' ), div );
-		}
-	}
+    }
+  }
 
 
 
@@ -198,23 +198,23 @@ export function PickerBase() {
 
   /**
    * This is a click handler triggered when the user opens the picker by clicking either a date button or a time button.
-	 *
-	 * @param {Event} e
    *
-	 * @see {@link module:js/pickerbase.PickerBase#showDateTable|showDateTable}
-	 * @see {@link module:js/pickerbase.PickerBase#showTimeTable|showTimeTable}
-	 */
-	this.onOpenPicker = ( e ) => {
+   * @param {Event} e
+   *
+   * @see {@link module:js/pickerbase.PickerBase#showDateTable|showDateTable}
+   * @see {@link module:js/pickerbase.PickerBase#showTimeTable|showTimeTable}
+  */
+  this.onOpenPicker = ( e ) => {
     const btn = e.currentTarget;
-		let picker, date;
+    let picker, date;
 
-		// Adds or removes the active state from current button when it's clicked
-		btn.classList.toggle( 'active' );
+    // Adds or removes the active state from current button when it's clicked
+    btn.classList.toggle( 'active' );
 
-		// Removes the active state from the other buttons except the current one
+    // Removes the active state from the other buttons except the current one
     let css_selector = `div#${ this.start_container.id } button`;
     css_selector += ( this.end_container?.id ) ? `, div#${ this.end_container.id } button` : '';
-		[].slice.call( document.querySelectorAll( css_selector ) ).forEach( ( item ) => {
+    [].slice.call( document.querySelectorAll( css_selector ) ).forEach( ( item ) => {
       if( item != btn ) {
         item.classList.remove( 'active' )
       }
@@ -223,30 +223,30 @@ export function PickerBase() {
     // Is the start or the end date of the interval?
     // Please note, if there is not an interval, only the start date exists
     if( btn.classList.contains( 'start' ) ) {
-    	picker = this.start_picker_div;
-    	date = this.start_date;
-    	mode = 'start';
+      picker = this.start_picker_div;
+      date = this.start_date;
+      mode = 'start';
     } else {
-    	picker = this.end_picker_div;
-    	date = this.end_date;
-    	mode = 'end';
+      picker = this.end_picker_div;
+      date = this.end_date;
+      mode = 'end';
     }
 
-		document.body.addEventListener( click, this.onClickOutside );
+    document.body.addEventListener( click, this.onClickOutside );
 
     // If the button has the active state...
-		if( btn.classList.contains( 'active' ) ) {
-			picker.style.display = 'block';
+    if( btn.classList.contains( 'active' ) ) {
+      picker.style.display = 'block';
 
-			let substr = ( btn.classList.contains( 'date' ) )? 'Date' : 'Time';
-			let method = 'show' + substr + 'Table';
-			this[ method ]( picker, date );
+      let substr = ( btn.classList.contains( 'date' ) )? 'Date' : 'Time';
+      let method = 'show' + substr + 'Table';
+      this[ method ]( picker, date );
 
-			// Checks if the picker exceeds the viewport height
+      // Checks if the picker exceeds the viewport height
       const rect = picker.getBoundingClientRect();
       const diff = ( rect.top + picker.offsetHeight ) - document.documentElement.clientHeight
 
-			if( diff > 0 ) {
+      if( diff > 0 ) {
         // Checks if scroll behavior is supported
         if( 'scrollBehavior' in document.documentElement.style ) {
           window.scrollBy( {
@@ -255,18 +255,18 @@ export function PickerBase() {
             behavior: 'smooth'
           } );
         } else {
-  				window.scrollBy( 0, diff );
+          window.scrollBy( 0, diff );
         }
-			}
-		}
+      }
+    }
 
     // ...otherwise
     else {
       // The picker was already open, so we close it
-			picker.style.display = 'none';
-			document.body.removeEventListener( click, this.onClickOutside );
-		}
-	}
+      picker.style.display = 'none';
+      document.body.removeEventListener( click, this.onClickOutside );
+    }
+  }
 
 
   // ---

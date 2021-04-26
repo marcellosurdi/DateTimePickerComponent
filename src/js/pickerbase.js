@@ -18,8 +18,33 @@
      Element.prototype.webkitMatchesSelector
  }
 // Please note, the following code will be transpiled with WebPack/Babel for IE11 backcompatibility.
-// If you want to use destructuring assignment too, you also need to install @babel/polyfill.
-// Somewhere, in the code below, you can find the alternative syntax commented.
+// If you want to use destructuring assignment too, you also need to install @babel/polyfill. The file
+// size will increase consequently though. In the code below, if applicable, you can find the alternative
+// destructured syntax commented.
+
+
+
+
+
+/**
+ * @namespace PickerBaseNS
+ * @memberof module:js/pickerbase
+ */
+
+/**
+ * @typedef {object} UserSelection
+ * @memberof module:js/pickerbase.PickerBaseNS
+ * @property {HTMLButtonElement} btn The active button
+ * @property {HTMLDivElement} container Start or end top level container depending on which button was clicked
+ * @property {Date} date Start date or end date
+ * @property {HTMLDivElement} picker Picker to be closed after updating
+ * @property {string} text The day number or the hour/minute pair (HH:mm) inside the `td` element
+ * @property {boolean} [next_month] Denotes a next month day (only for days selection)
+ * @property {boolean} [prev_month] Denotes a previous month day (only for days selection)
+ * @property {string} [hour] Denotes the 2-digit hour (only for hour/minute selection)
+ * @property {string} [minute] Denotes the 2-digit minute (only for hour/minute selection)
+ */
+
 
 
 
@@ -39,18 +64,18 @@ export function PickerBase() {
    * @property {object} i18n Strings for translation
    */
   this.i18n = {
-    'jan':'jan',
-    'feb':'feb',
-    'mar':'mar',
-    'apr':'apr',
-    'may':'may',
-    'jun':'jun',
-    'jul':'jul',
-    'aug':'aug',
-    'sep':'set',
-    'oct':'sep',
-    'nov':'nov',
-    'dec':'dec',
+    'jan':'Jan',
+    'feb':'Feb',
+    'mar':'Mar',
+    'apr':'Apr',
+    'may':'May',
+    'jun':'Jun',
+    'jul':'Jul',
+    'aug':'Aug',
+    'sep':'Set',
+    'oct':'Sep',
+    'nov':'Nov',
+    'dec':'Dec',
     'january':'January',
     'february':'February',
     'march':'March',
@@ -63,13 +88,13 @@ export function PickerBase() {
     'october':'October',
     'november':'November',
     'december':'December',
-    'mon':'mon',
-    'tue':'tue',
-    'wed':'wed',
-    'thu':'thu',
-    'fri':'fri',
-    'sat':'sat',
-    'sun':'sun',
+    'mon':'Mon',
+    'tue':'Tue',
+    'wed':'Wed',
+    'thu':'Thu',
+    'fri':'Fri',
+    'sat':'Sat',
+    'sun':'Sun',
     'lunedi':'Monday',
     'martedi':'Tuesday',
     'mercoledi':'Wednesday',
@@ -99,8 +124,8 @@ export function PickerBase() {
    *
    * @param {HTMLDivElement} picker The picker currently open
   */
-  this.addEventOnSelect = function( div ) {
-    let coll = div.querySelectorAll( 'td.selectable' );
+  this.addEventOnSelect = function( picker ) {
+    let coll = picker.querySelectorAll( 'td.selectable' );
 
 		for( let i = 0, n = coll.length; i < n; i++ ) {
 			coll[ i ].addEventListener( 'click', this.onSelectDayOrHour );
@@ -112,13 +137,13 @@ export function PickerBase() {
 
 
   /**
-   * Closes the picker and removes the active state from the active button.
+   * Closes the picker and removes the active state from the The active button.
    *
-   * @param {HTMLDivElement} btn Active button
    * @param {HTMLDivElement} picker The picker currently open
+   * @param {HTMLDivElement} btn The active button
    * @param {int} [msec=0] Number of milliseconds, then the picker is closed
   */
-  this.closePicker = function( btn, picker, ms = 0 ) {
+  this.closePicker = function( picker, btn, ms = 0 ) {
     setTimeout( () => {
       btn.classList.remove( 'active' );
       picker.style.display = 'none';
@@ -189,22 +214,25 @@ export function PickerBase() {
 
 
   /**
-   * Returns the classes for the `td` elements that contain the hours/minutes pair (HH:mm).
+   * Returns the classes for the `td` elements that contain the hour/minute pairs (HH:mm).
    * It's used inside a loop both when building table ({@link module:js/pickerbase.PickerBase#onOpenPicker|onOpenPicker})
    * and when updating it ({@link module:js/pickerbase.PickerBase#selectHour|selectHour}).
    *
-   * @param {string} hour Current hour inside a loop
+   * @param {string} hour Current hour/minute inside a loop
    * @param {Date} date Date object with the hour/minutes info
    * @return {string} Classes to be assigned to the current `td` element
    */
   this.getHourClassName = function( hour, date ) {
-    let selected_hour = ( '0' + date.getHours() ).slice( -2 ) + ':' + ( '0' + date.getMinutes() ).slice( -2 );
+    const selected_hour = ( '0' + date.getHours() ).slice( -2 ) + ':' + ( '0' + date.getMinutes() ).slice( -2 );
 
-    let h = hour.split( ':' );
-    // let [ h, m ] = hour.split( ':' );
+    const arr = hour.split( ':' );
+    const h = arr[ 0 ];
+    const m = arr[ 1 ];
+    // With destructuring assignment
+    // const [ h, m ] = hour.split( ':' );
 
     let tmp_day = new Date( date.getTime() );
-    tmp_day.setHours( h[0], h[1], 0, 0 );
+    tmp_day.setHours( h, m, 0, 0 );
 
     let class_name = 'hour ';
     if( tmp_day < this.first_date || tmp_day > this.last_date ) {
@@ -246,7 +274,7 @@ export function PickerBase() {
     } while( el !== null && el.nodeType === 1 );
 
     if( !inside )  {
-      this.closePicker( div.previousElementSibling.querySelector( '.active' ), div );
+      this.closePicker( div, div.previousElementSibling.querySelector( '.active' ) );
     }
   }
 
@@ -334,17 +362,8 @@ export function PickerBase() {
   * @desc
   * This is a click handler triggered when the user clicks to select either a day or an hour.
   * It passes an object as parameter to {@link module:js/pickerbase.PickerBase#selectDay|selectDay} or
-  * to {@link module:js/pickerbase.PickerBase#selectHour|selectHour} depending on the user clicks or to
-  * on a day button or on an hour button respectively.
-  *
-  * These are the object properties if a day button is clicked:
-  * - `btn` [HTMLButtonElement] Active button
-  * - `container` [HTMLDivElement] Start or end top level container depending on which button was clicked
-  * - `date` [Date] Start date or end date
-  * - `next_month` [boolean] Is a next month day?
-  * - `picker` [HTMLDivElement] Picker to be closed
-  * - `prev_month` [boolean] Is a previous month day?
-  * - `text` [string] The day number inside `td` element
+  * to {@link module:js/pickerbase.PickerBase#selectHour|selectHour} depending on the user clicks on a day
+  * button or on an hour button respectively.
   *
   * @param {Event} e
   *
@@ -364,18 +383,19 @@ export function PickerBase() {
       o.container = this.start_container;
       o.btn = ( !if_hour ) ? this.start_date_btn : this.start_time_btn;
       o.picker = this.start_picker_div;
+    } else {
+    	o.date = this.end_date;
+      o.container = this.end_container;
+      o.btn = ( !if_hour ) ? this.end_date_btn : this.end_time_btn;
+      o.picker = this.end_picker_div;
     }
-    // else {
-    // 	o.date = end_date;
-    // 	o.div_close = end_picker_div; // => picker
-    // 	o.interval_div = el_end; // => container
-    // 	o.btn = ( !if_hour ) ? end_date_btn : end_time_btn;
-    // }
-    //
+
     if( if_hour ) {
-      // 	let arr = o.text.split(':');
-      // 	o.hour = arr[0];
-      // 	o.minute = arr[1]
+    	let arr = o.text.split(':');
+    	o.hour = arr[0];
+    	o.minute = arr[1];
+      // With destructuring assignment
+      // [ o.hour, o.minute ] = o.text.split(':');
     } else {
       o.prev_month = t.classList.contains('prev-month');
       o.next_month = t.classList.contains('next-month');
@@ -393,7 +413,7 @@ export function PickerBase() {
   /**
    * @desc
    * Displays date and time in their own buttons.
-   * Outputs the date to the value attribute of `input.date_output` according to `setting.date_output` property.
+   * Outputs the date to the value attribute of `input.date_output` according to `settings.date_output` property.
    *
    * @param {HTMLDivElement} div `div` element where to display the date
    * @param {Date} date Date to be displayed
@@ -405,6 +425,7 @@ export function PickerBase() {
     const week_day_span = date_coll[ 0 ];
     const month_day = date_coll[ 1 ];
     const month_year_span = date_coll[ 2 ];
+    // With destructuring assignment
     // const [ week_day_span, month_day, month_year_span ] = div.querySelectorAll( 'button.date > *' );
 
     const week_day_number = getWeekDayNo( date );
@@ -418,6 +439,7 @@ export function PickerBase() {
     if( time_coll.length > 0 ) {
       const hours = time_coll[ 0 ];
       const minutes = time_coll[ 1 ];
+      // With destructuring assignment
       // const [ hours, minutes ] = time_coll;
 
       hours.textContent = ( '0' + date.getHours() ).slice( -2 );
@@ -452,7 +474,7 @@ export function PickerBase() {
 	 * Selects the day clicked by the user and then closes the picker,
    * it's called by {@link module:js/pickerbase.PickerBase#onSelectDayOrHour|onSelectDayOrHour} method.
 	 *
-	 * @param {object} o Object with contextual info.
+	 * @param {module:js/pickerbase.PickerBaseNS.UserSelection} o Object with contextual info
    *
 	 * @see printDateAndTime
 	 * @see closePicker
@@ -479,7 +501,7 @@ export function PickerBase() {
 		// Updates day classes after user selection
 		let coll = document.querySelectorAll( 'td.selectable' );
 
-		for( let n = coll.length, i = 0; i < n; i++ ) {
+		for( let i = 0, n = coll.length; i < n; i++ ) {
 			let param, class_name = '';
 			if( coll[ i ].classList.contains( 'prev-month' ) ) {
 				param = this.prev_month;
@@ -500,7 +522,7 @@ export function PickerBase() {
 		this.printDateAndTime( o.container, o.date );
 
 		// Chiude il pannello attivo e toglie il focus dal pulsante corrispondente
-		this.closePicker( o.btn, o.picker, 500 );
+		this.closePicker( o.picker, o.btn, 500 );
 	}
 
 
@@ -510,36 +532,33 @@ export function PickerBase() {
   /**
 	 * Selects the hour/minute pair clicked by the user and then closes the picker
 	 *
-	 * @param {object} obj Oggetto contenente tutte le informazioni contestuali calcolate dal metodo chiamante {@link DatePicker#onSelectDayOrHour}
+	 * @param {module:js/pickerbase.PickerBaseNS.UserSelection} o Object with contextual info
    *
    * @see printDateAndTime
 	 * @see closePicker
 	 */
-	this.selectHour = function( obj ) {
-    return;
-		// Aggiorna l'orario in memoria di inizio o fine intervallo
-		obj.date.setHours( obj.hour, obj.minute, 0, 0 );
+	this.selectHour = function( o ) {
+		// Updates hour and minute with those selected by the user
+		o.date.setHours( o.hour, o.minute, 0, 0 );
 
 		// // Ricava le rispettive date tenendo conto del tempo minimo di intervallo
 		// let _start_date = new Date( start_date.getTime() + min_time );
 		// let _end_date = new Date( end_date.getTime() - min_time );
-		// let _curr_date = new Date( obj.date.getTime() );
+		// let _curr_date = new Date( o.date.getTime() );
 		// let _min_date = new Date( min_date.getTime() + min_time );
 		// let _max_date = new Date( max_date.getTime() - min_time );
-		// this.checkDateTimeContraints( obj, _start_date, _end_date, _curr_date, _min_date, _max_date );
+		// this.checkDateTimeContraints( o, _start_date, _end_date, _curr_date, _min_date, _max_date );
 
-		// Aggiorna la tabella contenente gli orari di inizio o fine intervallo
+		// Updates the table
 		let coll = document.querySelectorAll( 'td.selectable' );
-		let l = coll.length
-		for( let i = 0; i < l; i++ ) {
-			coll[i].className = this.getHourClassName( coll[i].textContent, obj.date );
+
+		for( let i = 0, n = coll.length; i < n; i++ ) {
+			coll[ i ].className = this.getHourClassName( coll[ i ].textContent, o.date );
 		}
 
-		// Stampa nella pagina
-		this.printDateAndTime( obj.interval_div, obj.date );
+		this.printDateAndTime( o.container, o.date );
 
-		// Chiude il pannello
-		this.closeDateOrHourTable( obj.btn, obj.div_close, 500 );
+		this.closePicker( o.picker, o.btn, 500 );
 	}
 
 

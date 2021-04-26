@@ -11,11 +11,11 @@
 // Polyfill for Element.prototype.matches
  if( !Element.prototype.matches ) {
    Element.prototype.matches =
-     Element.prototype.matchesSelector ||
-     Element.prototype.mozMatchesSelector ||
-     Element.prototype.msMatchesSelector ||
-     Element.prototype.oMatchesSelector ||
-     Element.prototype.webkitMatchesSelector
+   Element.prototype.matchesSelector ||
+   Element.prototype.mozMatchesSelector ||
+   Element.prototype.msMatchesSelector ||
+   Element.prototype.oMatchesSelector ||
+   Element.prototype.webkitMatchesSelector
  }
 // The following code will be transpiled with WebPack/Babel for IE11 backcompatibility.
 // If you want to use destructuring assignment too, you also need to install @babel/polyfill. The file
@@ -34,6 +34,7 @@
 /**
  * @typedef {object} UserSelection
  * @memberof module:js/pickerbase.PickerBaseNS
+ *
  * @property {HTMLButtonElement} btn The active button
  * @property {HTMLDivElement} container Start or end top level container depending on which button was clicked
  * @property {Date} date Start date or end date

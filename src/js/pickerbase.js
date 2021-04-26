@@ -318,7 +318,6 @@ export function PickerBase() {
       mode = 'end';
     }
 
-
     // If the button has the active state...
     if( btn.classList.contains( 'active' ) ) {
       picker.style.display = 'block';
@@ -384,16 +383,16 @@ export function PickerBase() {
       o.btn = ( !if_hour ) ? this.start_date_btn : this.start_time_btn;
       o.picker = this.start_picker_div;
     } else {
-    	o.date = this.end_date;
+      o.date = this.end_date;
       o.container = this.end_container;
       o.btn = ( !if_hour ) ? this.end_date_btn : this.end_time_btn;
       o.picker = this.end_picker_div;
     }
 
     if( if_hour ) {
-    	let arr = o.text.split(':');
-    	o.hour = arr[0];
-    	o.minute = arr[1];
+      let arr = o.text.split(':');
+      o.hour = arr[0];
+      o.minute = arr[1];
       // With destructuring assignment
       // [ o.hour, o.minute ] = o.text.split(':');
     } else {

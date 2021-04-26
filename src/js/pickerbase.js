@@ -17,7 +17,7 @@
      Element.prototype.oMatchesSelector ||
      Element.prototype.webkitMatchesSelector
  }
-// Please note, the following code will be transpiled with WebPack/Babel for IE11 backcompatibility.
+// The following code will be transpiled with WebPack/Babel for IE11 backcompatibility.
 // If you want to use destructuring assignment too, you also need to install @babel/polyfill. The file
 // size will increase consequently though. In the code below, if applicable, you can find the alternative
 // destructured syntax commented.
@@ -123,13 +123,13 @@ export function PickerBase() {
    * {@link module:js/pickerbase.PickerBase#showTimeTable|showTimeTable} methods.
    *
    * @param {HTMLDivElement} picker The picker currently open
-  */
+   */
   this.addEventOnSelect = function( picker ) {
     let coll = picker.querySelectorAll( 'td.selectable' );
 
-		for( let i = 0, n = coll.length; i < n; i++ ) {
-			coll[ i ].addEventListener( 'click', this.onSelectDayOrHour );
-		}
+    for( let i = 0, n = coll.length; i < n; i++ ) {
+      coll[ i ].addEventListener( 'click', this.onSelectDayOrHour );
+    }
   }
 
 
@@ -307,7 +307,7 @@ export function PickerBase() {
     } );
 
     // Is the start or the end date of the interval?
-    // Please note, if there is not an interval, only the start date exists
+    // If there is not an interval, only the start date exists
     if( btn.classList.contains( 'start' ) ) {
       picker = this.start_picker_div;
       date = this.start_date;
@@ -466,103 +466,101 @@ export function PickerBase() {
   }
 
 
-  // ---
+
 
 
   /**
    * @desc
-	 * Selects the day clicked by the user and then closes the picker,
+   * Selects the day clicked by the user and then closes the picker,
    * it's called by {@link module:js/pickerbase.PickerBase#onSelectDayOrHour|onSelectDayOrHour} method.
-	 *
-	 * @param {module:js/pickerbase.PickerBaseNS.UserSelection} o Object with contextual info
    *
-	 * @see printDateAndTime
-	 * @see closePicker
-	 */
-	this.selectDay = function( o ) {
+   * @param {module:js/pickerbase.PickerBaseNS.UserSelection} o Object with contextual info
+   *
+   * @see {@link module:js/pickerbase.PickerBase#printDateAndTime|printDateAndTime}
+   * @see {@link module:js/pickerbase.PickerBase#closePicker|closePicker}
+   */
+  this.selectDay = function( o ) {
     // Updates this.start_date or this.end_date after user selection
-		if( o.prev_month ) {
-			o.date.setFullYear( this.prev_month.getFullYear(), this.prev_month.getMonth(), o.text );
-		} else if( o.next_month ) {
-			o.date.setFullYear( this.next_month.getFullYear(), this.next_month.getMonth(), o.text );
-		} else {
-			o.date.setFullYear( this.current_month.getFullYear(), this.current_month.getMonth(), o.text );
-		}
+    if( o.prev_month ) {
+      o.date.setFullYear( this.prev_month.getFullYear(), this.prev_month.getMonth(), o.text );
+    } else if( o.next_month ) {
+      o.date.setFullYear( this.next_month.getFullYear(), this.next_month.getMonth(), o.text );
+    } else {
+      o.date.setFullYear( this.current_month.getFullYear(), this.current_month.getMonth(), o.text );
+    }
 
-		// // Ricava le rispettive date senza differenze di orario
-		// let _start_date = new Date( start_date.getFullYear(), start_date.getMonth(), start_date.getDate() );
-		// let _end_date = new Date( end_date.getFullYear(), end_date.getMonth(), end_date.getDate() );
-		// let _curr_date = new Date( obj.date.getFullYear(), obj.date.getMonth(), obj.date.getDate() );
-		// let _min_date = new Date( min_date.getFullYear(), min_date.getMonth(), min_date.getDate() );
-		// let _max_date = new Date( max_date.getFullYear(), max_date.getMonth(), max_date.getDate() );
+    // // Ricava le rispettive date senza differenze di orario
+    // let _start_date = new Date( start_date.getFullYear(), start_date.getMonth(), start_date.getDate() );
+    // let _end_date = new Date( end_date.getFullYear(), end_date.getMonth(), end_date.getDate() );
+    // let _curr_date = new Date( obj.date.getFullYear(), obj.date.getMonth(), obj.date.getDate() );
+    // let _min_date = new Date( min_date.getFullYear(), min_date.getMonth(), min_date.getDate() );
+    // let _max_date = new Date( max_date.getFullYear(), max_date.getMonth(), max_date.getDate() );
     //
-		// this.checkDateTimeContraints( obj, _start_date, _end_date, _curr_date, _min_date, _max_date );
+    // this.checkDateTimeContraints( obj, _start_date, _end_date, _curr_date, _min_date, _max_date );
 
-		// Updates day classes after user selection
-		let coll = document.querySelectorAll( 'td.selectable' );
+    // Updates day classes after user selection
+    let coll = document.querySelectorAll( 'td.selectable' );
 
-		for( let i = 0, n = coll.length; i < n; i++ ) {
-			let param, class_name = '';
-			if( coll[ i ].classList.contains( 'prev-month' ) ) {
-				param = this.prev_month;
-				class_name += 'prev-month ';
-			}
-			else if( coll[ i ].classList.contains( 'next-month' ) ) {
-				param = this.next_month;
-				class_name += 'next-month ';
-			}
-			else {
-				param = this.current_month;
-			}
-			class_name += this.getDayClassName( coll[ i ].textContent, param );
-			coll[ i ].className = class_name;
-		}
+    for( let i = 0, n = coll.length; i < n; i++ ) {
+      let param, class_name = '';
+      if( coll[ i ].classList.contains( 'prev-month' ) ) {
+        param = this.prev_month;
+        class_name += 'prev-month ';
+      }
+      else if( coll[ i ].classList.contains( 'next-month' ) ) {
+        param = this.next_month;
+        class_name += 'next-month ';
+      }
+      else {
+        param = this.current_month;
+      }
+      class_name += this.getDayClassName( coll[ i ].textContent, param );
+      coll[ i ].className = class_name;
+    }
 
-		// Stampa nella pagina
-		this.printDateAndTime( o.container, o.date );
+    this.printDateAndTime( o.container, o.date );
 
-		// Chiude il pannello attivo e toglie il focus dal pulsante corrispondente
-		this.closePicker( o.picker, o.btn, 500 );
-	}
+    this.closePicker( o.picker, o.btn, 500 );
+  }
 
 
 
 
 
   /**
-	 * Selects the hour/minute pair clicked by the user and then closes the picker
-	 *
-	 * @param {module:js/pickerbase.PickerBaseNS.UserSelection} o Object with contextual info
+   * Selects the hour/minute pair clicked by the user and then closes the picker
    *
-   * @see printDateAndTime
-	 * @see closePicker
-	 */
-	this.selectHour = function( o ) {
-		// Updates hour and minute with those selected by the user
-		o.date.setHours( o.hour, o.minute, 0, 0 );
+   * @param {module:js/pickerbase.PickerBaseNS.UserSelection} o Object with contextual info
+   *
+   * @see {@link module:js/pickerbase.PickerBase#printDateAndTime|printDateAndTime}
+   * @see {@link module:js/pickerbase.PickerBase#closePicker|closePicker}
+   */
+  this.selectHour = function( o ) {
+    // Updates hour and minute with those selected by the user
+    o.date.setHours( o.hour, o.minute, 0, 0 );
 
-		// // Ricava le rispettive date tenendo conto del tempo minimo di intervallo
-		// let _start_date = new Date( start_date.getTime() + min_time );
-		// let _end_date = new Date( end_date.getTime() - min_time );
-		// let _curr_date = new Date( o.date.getTime() );
-		// let _min_date = new Date( min_date.getTime() + min_time );
-		// let _max_date = new Date( max_date.getTime() - min_time );
-		// this.checkDateTimeContraints( o, _start_date, _end_date, _curr_date, _min_date, _max_date );
+    // // Ricava le rispettive date tenendo conto del tempo minimo di intervallo
+    // let _start_date = new Date( start_date.getTime() + min_time );
+    // let _end_date = new Date( end_date.getTime() - min_time );
+    // let _curr_date = new Date( o.date.getTime() );
+    // let _min_date = new Date( min_date.getTime() + min_time );
+    // let _max_date = new Date( max_date.getTime() - min_time );
+    // this.checkDateTimeContraints( o, _start_date, _end_date, _curr_date, _min_date, _max_date );
 
-		// Updates the table
-		let coll = document.querySelectorAll( 'td.selectable' );
+    // Updates the table after user selection
+    let coll = document.querySelectorAll( 'td.selectable' );
 
-		for( let i = 0, n = coll.length; i < n; i++ ) {
-			coll[ i ].className = this.getHourClassName( coll[ i ].textContent, o.date );
-		}
+    for( let i = 0, n = coll.length; i < n; i++ ) {
+      coll[ i ].className = this.getHourClassName( coll[ i ].textContent, o.date );
+    }
 
-		this.printDateAndTime( o.container, o.date );
+    this.printDateAndTime( o.container, o.date );
 
-		this.closePicker( o.picker, o.btn, 500 );
-	}
+    this.closePicker( o.picker, o.btn, 500 );
+  }
 
 
-
+  // ---
 
 
   /**

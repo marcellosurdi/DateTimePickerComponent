@@ -229,7 +229,6 @@ export function PickerBase() {
     const arr = hour.split( ':' );
     const h = arr[ 0 ];
     const m = arr[ 1 ];
-    // With destructuring assignment
     // const [ h, m ] = hour.split( ':' );
 
     let tmp_day = new Date( date.getTime() );
@@ -394,7 +393,6 @@ export function PickerBase() {
       let arr = o.text.split(':');
       o.hour = arr[0];
       o.minute = arr[1];
-      // With destructuring assignment
       // [ o.hour, o.minute ] = o.text.split(':');
     } else {
       o.prev_month = t.classList.contains('prev-month');
@@ -412,38 +410,28 @@ export function PickerBase() {
 
   /**
    * @desc
-   * Displays date and time in their own buttons.
+   * Displays date and/or time in their own buttons.
    * Outputs the date to the value attribute of `input.date_output` according to `settings.date_output` property.
    *
    * @param {HTMLDivElement} div `div` element where to display the date
    * @param {Date} date Date to be displayed
+   * @param {string} [action=both] Denotes which button needs to be update (both|date|time)
    *
    * @see {@link module:js/pickerbase.PickerBase~getWeekDayNo|getWeekDayNo}
    */
-  this.printDateAndTime = function( div, date ) {
-    const date_coll = div.querySelectorAll( 'button.date > *' );
-    const week_day_span = date_coll[ 0 ];
-    const month_day = date_coll[ 1 ];
-    const month_year_span = date_coll[ 2 ];
-    // With destructuring assignment
-    // const [ week_day_span, month_day, month_year_span ] = div.querySelectorAll( 'button.date > *' );
+  this.printDateAndTime = function( div, date, action = 'both' ) {
+    const self = this;
 
-    const week_day_number = getWeekDayNo( date );
-
-    week_day_span.textContent = this.i18n[ days_order[ week_day_number ] ];
-    month_day.textContent = ( '0' + date.getDate() ).slice( -2 );
-    month_year_span.innerHTML = `<span data-i18n="${months_label[ date.getMonth() ]}">${this.i18n[ months_label[ date.getMonth() ] ]}</span><br>${date.getFullYear()}`;
-
-    // If there's a time button
-    const time_coll = div.querySelectorAll( 'button.time > *' );
-    if( time_coll.length > 0 ) {
-      const hours = time_coll[ 0 ];
-      const minutes = time_coll[ 1 ];
-      // With destructuring assignment
-      // const [ hours, minutes ] = time_coll;
-
-      hours.textContent = ( '0' + date.getHours() ).slice( -2 );
-      minutes.textContent = `:${ ( '0' + date.getMinutes() ).slice( -2 ) }`;
+    switch( action ) {
+      case 'date':
+        updateDate();
+      break;
+      case 'time':
+        updateTime();
+      break;
+      default:
+        updateDate();
+        updateTime();
     }
 
     let output_date;
@@ -453,16 +441,50 @@ export function PickerBase() {
     var full_iso = ( new Date( date.getTime() - time_zone_offset ) ).toISOString().slice( 0, -1 );
     switch( this.date_output ) {
       // YYYY-MM-DDTHH:mm:ss.sss
-      case 'full_ISO': output_date = full_iso; break;
+      case 'full_ISO':
+        output_date = full_iso;
+      break;
       // YYYY-MM-DD
-      case 'short_ISO': [ output_date, ] = full_iso.split( 'T' ); break;
+      case 'short_ISO':
+        let arr = full_iso.split( 'T' );
+        output_date = arr[ 0 ];
+        // [ output_date, ] = full_iso.split( 'T' );
+      break;
       case 'timestamp':
       default:
-      output_date = Math.round( date.getTime() / 1000 );
-      break;
+        output_date = Math.round( date.getTime() / 1000 );
     }
 
     div.querySelector( 'input.date_output' ).value = output_date;
+
+
+
+
+
+    function updateDate() {
+      const date_coll = div.querySelectorAll( 'button.date > *' );
+      const week_day_span = date_coll[ 0 ];
+      const month_day = date_coll[ 1 ];
+      const month_year_span = date_coll[ 2 ];
+      // const [ week_day_span, month_day, month_year_span ] = div.querySelectorAll( 'button.date > *' );
+
+      const week_day_number = getWeekDayNo( date );
+
+      week_day_span.textContent = self.i18n[ days_order[ week_day_number ] ];
+      month_day.textContent = ( '0' + date.getDate() ).slice( -2 );
+      month_year_span.innerHTML =
+        `<span data-i18n="${ months_label[ date.getMonth() ] }">${ self.i18n[ months_label[ date.getMonth() ] ] }</span><br>${ date.getFullYear() }`;
+    }
+
+    function updateTime() {
+      const time_coll = div.querySelectorAll( 'button.time > *' );
+      const hours = time_coll[ 0 ];
+      const minutes = time_coll[ 1 ];
+      // const [ hours, minutes ] = time_coll;
+
+      hours.textContent = ( '0' + date.getHours() ).slice( -2 );
+      minutes.textContent = `:${ ( '0' + date.getMinutes() ).slice( -2 ) }`;
+    }
   }
 
 
@@ -518,7 +540,7 @@ export function PickerBase() {
       coll[ i ].className = class_name;
     }
 
-    this.printDateAndTime( o.container, o.date );
+    this.printDateAndTime( o.container, o.date, 'date' );
 
     this.closePicker( o.picker, o.btn, 500 );
   }
@@ -554,7 +576,7 @@ export function PickerBase() {
       coll[ i ].className = this.getHourClassName( coll[ i ].textContent, o.date );
     }
 
-    this.printDateAndTime( o.container, o.date );
+    this.printDateAndTime( o.container, o.date, 'time' );
 
     this.closePicker( o.picker, o.btn, 500 );
   }

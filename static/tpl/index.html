@@ -7,8 +7,8 @@
 <meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta name="format-detection" content="telephone=no">
 <style>
-  html, body { margin: 0; padding: 0; height: 100%; font: 100% arial, sans-serif; color: #444; }
-  div#container { padding: 10px; }
+  html, body { margin: 0; padding: 0; background: #eee; height: 100%; font: 100% arial, sans-serif; color: #444; }
+  div#container { margin: 10px auto; background: #fff; max-width: 640px; padding: 10px; }
 
   /* Available classes: prev-month, next-month, today, start-day end-day */
   div#select_date td.today {
@@ -19,23 +19,23 @@
 
 <body>
   <div id="container">
+    <h2>DateTimePicker</h2>
+    <span>div#select_datetime</span>
+    <div id="select_datetime"></div>
 
-    <span>Default date values</span>
+    <h2>DatePicker</h2>
+    <span>div#select_date</span>
     <div id="select_date"></div>
 
-    <span>JS values</span>
+    <span>div#select_date_2</span>
     <div id="select_date_2"></div>
 
-    <span>HTML hidden values</span>
+    <span>div#select_date_3</span>
     <div id="select_date_3">
       <input type="hidden" class="first_date" value="2022-08-03">
       <input type="hidden" class="start_date" value="2022-08-23">
       <input type="hidden" class="last_date" value="2022-08-31">
     </div>
-
-    <span>Default date time values</span>
-    <div id="select_datetime"></div>
-
   </div>
 </body>
 

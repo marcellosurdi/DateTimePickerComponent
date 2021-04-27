@@ -16,18 +16,18 @@ let it = {
   'oct':'Ott',
   'nov':'Nov',
   'dec':'Dic',
-  'january':'Gennaio',
-  'february':'Febbraio',
-  'march':'Marzo',
-  'april':'Aprile',
-  'may':'Maggio',
-  'june':'Giugno',
-  'july':'Luglio',
-  'august':'Agosto',
-  'september':'Settembre',
-  'october':'Ottobre',
-  'november':'Novembre',
-  'december':'Dicembre',
+  'jan_':'Gennaio',
+  'feb_':'Febbraio',
+  'mar_':'Marzo',
+  'apr_':'Aprile',
+  'may_':'Maggio',
+  'jun_':'Giugno',
+  'jul_':'Luglio',
+  'aug_':'Agosto',
+  'sep_':'Settembre',
+  'oct_':'Ottobre',
+  'nov_':'Novembre',
+  'dec_':'Dicembre',
   'mon':'Lun',
   'tue':'Mar',
   'wed':'Mer',
@@ -35,14 +35,24 @@ let it = {
   'fri':'Ven',
   'sat':'Sab',
   'sun':'Dom',
-  'lunedi':'Lunedì',
-  'martedi':'Martedì',
-  'mercoledi':'Mercoledì',
-  'giovedi':'Giovedì',
-  'venerdi':'Venerdì',
-  'sabato':'Sabato',
-  'domenica':'Domenica',
+  'mon_':'Lunedì',
+  'tue_':'Martedì',
+  'wed_':'Mercoledì',
+  'thu_':'Giovedì',
+  'fri_':'Venerdì',
+  'sat_':'Sabato',
+  'sun_':'Domenica',
 };
+
+
+
+
+
+new DateTimePicker( 'select_datetime', { i18n: it } );
+
+
+
+
 
 new DatePicker( 'select_date', { first_day_no: 0 } );
 
@@ -54,9 +64,3 @@ new DatePicker( 'select_date_2', {
 } );
 
 new DatePicker( 'select_date_3', { first_day_no: 0 } );
-
-
-
-
-
-new DateTimePicker( 'select_datetime', { first_day_no: 0 } );

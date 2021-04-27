@@ -18,9 +18,8 @@
    Element.prototype.webkitMatchesSelector
  }
 // The following code will be transpiled with WebPack/Babel for IE11 backcompatibility.
-// If you want to use destructuring assignment too, you also need to install @babel/polyfill. The file
-// size will increase consequently though. In the code below, if applicable, you can find the alternative
-// destructured syntax commented.
+// If you want to use destructuring assignment too, you also need to install @babel/polyfill, but
+// the file size will increase consequently.
 
 
 
@@ -77,18 +76,18 @@ export function PickerBase() {
     'oct':'Sep',
     'nov':'Nov',
     'dec':'Dec',
-    'january':'January',
-    'february':'February',
-    'march':'March',
-    'april':'April',
-    'may':'May',
-    'june':'June',
-    'july':'July',
-    'august':'August',
-    'september':'September',
-    'october':'October',
-    'november':'November',
-    'december':'December',
+    'jan_':'January',
+    'feb_':'February',
+    'mar_':'March',
+    'apr_':'April',
+    'may_':'May',
+    'jun_':'June',
+    'jul_':'July',
+    'aug_':'August',
+    'sep_':'September',
+    'oct_':'October',
+    'nov_':'November',
+    'dec_':'December',
     'mon':'Mon',
     'tue':'Tue',
     'wed':'Wed',
@@ -96,19 +95,18 @@ export function PickerBase() {
     'fri':'Fri',
     'sat':'Sat',
     'sun':'Sun',
-    'lunedi':'Monday',
-    'martedi':'Tuesday',
-    'mercoledi':'Wednesday',
-    'giovedi':'Thursday',
-    'venerdi':'Friday',
-    'sabato':'Saturday',
-    'domenica':'Sunday',
+    'mon_':'Monday',
+    'tue_':'Tuesday',
+    'wed_':'Wednesday',
+    'thu_':'Thursday',
+    'fri_':'Friday',
+    'sat_':'Saturday',
+    'sun_':'Sunday',
   };
 
   const ms_per_day = 24 * 60 * 60 * 1000;
   const default_days_order = [ 'sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat' ];
-  const months_label = [ 'jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec' ];
-  const months_fullname = [ 'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december' ];
+  const months_order = [ 'jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec' ];
   const hours = [
     '00:00', '00:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:30', '04:00', '04:30', '05:00', '05:30', '06:00', '06:30', '07:00', '07:30',
     '08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30',
@@ -473,14 +471,14 @@ export function PickerBase() {
       week_day_span.textContent = self.i18n[ days_order[ week_day_number ] ];
       month_day.textContent = ( '0' + date.getDate() ).slice( -2 );
       month_year_span.innerHTML =
-        `<span data-i18n="${ months_label[ date.getMonth() ] }">${ self.i18n[ months_label[ date.getMonth() ] ] }</span><br>${ date.getFullYear() }`;
+        `<span data-i18n="${ months_order[ date.getMonth() ] }">${ self.i18n[ months_order[ date.getMonth() ] ] }</span><br>${ date.getFullYear() }`;
     }
 
     function updateTime() {
       const time_coll = div.querySelectorAll( 'button.time > *' );
       const hours = time_coll[ 0 ];
       const minutes = time_coll[ 1 ];
-      // const [ hours, minutes ] = time_coll;
+      // const [ hours, minutes ] = div.querySelectorAll( 'button.time > *' );
 
       hours.textContent = ( '0' + date.getHours() ).slice( -2 );
       minutes.textContent = `:${ ( '0' + date.getMinutes() ).slice( -2 ) }`;
@@ -714,8 +712,8 @@ export function PickerBase() {
 				<tr>
 					<th><a href="javascript:void(0);" class="prev-month">&laquo;</a></th>
 					<th colspan="5">
-						<span data-i18n="${ months_fullname[ month ] }">${ this.i18n[ months_fullname[ month ] ] }</span>
-						<span class="number">${ year }</span>
+						<span class="month" data-i18n="${ months_order[ month ] + '_' }">${ this.i18n[ months_order[ month ] + '_' ] }</span>
+						${ year }
 					</th>
 					<th><a href="javascript:void(0);" class="next-month">&raquo;</a></th>
 				</tr>
@@ -794,8 +792,9 @@ export function PickerBase() {
       `<table class="time">
         <tr>
           <th colspan="7">
-            <span class="number">${ day.getDate() }</span>
-            <span data-i18n="${ months_fullname[ day.getMonth() ] }">${ this.i18n[ months_fullname[ day.getMonth() ] ] }</span>
+            ${ this.i18n[ days_order[ getWeekDayNo( day ) ] + '_' ] }
+            ${ day.getDate() }
+            <span class="month" data-i18n="${ months_order[ day.getMonth() ] + '_' }">${ this.i18n[ months_order[ day.getMonth() ] + '_' ] }</span>
           </th>
         </tr>
         ${ html }

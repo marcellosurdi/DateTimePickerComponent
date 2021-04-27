@@ -16,7 +16,6 @@ div.datetime-container {
   border-radius: 5px 5px 0 0;
   margin: 5px 0;
   background-color: $light_grey_color;
-  max-width: 640px;
   text-align: center;
   user-select: none;
 
@@ -29,8 +28,7 @@ div.datetime-container {
     padding: 0;
     width: 100%;
     outline: 0;
-    text-transform: lowercase;
-    font-variant: small-caps;
+    text-transform: uppercase;
     cursor: pointer;
   }
 
@@ -44,7 +42,7 @@ div.datetime-container {
   }
 
     button > span { display: inline-block; margin: 0 -2px; }
-    button span.week-day, button span.minutes { text-align: right; font-size: 18px; }
+    button span.week-day{ text-align: right; font-size: 14px; }
     button span.month-day, button span.hours {
       width: 45px;
       text-align: center;
@@ -52,7 +50,8 @@ div.datetime-container {
       font-size: 36px;
     }
     button span.month-year { text-align: left; font-size: 16px; }
-    button span span { position: relative; top: 2px; }
+      span.month-year span { position: relative; top: 2px; font-weight: bold; font-size: 14px; }
+    button span.minutes { font-size: 18px; }
 }
 
 
@@ -85,11 +84,11 @@ div.datetime-container {
         }
 
         table th {
-          font-weight: bold;
+          font-weight: normal;
           font-size: 20px;
         }
 
-        table th span.number { font-weight: normal; }
+        table th span.month { font-weight: bold; }
 
         table th, table td {
           border-bottom: 1px solid #ddd;
@@ -99,7 +98,7 @@ div.datetime-container {
           vertical-align: middle;
         }
 
-        table td.day-label { font-variant: small-caps; }
+        table td.day-label { text-transform: uppercase; font-size: 14px; }
 
         table td.selectable { cursor: pointer; }
         table td.selectable:hover { font-weight: bold; }

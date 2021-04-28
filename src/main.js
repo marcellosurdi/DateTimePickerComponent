@@ -1,6 +1,7 @@
 import './css/style.scss';
 import { DatePicker } from './js/datepicker';
 import { DateTimePicker } from './js/datetimepicker';
+import { DateIntervalPicker } from './js/dateintervalpicker';
 
 
 let it = {
@@ -43,6 +44,12 @@ let it = {
   'sat_':'Sabato',
   'sun_':'Domenica',
 };
+
+
+
+
+
+new DateIntervalPicker( 'start_date', 'end_date', { i18n: it } );
 
 
 

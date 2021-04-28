@@ -22,7 +22,7 @@ DateTimePicker.prototype.constructor = DateTimePicker;
  * @classdesc
  * Creates a date time picker inside the `div` passed as parameter
  *
- * @param {string} id_div Id of the `div` element
+ * @param {string} id Id of the `div` element
  * @param {object} [settings] Object with user defined values
  *
  * @example
@@ -31,22 +31,17 @@ DateTimePicker.prototype.constructor = DateTimePicker;
  *  first_date: "2021-01-02",
  *  start_date: "2021-01-05",
  *  last_date: new Date( 2021, 0, 29 )
- * } )
+ * } );
  */
-export function DateTimePicker( id_div, settings ) {
+export function DateTimePicker( id, settings ) {
   PickerBase.call( this );
-
-  const el = document.getElementById( id_div );
-  if( el == null || el.nodeName != 'DIV' ) {
-    return false;
-  }
 
   // Settings
   const start_date = ( settings?.start_date ) ? settings.start_date : null;
   const first_date = ( settings?.first_date ) ? settings.first_date : null;
   const last_date = ( settings?.last_date ) ? settings.last_date : null;
   const first_day_no = ( typeof settings?.first_day_no !== 'undefined' ) ? settings.first_day_no : 1;
-  this.setPickerProps( el, start_date, first_date, last_date, first_day_no );
+  this.setStartPickerProps( id, start_date, first_date, last_date, first_day_no );
 
   this.i18n = ( settings?.i18n ) ? settings.i18n : this.i18n;
   this.date_output = ( settings?.date_output ) ? settings.date_output : 'full_ISO';

@@ -1,16 +1,16 @@
 /**
- * @module js/datepicker
+ * @module js/datetimepicker
  * @author Marcello Surdi
  * @version 1.0.0
  *
  * @desc
- * This module contains the DatePicker class
+ * This module contains the DateIntervalPicker class
  */
 
 import { PickerBase } from './pickerbase';
 
-DatePicker.prototype = Object.create( PickerBase.prototype );
-DatePicker.prototype.constructor = DatePicker;
+DateIntervalPicker.prototype = Object.create( PickerBase.prototype );
+DateIntervalPicker.prototype.constructor = DateIntervalPicker;
 
 
 
@@ -20,20 +20,22 @@ DatePicker.prototype.constructor = DatePicker;
  * @class
  *
  * @classdesc
- * Creates a date picker inside the `div` passed as parameter
+ * Creates a date interval picker inside the `div` elements passed as parameters
  *
- * @param {string} id Id of the `div` element
+ * @param {string} start_id Id of the `div` element that will contain the start date button
+ * @param {string} end_id Id of the `div` element that will contain the end date button
  * @param {object} [settings] Object with user defined values
  *
  * @example
  * // In settings object you can use either a date string (in ISO format) or a date object
- * new DatePicker( 'id', {
+ * new DatePicker( 'start_id', 'end_id' {
  *  first_date: "2021-01-02",
  *  start_date: "2021-01-05",
- *  last_date: new Date( 2021, 0, 29 )
+ *  last_date: new Date( 2021, 0, 29 ),
+ *  end_date: "2021-01-07"
  * } );
  */
-export function DatePicker( id, settings ) {
+export function DateIntervalPicker( start_id, end_id, settings ) {
   PickerBase.call( this );
 
   // Settings
@@ -41,11 +43,12 @@ export function DatePicker( id, settings ) {
   const first_date = ( settings?.first_date ) ? settings.first_date : null;
   const last_date = ( settings?.last_date ) ? settings.last_date : null;
   const first_day_no = ( typeof settings?.first_day_no !== 'undefined' ) ? settings.first_day_no : 1;
-  this.setStartPickerProps( id, start_date, first_date, last_date, first_day_no );
+  this.setStartPickerProps( start_id, start_date, first_date, last_date, first_day_no );
 
   this.i18n = ( settings?.i18n ) ? settings.i18n : this.i18n;
-  this.date_output = ( settings?.date_output ) ? settings.date_output : 'short_ISO';
+  this.date_output = ( settings?.date_output ) ? settings.date_output : 'full_ISO';
 
+  // Start date
   this.start_container.classList.add( 'datetime-container', 'fix-float' );
   this.start_container.insertAdjacentHTML( 'afterbegin',
   `<div class="buttons-container fix-float">
@@ -64,4 +67,8 @@ export function DatePicker( id, settings ) {
   this.start_picker_div = this.start_container.querySelector( 'div.picker' );
 
   this.start_date_btn.addEventListener( 'click', this.onOpenPicker );
+
+  // End date
+  const end_date = ( settings?.end_date ) ? settings.end_date : null;
+  this.setEndPickerProps( end_id, end_date );
 }

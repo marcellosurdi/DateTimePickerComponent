@@ -456,9 +456,6 @@ export function PickerBase() {
     div.querySelector( 'input.date_output' ).value = output_date;
 
 
-
-
-
     function updateDate() {
       const date_coll = div.querySelectorAll( 'button.date > *' );
       const week_day_span = date_coll[ 0 ];
@@ -582,12 +579,34 @@ export function PickerBase() {
 
   // ---
 
+  /**
+   * @desc
+   * Initializes the end date picker properties.
+   *
+   * @param {string} id id of the `div` element that will contain the button(s)
+   *
+   * @see {@link module:js/datepickermixin.exports.DatePickerMixin.getDateBetween|getDateBetween}
+   * @see {@link module:js/datepickermixin.exports.DatePickerMixin.roundMinutes|roundMinutes}
+   */
+  this.setEndPickerProps = function( id ) {
+    const el = document.getElementById( id );
+    if( el == null || el.nodeName != 'DIV' ) {
+      throw new Error( `Invalid id: ${ id }. Please check the id attribute in your HTML code` );
+    }
+
+    // Default end selected date is one day more than start date
+    const end_date_default = new Date( this.start_date.getTime() + ms_per_day );
+    console.log( end_date_default == this.start_date );
+
+    this.end_container = el;
+  }
+
 
   /**
    * @desc
    * Initializes the start date picker properties.
    *
-   * @param {HTMLDivElement} el `div` element that will contain the button
+   * @param {string} id id of the `div` element that will contain the button(s)
    * @param {Date} [start_date_param] Start selected date
    * @param {Date} [first_date_param] First selectable date
    * @param {Date} [last_date_param] Last selectable date
@@ -596,7 +615,12 @@ export function PickerBase() {
    * @see {@link module:js/datepickermixin.exports.DatePickerMixin.getDateBetween|getDateBetween}
    * @see {@link module:js/datepickermixin.exports.DatePickerMixin.roundMinutes|roundMinutes}
    */
-  this.setPickerProps = function( el, start_date_param, first_date_param, last_date_param, first_day_no ) {
+  this.setStartPickerProps = function( id, start_date_param, first_date_param, last_date_param, first_day_no ) {
+    const el = document.getElementById( id );
+    if( el == null || el.nodeName != 'DIV' ) {
+      throw new Error( `Invalid id: ${ id }. Please check the id attribute in your HTML code` );
+    }
+
     // Default start selected date is one day more than current date
     const start_date_default = new Date( Date.now() + ms_per_day );
     let start_date = getDateBetween( start_date_default, start_date_param, el.querySelector( 'input.start_date' ) );
@@ -605,7 +629,7 @@ export function PickerBase() {
     const first_date_default = new Date;
     let first_date = getDateBetween( first_date_default, first_date_param, el.querySelector( 'input.first_date' ) );
     // Start selected date must be greater than or equal to first selectable date
-    if( start_date.getTime() < first_date.getTime() ) {
+    if( start_date < first_date ) {
       first_date = start_date;
     }
 
@@ -613,7 +637,7 @@ export function PickerBase() {
     const last_date_default = new Date( start_date.getTime() + ( ms_per_day * 365 ) );
     let last_date = getDateBetween( last_date_default, last_date_param, el.querySelector( 'input.last_date' ) );
     // Last selectable date must be greater than start selected date
-    if( last_date.getTime() < start_date.getTime()  ) {
+    if( last_date < start_date ) {
       last_date = last_date_default;
     }
 
@@ -811,11 +835,11 @@ export function PickerBase() {
    * @desc
    * Returns a date depending on these precedence criteria:
    * - the date provided in a hidden input field (if any) takes priority over other dates;
-   * - then follows the date provided as parameter of {@link module:js/pickerbase.PickerBase#setPickerProps|setPickerProps} method;
+   * - then follows the date provided as parameter by {@link module:js/pickerbase.PickerBase#setStartPickerProps|setStartPickerProps} method;
    * - default date comes last.
    *
    * @param {Date} date_default Default date
-   * @param {Date|string} date_param The date provided as parameter of setPickerProps method
+   * @param {Date|string} date_param The date provided as parameter of setStartPickerProps method
    * @param {HTMLInputElement|null} input A hidden input field with ISO date string in its value attribute
    * @return {Date}
    *

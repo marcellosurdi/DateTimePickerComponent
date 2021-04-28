@@ -191,19 +191,20 @@ export function PickerBase() {
       class_name += 'start-day ';
     }
 
-    // // Only for intervals
-    // if( this.end_date ) {
-    //   let end_date_ms = new Date( this.end_date.getFullYear(), this.end_date.getMonth(), this.end_date.getDate() ).getTime();
-    //
-    // 	// Giorno compreso nell'intervallo
-    // 	if( curr_day_ms > start_date_ms && curr_day_ms < end_date_ms ) {
-    // 		class_name += ' interval-background';
-    // 	}
-    // 	// Giorno di fine intervallo
-    // 	if( curr_day_ms == end_date_ms ) {
-    // 		class_name += ' end-day ';
-    // 	}
-    // }
+    if( this.end_date ) {
+      let end_date_ms = new Date( this.end_date.getFullYear(), this.end_date.getMonth(), this.end_date.getDate() ).getTime();
+      // console.log( end_date_ms + '---' );
+      // console.log( new Date( this.end_date ).setHours( 0, 0, 0, 0 ) );
+
+    	// The day is between start date and end date
+    	if( curr_day_ms > start_date_ms && curr_day_ms < end_date_ms ) {
+    		class_name += ' interval-background';
+    	}
+
+    	if( curr_day_ms == end_date_ms ) {
+    		class_name += ' end-day ';
+    	}
+    }
 
     return class_name;
   }
@@ -579,16 +580,18 @@ export function PickerBase() {
 
   // ---
 
+
   /**
    * @desc
    * Initializes the end date picker properties.
    *
    * @param {string} id id of the `div` element that will contain the button(s)
+   * @param {Date|string|null} [end_date_param] End selected date
    *
    * @see {@link module:js/datepickermixin.exports.DatePickerMixin.getDateBetween|getDateBetween}
    * @see {@link module:js/datepickermixin.exports.DatePickerMixin.roundMinutes|roundMinutes}
    */
-  this.setEndPickerProps = function( id ) {
+  this.setEndPickerProps = function( id, end_date_param ) {
     const el = document.getElementById( id );
     if( el == null || el.nodeName != 'DIV' ) {
       throw new Error( `Invalid id: ${ id }. Please check the id attribute in your HTML code` );
@@ -596,10 +599,14 @@ export function PickerBase() {
 
     // Default end selected date is one day more than start date
     const end_date_default = new Date( this.start_date.getTime() + ms_per_day );
-    console.log( end_date_default == this.start_date );
+    let end_date = end_date_default
 
     this.end_container = el;
+    this.end_date = end_date;
   }
+
+
+
 
 
   /**

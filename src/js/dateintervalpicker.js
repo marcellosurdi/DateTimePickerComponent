@@ -39,14 +39,15 @@ export function DateIntervalPicker( start_id, end_id, settings ) {
   PickerBase.call( this );
 
   // Settings
+  this.i18n = ( settings?.i18n ) ? settings.i18n : this.i18n;
+  this.date_output = ( settings?.date_output ) ? settings.date_output : 'full_ISO';
+
   const start_date = ( settings?.start_date ) ? settings.start_date : null;
   const first_date = ( settings?.first_date ) ? settings.first_date : null;
   const last_date = ( settings?.last_date ) ? settings.last_date : null;
   const first_day_no = ( typeof settings?.first_day_no !== 'undefined' ) ? settings.first_day_no : 1;
   this.setStartPickerProps( start_id, start_date, first_date, last_date, first_day_no );
 
-  this.i18n = ( settings?.i18n ) ? settings.i18n : this.i18n;
-  this.date_output = ( settings?.date_output ) ? settings.date_output : 'full_ISO';
 
   // Start date
   this.start_container.classList.add( 'datetime-container', 'fix-float' );
@@ -68,7 +69,27 @@ export function DateIntervalPicker( start_id, end_id, settings ) {
 
   this.start_date_btn.addEventListener( 'click', this.onOpenPicker );
 
+
   // End date
   const end_date = ( settings?.end_date ) ? settings.end_date : null;
   this.setEndPickerProps( end_id, end_date );
+
+  this.end_container.classList.add( 'datetime-container', 'fix-float' );
+  this.end_container.insertAdjacentHTML( 'afterbegin',
+  `<div class="buttons-container fix-float">
+    <button type="button" class="date end">
+      <span class="week-day">mon</span>
+      <span class="month-day">00</span>
+      <span class="month-year"><span>jan</span><br>2000</span>
+    </button>
+  </div>
+  <div class="picker"></div>
+  <input type="hidden" class="date_output" value="">`
+  );
+  this.printDateAndTime( this.end_container, this.end_date, 'date' );
+
+  this.end_date_btn = this.end_container.querySelector( 'button.date.end' );
+  this.end_picker_div = this.end_container.querySelector( 'div.picker' );
+
+  this.end_date_btn.addEventListener( 'click', this.onOpenPicker );
 }

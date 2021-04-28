@@ -1,8 +1,13 @@
 $active_background: #fec601;
 $active_color: #000;
+$interval_background: #eee;
+$end_background: #0b6e38;
+$end_color: #fff;
 $disabled_color: #ccc;
 $light_grey_color: #f4f4f4;
 $white_color: #fff;
+$arrow_start: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14'%3E%3Cpolyline points='0 14 6 7 0 0 ' fill='%23FFF'/%3E%3C/svg%3E";
+$arrow_end: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14'%3E%3Cpolyline points='14 0 8 7 14 14 ' fill='%23FFF'/%3E%3C/svg%3E";
 
 
 
@@ -67,6 +72,7 @@ div.datetime-container {
       box-shadow: 0 1px 10px #555;
       background-color: #fff;
       width: 100%;
+      padding: 0 10px 10px;
 
         table {
           margin: 0 auto;
@@ -110,20 +116,23 @@ div.datetime-container {
           font-weight: bold;
         }
 
-        table td.start-day, table td.time-selected {
-          background-color: $active_background; color: $active_color;
-          // background-image: url(../img/datepicker/start_min.svg);
-          background-position: left center;
-        }
-
         table td.end-day {
-          background-color: $active_background; color: $active_color;
-          // background-image: url(../img/datepicker/end_min.svg);
+          background-color: $end_background; color: $end_color;
+          background-image: url($arrow_end);
           background-position: right center;
         }
 
+        table td.start-day, table td.time-selected {
+          background-color: $active_background; color: $active_color;
+          background-image: url($arrow_start);
+          background-position: left center;
+        }
+
+        table td.interval { background-color: $interval_background; }
+
+
         table td.start-day.end-day {
-          // background-image: url(../img/datepicker/start_min.svg), url(../img/datepicker/end_min.svg);
+          background-image: url($arrow_start), url($arrow_end);
           background-position: left center, right center;
         }
     }

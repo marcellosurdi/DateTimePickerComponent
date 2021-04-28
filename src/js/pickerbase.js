@@ -167,14 +167,12 @@ export function PickerBase() {
   this.getDayClassName = function( day, date ) {
     let class_name;
 
-    // We don't take hours/minutes/seconds info into account for subsequent date comparisons
-    const today = new Date();
-    today.setHours( 0, 0, 0, 0 );
-    const today_ms = today.getTime();
-    const start_date_ms = new Date( this.start_date.getFullYear(), this.start_date.getMonth(), this.start_date.getDate() ).getTime();
+    // We use milliseconds without the hours/minutes info for subsequent date comparisons
+    const today_ms = new Date().setHours( 0, 0, 0, 0 );
+    const start_date_ms = new Date( this.start_date ).setHours( 0, 0, 0, 0 );
     const curr_day_ms = new Date( date.getFullYear(), date.getMonth(), day ).getTime();
-    const first_date_ms = new Date( this.first_date.getFullYear(), this.first_date.getMonth(), this.first_date.getDate() ).getTime();
-    const last_date_ms = new Date( this.last_date.getFullYear(), this.last_date.getMonth(), this.last_date.getDate() ).getTime();
+    const first_date_ms = new Date( this.first_date ).setHours( 0, 0, 0, 0 );
+    const last_date_ms = new Date( this.last_date ).setHours( 0, 0, 0, 0 );
 
     class_name = 'day ';
     if( curr_day_ms < first_date_ms || curr_day_ms > last_date_ms ) {
@@ -192,13 +190,10 @@ export function PickerBase() {
     }
 
     if( this.end_date ) {
-      let end_date_ms = new Date( this.end_date.getFullYear(), this.end_date.getMonth(), this.end_date.getDate() ).getTime();
-      // console.log( end_date_ms + '---' );
-      // console.log( new Date( this.end_date ).setHours( 0, 0, 0, 0 ) );
+      let end_date_ms = new Date( this.end_date ).setHours( 0, 0, 0, 0 );
 
-    	// The day is between start date and end date
     	if( curr_day_ms > start_date_ms && curr_day_ms < end_date_ms ) {
-    		class_name += ' interval-background';
+    		class_name += ' interval';
     	}
 
     	if( curr_day_ms == end_date_ms ) {
@@ -230,7 +225,7 @@ export function PickerBase() {
     const m = arr[ 1 ];
     // const [ h, m ] = hour.split( ':' );
 
-    let tmp_day = new Date( date.getTime() );
+    const tmp_day = new Date( date );
     tmp_day.setHours( h, m, 0, 0 );
 
     let class_name = 'hour ';
@@ -291,7 +286,7 @@ export function PickerBase() {
   */
   this.onOpenPicker = ( e ) => {
     const btn = e.currentTarget;
-    let picker, date;
+    let picker, close, date;
 
     // Adds or removes the active state from current button when it's clicked
     btn.classList.toggle( 'active' );
@@ -309,10 +304,12 @@ export function PickerBase() {
     // If there is not an interval, only the start date exists
     if( btn.classList.contains( 'start' ) ) {
       picker = this.start_picker_div;
+      close = this.end_picker_div;
       date = this.start_date;
       mode = 'start';
     } else {
       picker = this.end_picker_div;
+      close = this.start_picker_div;
       date = this.end_date;
       mode = 'end';
     }
@@ -320,6 +317,11 @@ export function PickerBase() {
     // If the button has the active state...
     if( btn.classList.contains( 'active' ) ) {
       picker.style.display = 'block';
+      // Closes the other picker (if any)
+      if( close ) {
+        close.style.display = 'none';
+      }
+
       document.body.addEventListener( click, this.onClickOutside );
 
       let substr = ( btn.classList.contains( 'date' ) )? 'Date' : 'Time';
@@ -507,14 +509,7 @@ export function PickerBase() {
       o.date.setFullYear( this.current_month.getFullYear(), this.current_month.getMonth(), o.text );
     }
 
-    // // Ricava le rispettive date senza differenze di orario
-    // let _start_date = new Date( start_date.getFullYear(), start_date.getMonth(), start_date.getDate() );
-    // let _end_date = new Date( end_date.getFullYear(), end_date.getMonth(), end_date.getDate() );
-    // let _curr_date = new Date( obj.date.getFullYear(), obj.date.getMonth(), obj.date.getDate() );
-    // let _min_date = new Date( min_date.getFullYear(), min_date.getMonth(), min_date.getDate() );
-    // let _max_date = new Date( max_date.getFullYear(), max_date.getMonth(), max_date.getDate() );
-    //
-    // this.checkDateTimeContraints( obj, _start_date, _end_date, _curr_date, _min_date, _max_date );
+    // this.checkDateTimeConstraints();
 
     // Updates day classes after user selection
     let coll = document.querySelectorAll( 'td.selectable' );
@@ -557,13 +552,7 @@ export function PickerBase() {
     // Updates hour and minute with those selected by the user
     o.date.setHours( o.hour, o.minute, 0, 0 );
 
-    // // Ricava le rispettive date tenendo conto del tempo minimo di intervallo
-    // let _start_date = new Date( start_date.getTime() + min_time );
-    // let _end_date = new Date( end_date.getTime() - min_time );
-    // let _curr_date = new Date( o.date.getTime() );
-    // let _min_date = new Date( min_date.getTime() + min_time );
-    // let _max_date = new Date( max_date.getTime() - min_time );
-    // this.checkDateTimeContraints( o, _start_date, _end_date, _curr_date, _min_date, _max_date );
+    // this.checkDateTimeConstraints();
 
     // Updates the table after user selection
     let coll = document.querySelectorAll( 'td.selectable' );

@@ -1,5 +1,5 @@
 /**
- * @module js/datetimepicker
+ * @module js/dateintervalpicker
  * @author Marcello Surdi
  * @version 1.0.0
  *

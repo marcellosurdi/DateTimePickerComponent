@@ -112,6 +112,7 @@ export function PickerBase() {
     '08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30',
     '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30', '22:00', '22:30', '23:00', '23:30'
   ];
+  // Click events don't always work like expected on iOS, we can use touchstart instead
   const click = ( navigator.userAgent.match( /(iPad|iPhone|iPod)/g ) ) ? 'touchstart' : 'click';
   let user_days_order, days_order;
   let mode = 'start';
@@ -435,11 +436,12 @@ export function PickerBase() {
         updateTime();
     }
 
-    let output_date;
     // Offset in milliseconds (because Date.getTimezoneOffset returns minutes)
     var time_zone_offset = ( new Date() ).getTimezoneOffset() * 60000;
-    // toISOString with timezone offset, the slice(0, -1) gets rid of the trailing Z
-    var full_iso = ( new Date( date.getTime() - time_zone_offset ) ).toISOString().slice( 0, -1 );
+    // toISOString with timezone offset, the slice(0, -5) gets rid of the trailing .ssssZ
+    var full_iso = ( new Date( date.getTime() - time_zone_offset ) ).toISOString().slice( 0, -5 );
+
+    let output_date;
     switch( this.date_output ) {
       // YYYY-MM-DDTHH:mm:ss.sss
       case 'full_ISO':
@@ -831,30 +833,37 @@ export function PickerBase() {
    * @desc
    * Returns a date depending on these precedence criteria:
    * - the date provided in a hidden input field (if any) takes priority over other dates;
-   * - then follows the date provided as parameter by {@link module:js/pickerbase.PickerBase#setStartPickerProps|setStartPickerProps} method;
-   * - default date comes last.
+   * - then follows the date provided by the settings object;
+   * - default date provided by {@link module:js/pickerbase.PickerBase#setStartPickerProps|setStartPickerProps} method comes last.
    *
    * @param {Date} date_default Default date
    * @param {Date|string} date_param The date provided as parameter of setStartPickerProps method
    * @param {HTMLInputElement|null} input A hidden input field with ISO date string in its value attribute
    * @return {Date}
    *
-   * @see {@link module:js/datepickermixin.exports.DatePickerMixin.isISOFormat|isISOFormat}
+   * @see {@link module:js/datepickermixin.exports.DatePickerMixin.ISO2Date|ISO2Date}
    */
   function getDateBetween( date_default, date_param, input ) {
-    if( typeof date_param == 'string' && isISOFormat( date_param ) ) {
-      date_param = new Date( date_param )
+    let date;
+
+    const prev_date = input?.value;
+    if( prev_date ) {
+      date = ISO2Date( prev_date );
+      if( date ) return date;
     }
 
-    // Date may be invalid even if isISOFormat returns true (for istance '2015-13-25T12:00:00'), that's why we have to check it with isNan
-    const date = ( date_param instanceof Date && !isNaN( date_param ) ) ? date_param : date_default;
+    if( date_param ) {
+      if( date_param instanceof Date ) {
+        return date_param;
+      }
 
-    let prev_date = input?.value;
-    if( prev_date && isISOFormat( prev_date ) ) {
-      prev_date = new Date( prev_date );
+      if( typeof date_param == 'string' ) {
+        date = ISO2Date( date_param );
+        if( date ) return date;
+      }
     }
 
-    return ( !isNaN( prev_date ) ) ? prev_date : date;
+    return date_default;
   }
 
 
@@ -884,14 +893,34 @@ export function PickerBase() {
 
   /**
    * @desc
-   * Checks if `iso_date` has the right ISO format, it doesn't do date validation.
-   * Accepted values: '2015-03-25', '2015-03-25T12:00:00', '2015-03-25T12:00:00Z', '2015-03-25T12:00:00-06:30'.
+   * Tries to convert `iso_date` in a valid Date object (always in local time).
+   * Accepted values: 'HHHH-MM-DD', 'HHHH-MM-DDTHH:mm:ss''.
    *
    * @param {string} iso_date Date string
-   * @return {boolean} `true` if format is valid, `false` otherwise
+   * @return {Date|null} `Date` if `iso_date` had a right format and is a valid date, `null` otherwise
+   *
+   * @see {@link https://css-tricks.com/everything-you-need-to-know-about-date-in-javascript/|Everything you need to know about date in JavaScript}
    */
-  function isISOFormat( iso_date ) {
-    return ( iso_date.match( /^(\d{4})-(\d{2})-(\d{2})(T\d{2}\:\d{2}\:\d{2}[+-]\d{2}\:\d{2})?|Z$/ ) ) ? true : false
+  function ISO2Date( iso_date ) {
+    let date = null;
+    const arr = iso_date.match( /^(\d{4})-(\d{2})-(\d{2})(T(\d{2}):(\d{2}):(\d{2}))?$/ );
+
+    // If `iso_date` has the right format and it's a valid date (i.e. new Date doesn't return NaN)
+    if( arr && +new Date( arr[0] ) ) {
+      const year = arr[1];
+      const month = arr[2] - 1;
+      const day = arr[3];
+      if( !arr[4] ) {
+        date = new Date( year, month, day );
+      } else {
+        const hours = arr[5];
+        const minutes = arr[6];
+        const seconds = arr[7];
+        date = new Date( year, month, day, hours, minutes, seconds );
+      }
+    }
+
+    return ( date ) ? date : null;
   }
 
 

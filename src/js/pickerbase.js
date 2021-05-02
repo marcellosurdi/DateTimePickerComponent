@@ -418,7 +418,7 @@ export function PickerBase() {
    *
    * @param {HTMLDivElement} div `div` element where to display the date/time
    * @param {Date} date Date to be displayed
-   * @param {string} [action=both] Denotes which button needs to be update (both|date|time)
+   * @param {string} [action=both] Denotes which button needs to be update (`both|date|time`)
    *
    * @see {@link module:js/pickerbase.PickerBase~getWeekDayNo|getWeekDayNo}
    */

@@ -57,7 +57,7 @@
  *
  * @todo Provide support to disable days and hours even if these are between first_date and last_date
  * @todo Provide support for touch events
- * @todo Provide a year picker similar to a HTML native select control
+ * @todo Provide a year picker
  */
 export function PickerBase() {
   /**
@@ -137,11 +137,11 @@ export function PickerBase() {
 
 
   /**
-   * Closes the picker and removes the active state from the The active button.
+   * Closes the open picker and removes the active state from the the corresponding button.
    *
    * @param {HTMLDivElement} picker The picker currently open
    * @param {HTMLDivElement} btn The active button
-   * @param {int} [msec=0] Number of milliseconds, then the picker is closed
+   * @param {int} [msec=0] Number of milliseconds after which the picker is closed
   */
   this.closePicker = function( picker, btn, ms = 0 ) {
     setTimeout( () => {
@@ -214,7 +214,7 @@ export function PickerBase() {
    * It's used inside a loop both when building table ({@link module:js/pickerbase.PickerBase#onOpenPicker|onOpenPicker})
    * and when updating it ({@link module:js/pickerbase.PickerBase#selectHour|selectHour}).
    *
-   * @param {string} hour Current hour/minute inside a loop
+   * @param {string} hour Current hour/minute pair (HH:mm) inside a loop
    * @param {Date} date Date object with the hour/minutes info
    * @return {string} Classes to be assigned to the current `td` element
    */
@@ -234,7 +234,7 @@ export function PickerBase() {
       class_name += 'disabled';
     } else {
       class_name += 'selectable';
-      class_name += ( selected_hour == hour ) ? ' time-selected '+ mode : '';
+      class_name += ( selected_hour == hour ) ? ' time-selected ' + mode : '';
     }
 
     return class_name;
@@ -245,7 +245,7 @@ export function PickerBase() {
 
 
   /**
-   * This is a click handler that closes the picker if the user clicks outside.
+   * This is a click handler that closes the picker if the user clicks outside of it.
    *
    * @param {Event} e
    *
@@ -318,7 +318,7 @@ export function PickerBase() {
     // If the button has the active state...
     if( btn.classList.contains( 'active' ) ) {
       picker.style.display = 'block';
-      // Closes the other picker (if any)
+      // Closes the picker previously opened (if any)
       if( close ) {
         close.style.display = 'none';
       }
@@ -362,9 +362,10 @@ export function PickerBase() {
   /**
   * @desc
   * This is a click handler triggered when the user clicks to select either a day or an hour.
-  * It passes an object as parameter to {@link module:js/pickerbase.PickerBase#selectDay|selectDay} or
-  * to {@link module:js/pickerbase.PickerBase#selectHour|selectHour} depending on the user clicks on a day
-  * button or on an hour button respectively.
+  * It passes an {@link module:js/pickerbase.PickerBaseNS.UserSelection|UserSelection} object as
+  * parameter to {@link module:js/pickerbase.PickerBase#selectDay|selectDay} or to
+  * {@link module:js/pickerbase.PickerBase#selectHour|selectHour} depending on the user
+  * clicks on a day button or on an hour button respectively.
   *
   * @param {Event} e
   *
@@ -412,10 +413,10 @@ export function PickerBase() {
 
   /**
    * @desc
-   * Displays date and/or time in their own buttons.
-   * Outputs the date to the value attribute of `input.date_output` according to `settings.date_output` property.
+   * Displays date and/or time in their own buttons. According to `settings.date_output` property,
+   * it outputs the date in local time to the value attribute of `input.date_output`.
    *
-   * @param {HTMLDivElement} div `div` element where to display the date
+   * @param {HTMLDivElement} div `div` element where to display the date/time
    * @param {Date} date Date to be displayed
    * @param {string} [action=both] Denotes which button needs to be update (both|date|time)
    *
@@ -443,7 +444,7 @@ export function PickerBase() {
 
     let output_date;
     switch( this.date_output ) {
-      // YYYY-MM-DDTHH:mm:ss.sss
+      // YYYY-MM-DDTHH:mm:ss
       case 'full_ISO':
         output_date = full_iso;
       break;

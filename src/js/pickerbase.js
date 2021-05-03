@@ -118,7 +118,7 @@ export function PickerBase() {
   let mode = 'start';
 
   /**
-   * Adds an event handler to the `td.selectable` elements.
+   * Adds an event handler to `td.selectable` elements.
    * It's called by {@link module:js/pickerbase.PickerBase#showDateTable|showDateTable} and
    * {@link module:js/pickerbase.PickerBase#showTimeTable|showTimeTable} methods.
    *
@@ -157,7 +157,7 @@ export function PickerBase() {
 
   /**
    * @desc
-   * Returns the classes for the `td` elements that contain the days of calendar.
+   * Returns the classes for `td` elements that contain the days of calendar.
    * It's used inside a loop both when building table ({@link module:js/pickerbase.PickerBase#onOpenPicker|onOpenPicker})
    * and when updating it ({@link module:js/pickerbase.PickerBase#selectDay|selectDay}).
    *
@@ -210,7 +210,7 @@ export function PickerBase() {
 
 
   /**
-   * Returns the classes for the `td` elements that contain the hour/minute pairs (HH:mm).
+   * Returns the classes for `td` elements that contain the hour/minute pairs (HH:mm).
    * It's used inside a loop both when building table ({@link module:js/pickerbase.PickerBase#onOpenPicker|onOpenPicker})
    * and when updating it ({@link module:js/pickerbase.PickerBase#selectHour|selectHour}).
    *
@@ -364,7 +364,7 @@ export function PickerBase() {
   * This is a click handler triggered when the user clicks to select either a day or an hour.
   * It passes an {@link module:js/pickerbase.PickerBaseNS.UserSelection|UserSelection} object as
   * parameter to {@link module:js/pickerbase.PickerBase#selectDay|selectDay} or to
-  * {@link module:js/pickerbase.PickerBase#selectHour|selectHour} depending on the user
+  * {@link module:js/pickerbase.PickerBase#selectHour|selectHour} methods, depending on the user
   * clicks on a day button or on an hour button respectively.
   *
   * @param {Event} e
@@ -570,7 +570,7 @@ export function PickerBase() {
   }
 
 
-  // ---
+
 
 
   /**
@@ -580,18 +580,25 @@ export function PickerBase() {
    * @param {string} id id of the `div` element that will contain the button(s)
    * @param {Date|string|null} [end_date_param] End selected date
    *
-   * @see {@link module:js/datepickermixin.exports.DatePickerMixin.getDateBetween|getDateBetween}
-   * @see {@link module:js/datepickermixin.exports.DatePickerMixin.roundMinutes|roundMinutes}
+   * @see {@link module:js/pickerbase.PickerBase~getDateBetween|getDateBetween}
+   * @see {@link module:js/pickerbase.PickerBase~roundMinutes|roundMinutes}
    */
   this.setEndPickerProps = function( id, end_date_param ) {
     const el = document.getElementById( id );
     if( el == null || el.nodeName != 'DIV' ) {
-      throw new Error( `Invalid id: ${ id }. Please check the id attribute in your HTML code` );
+      throw new Error( `Does div#${ id } exist? Please, check your HTML code` );
     }
 
-    // Default end selected date is one day more than start date
+    // Default end selected date is one day more than start selected date
     const end_date_default = new Date( this.start_date.getTime() + ms_per_day );
-    let end_date = end_date_default
+    let end_date = getDateBetween( end_date_default, end_date_param, el.querySelector( 'input.end_date' ) );
+    // End selected date must be less than last selectable date
+    if( end_date > this.last_date ) {
+      end_date = this.last_date;
+    }
+
+    end_date = roundMinutes( end_date );
+    // console.log( end_date );
 
     this.end_container = el;
     this.end_date = end_date;
@@ -611,13 +618,13 @@ export function PickerBase() {
    * @param {Date} [last_date_param] Last selectable date
    * @param {number} [first_day_no] Day the week must start with. Accordingly to returned values of `Date.getDate` method, accepted range values are 0-6 where 0 means Sunday, 1 means Monday and so on
    *
-   * @see {@link module:js/datepickermixin.exports.DatePickerMixin.getDateBetween|getDateBetween}
-   * @see {@link module:js/datepickermixin.exports.DatePickerMixin.roundMinutes|roundMinutes}
+   * @see {@link module:js/pickerbase.PickerBase~getDateBetween|getDateBetween}
+   * @see {@link module:js/pickerbase.PickerBase~roundMinutes|roundMinutes}
    */
   this.setStartPickerProps = function( id, start_date_param, first_date_param, last_date_param, first_day_no ) {
     const el = document.getElementById( id );
     if( el == null || el.nodeName != 'DIV' ) {
-      throw new Error( `Invalid id: ${ id }. Please check the id attribute in your HTML code` );
+      throw new Error( `Does div#${ id } exist? Please, check your HTML code` );
     }
 
     // Default start selected date is one day more than current date
@@ -671,110 +678,112 @@ export function PickerBase() {
 
   /**
    * @desc
-	 * Creates the calendar for the current month inside the picker.
-	 *
-	 * @param {HTMLDivElement} picker The picker that contains the calendar
-	 * @param {Date} date Current date
+   * Creates the calendar of the current month inside the picker.
    *
-   * @see {@link module:js/datepickermixin.exports.DatePickerMixin.getWeekDayNo|getWeekDayNo}
-   * @see {@link module:js/datepickermixin.exports.DatePickerMixin.getDayClassName|getDayClassName}
-	 */
-	this.showDateTable = function( picker, date ) {
-		let class_name, html = '';
+   * @param {HTMLDivElement} picker The picker that contains the calendar
+   * @param {Date} date Current date
+   *
+   * @see {@link module:js/pickerbase.PickerBase~getWeekDayNo|getWeekDayNo}
+   * @see {@link module:js/pickerbase.PickerBase#getDayClassName|getDayClassName}
+   * @see {@link module:js/pickerbase.PickerBase#addEventOnSelect|addEventOnSelect}
+   */
+  this.showDateTable = function( picker, date ) {
+    let class_name, html = '';
 
-		const month = date.getMonth();
-		const year = date.getFullYear();
+    const month = date.getMonth();
+    const year = date.getFullYear();
 
-		// February length
-		const feb = ( ( year % 100 != 0 ) && ( year % 4 == 0 ) || ( year % 400 == 0 ) ) ? 29 : 28;
-		const total_days = [ '31', feb, '31', '30', '31', '30', '31', '31', '30', '31', '30', '31' ];
+    // February length
+    const feb = ( ( year % 100 != 0 ) && ( year % 4 == 0 ) || ( year % 400 == 0 ) ) ? 29 : 28;
+    const total_days = [ '31', feb, '31', '30', '31', '30', '31', '31', '30', '31', '30', '31' ];
 
     // First day of current month as number
-		let week_day = getWeekDayNo( new Date( year, month, 1 ) );
+    let week_day = getWeekDayNo( new Date( year, month, 1 ) );
 
-		this.prev_month = new Date( year, ( month - 1 ), 1, date.getHours(), date.getMinutes() );
-		const prev_month_total_days = total_days[ this.prev_month.getMonth() ];
+    this.prev_month = new Date( year, ( month - 1 ), 1, date.getHours(), date.getMinutes() );
+    const prev_month_total_days = total_days[ this.prev_month.getMonth() ];
 
-		let i = 0
+    let i = 0
     let j = week_day;
     // This loop displays the last days of the previous month
-		while( j > 0 ) {
-			i = ( prev_month_total_days - ( j - 1 ) );
-			class_name = this.getDayClassName( i, this.prev_month );
-			html += `<td class="prev-month ${ class_name }">${ i }</td>`;
-			j--;
-		}
+    while( j > 0 ) {
+      i = ( prev_month_total_days - ( j - 1 ) );
+      class_name = this.getDayClassName( i, this.prev_month );
+      html += `<td class="prev-month ${ class_name }">${ i }</td>`;
+      j--;
+    }
 
 
     this.current_month = new Date( date.getTime() );
-		i = 1;
+    i = 1;
     // This loop displays the days of the current month
-		while ( i <= total_days[ month ] ) {
-			// Starts a new row
-			if( week_day > 6 ) {
-				week_day = 0;
-				html += "</tr><tr>";
-			}
+    while ( i <= total_days[ month ] ) {
+      // Starts a new row
+      if( week_day > 6 ) {
+        week_day = 0;
+        html += "</tr><tr>";
+      }
 
-			class_name = this.getDayClassName( i, this.current_month );
+      class_name = this.getDayClassName( i, this.current_month );
       html += `<td class="${ class_name }">${ i }</td>`;
 
-			week_day++;
-			i++;
-		}
+      week_day++;
+      i++;
+    }
 
-		this.next_month = new Date( year, ( month + 1 ), 1, date.getHours(), date.getMinutes() );
+    this.next_month = new Date( year, ( month + 1 ), 1, date.getHours(), date.getMinutes() );
     // This loop displays the first days of the next month
-		for( i = 1; week_day <= 6; week_day++, i++ ) {
-			class_name = this.getDayClassName( i, this.next_month );
+    for( i = 1; week_day <= 6; week_day++, i++ ) {
+      class_name = this.getDayClassName( i, this.next_month );
       html += `<td class="next-month ${ class_name }">${ i }</td>`;
-		}
+    }
 
-		picker.innerHTML =
-			`<table class="date">
-				<tr>
-					<th><a href="javascript:void(0);" class="prev-month">&laquo;</a></th>
-					<th colspan="5">
-						<span class="month" data-i18n="${ months_order[ month ] + '_' }">${ this.i18n[ months_order[ month ] + '_' ] }</span>
-						${ year }
-					</th>
-					<th><a href="javascript:void(0);" class="next-month">&raquo;</a></th>
-				</tr>
-				<tr>
-					<td class="day-label" data-i18n="${ days_order[0] }">${ this.i18n[ days_order[0] ] }</td>
-					<td class="day-label" data-i18n="${ days_order[1] }">${ this.i18n[ days_order[1] ] }</td>
-					<td class="day-label" data-i18n="${ days_order[2] }">${ this.i18n[ days_order[2] ] }</td>
-					<td class="day-label" data-i18n="${ days_order[3] }">${ this.i18n[ days_order[3] ] }</td>
-					<td class="day-label" data-i18n="${ days_order[4] }">${ this.i18n[ days_order[4] ] }</td>
-					<td class="day-label" data-i18n="${ days_order[5] }">${ this.i18n[ days_order[5] ] }</td>
-					<td class="day-label" data-i18n="${ days_order[6] }">${ this.i18n[ days_order[6] ] }</td>
-				</tr>
-				<tr>
-				${ html }
-				</tr>
-			</table>`;
+    picker.innerHTML =
+    `<table class="date">
+      <tr>
+        <th><a href="javascript:void(0);" class="prev-month">&laquo;</a></th>
+        <th colspan="5">
+          <span class="month" data-i18n="${ months_order[ month ] + '_' }">${ this.i18n[ months_order[ month ] + '_' ] }</span>
+          ${ year }
+        </th>
+        <th><a href="javascript:void(0);" class="next-month">&raquo;</a></th>
+      </tr>
+      <tr>
+        <td class="day-label" data-i18n="${ days_order[0] }">${ this.i18n[ days_order[0] ] }</td>
+        <td class="day-label" data-i18n="${ days_order[1] }">${ this.i18n[ days_order[1] ] }</td>
+        <td class="day-label" data-i18n="${ days_order[2] }">${ this.i18n[ days_order[2] ] }</td>
+        <td class="day-label" data-i18n="${ days_order[3] }">${ this.i18n[ days_order[3] ] }</td>
+        <td class="day-label" data-i18n="${ days_order[4] }">${ this.i18n[ days_order[4] ] }</td>
+        <td class="day-label" data-i18n="${ days_order[5] }">${ this.i18n[ days_order[5] ] }</td>
+        <td class="day-label" data-i18n="${ days_order[6] }">${ this.i18n[ days_order[6] ] }</td>
+      </tr>
+      <tr>
+        ${ html }
+      </tr>
+    </table>`;
 
     // Previous month button
-		this.prev_month.setDate( prev_month_total_days );
-		const prev_month_btn = picker.querySelector( '.prev-month' );
-		if( this.prev_month >= this.first_date ) {
-			prev_month_btn.addEventListener( 'click', () => this.showDateTable( picker, this.prev_month ) );
-		}
-		else {
-			prev_month_btn.classList.add( 'disabled' );
-		}
+    this.prev_month.setDate( prev_month_total_days );
+    const prev_month_btn = picker.querySelector( '.prev-month' );
+    if( this.prev_month >= this.first_date ) {
+      prev_month_btn.addEventListener( 'click', () => this.showDateTable( picker, this.prev_month ) );
+    }
+    else {
+      prev_month_btn.classList.add( 'disabled' );
+    }
 
     // Next month button
-		const next_month_btn = picker.querySelector( '.next-month' );
-		if( this.last_date > this.next_month ) {
-			next_month_btn.addEventListener( 'click', () => this.showDateTable( picker, this.next_month ) );
-		}
-		else {
-			next_month_btn.classList.add( 'disabled' );
-		}
+    const next_month_btn = picker.querySelector( '.next-month' );
+    if( this.last_date > this.next_month ) {
+      next_month_btn.addEventListener( 'click', () => this.showDateTable( picker, this.next_month ) );
+    }
+    else {
+      next_month_btn.classList.add( 'disabled' );
+    }
 
     this.addEventOnSelect( picker );
-	}
+  }
+
 
 
 
@@ -782,49 +791,50 @@ export function PickerBase() {
   /**
    * @desc
    * Creates the table of hours inside the picker
-	 *
-	 * @param {HTMLDivElement} picker The picker that contains the table
-	 * @param {Date} day Current day
    *
-	 * @see getHourClassName
-	 * @see addEventOnSelect
-	 */
-	this.showTimeTable = function( picker, day ) {
-		let i = 0, html = '', class_name;
+   * @param {HTMLDivElement} picker The picker that contains the table
+   * @param {Date} day Current day
+   *
+   * @see {@link module:js/pickerbase.PickerBase~getWeekDayNo|getWeekDayNo}
+   * @see {@link module:js/pickerbase.PickerBase#getHourClassName|getHourClassName}
+   * @see {@link module:js/pickerbase.PickerBase#addEventOnSelect|addEventOnSelect}
+   */
+  this.showTimeTable = function( picker, day ) {
+    let i = 0, html = '', class_name;
 
     // Nine rows
-		for( let j = 1; j < 9; j++ ) {
-			html += "<tr>";
+    for( let j = 1; j < 9; j++ ) {
+      html += "<tr>";
 
       // Six columns
-			for( i = 1 * i ; i < 6 * j; i++ ) {
-				if( hours[ i ] ) {
+      for( i = 1 * i ; i < 6 * j; i++ ) {
+        if( hours[ i ] ) {
           class_name = ''
-					class_name = this.getHourClassName( hours[ i ], day );
+          class_name = this.getHourClassName( hours[ i ], day );
 
-					html += `<td class="${ class_name }">${ hours[ i ] }</td>`;
-				} else {
-					html += `<td class="white-background disabled"></td>`;
-				}
-			}
+          html += `<td class="${ class_name }">${ hours[ i ] }</td>`;
+        } else {
+          html += `<td class="white-background disabled"></td>`;
+        }
+      }
 
-			html += "</tr>";
-		}
+      html += "</tr>";
+    }
 
-		picker.innerHTML =
-      `<table class="time">
-        <tr>
-          <th colspan="7">
-            ${ this.i18n[ days_order[ getWeekDayNo( day ) ] + '_' ] }
-            ${ day.getDate() }
-            <span class="month" data-i18n="${ months_order[ day.getMonth() ] + '_' }">${ this.i18n[ months_order[ day.getMonth() ] + '_' ] }</span>
-          </th>
-        </tr>
-        ${ html }
-      </table>`;
+    picker.innerHTML =
+    `<table class="time">
+      <tr>
+        <th colspan="7">
+          ${ this.i18n[ days_order[ getWeekDayNo( day ) ] + '_' ] }
+          ${ day.getDate() }
+          <span class="month" data-i18n="${ months_order[ day.getMonth() ] + '_' }">${ this.i18n[ months_order[ day.getMonth() ] + '_' ] }</span>
+        </th>
+      </tr>
+      ${ html }
+    </table>`;
 
-		this.addEventOnSelect( picker );
-	}
+    this.addEventOnSelect( picker );
+  }
 
 
 
@@ -835,14 +845,14 @@ export function PickerBase() {
    * Returns a date depending on these precedence criteria:
    * - the date provided in a hidden input field (if any) takes priority over other dates;
    * - then follows the date provided by the settings object;
-   * - default date provided by {@link module:js/pickerbase.PickerBase#setStartPickerProps|setStartPickerProps} method comes last.
+   * - default date provided by the {@link module:js/pickerbase.PickerBase#setStartPickerProps|setStartPickerProps} method comes last.
    *
    * @param {Date} date_default Default date
-   * @param {Date|string} date_param The date provided as parameter of setStartPickerProps method
+   * @param {Date|string} date_param The date provided by the settings object
    * @param {HTMLInputElement|null} input A hidden input field with ISO date string in its value attribute
    * @return {Date}
    *
-   * @see {@link module:js/datepickermixin.exports.DatePickerMixin.ISO2Date|ISO2Date}
+   * @see {@link module:js/pickerbase.PickerBase~ISO2Date|ISO2Date}
    */
   function getDateBetween( date_default, date_param, input ) {
     let date;
@@ -868,7 +878,7 @@ export function PickerBase() {
   }
 
 
-
+  // ---
 
 
   /**

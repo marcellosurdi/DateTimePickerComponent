@@ -39,10 +39,10 @@
  * @property {Date} date Start date or end date
  * @property {HTMLDivElement} picker Picker to be closed after updating
  * @property {string} text The day number or the hour/minute pair (HH:mm) inside the `td` element
- * @property {boolean} [next_month] Denotes a next month day (only for days selection)
- * @property {boolean} [prev_month] Denotes a previous month day (only for days selection)
- * @property {string} [hour] Denotes the 2-digit hour (only for hour/minute selection)
- * @property {string} [minute] Denotes the 2-digit minute (only for hour/minute selection)
+ * @property {boolean} [next_month] Denotes if it's a next month day (for days selection only)
+ * @property {boolean} [prev_month] Denotes if it's a previous month day (for days selection only)
+ * @property {string} [hour] 2-digit hour (for hour/minute selection only)
+ * @property {string} [minute] 2-digit minute (for hour/minute selection only)
  */
 
 
@@ -162,13 +162,13 @@ export function PickerBase() {
    * and when updating it ({@link module:js/pickerbase.PickerBase#selectDay|selectDay}).
    *
    * @param {string} day Current day inside a loop
-   * @param {Date} date Date object with the year/month info
+   * @param {Date} date Date object with year/month information
    * @return {string} Classes to be assigned to the current `td` element
   */
   this.getDayClassName = function( day, date ) {
     let class_name;
 
-    // We use milliseconds without the hours/minutes info for subsequent date comparisons
+    // We use milliseconds without hours/minutes information for subsequent date comparisons
     const today_ms = new Date().setHours( 0, 0, 0, 0 );
     const start_date_ms = new Date( this.start_date ).setHours( 0, 0, 0, 0 );
     const curr_day_ms = new Date( date.getFullYear(), date.getMonth(), day ).getTime();
@@ -215,7 +215,7 @@ export function PickerBase() {
    * and when updating it ({@link module:js/pickerbase.PickerBase#selectHour|selectHour}).
    *
    * @param {string} hour Current hour/minute pair (HH:mm) inside a loop
-   * @param {Date} date Date object with the hour/minutes info
+   * @param {Date} date Date object with hour/minutes information
    * @return {string} Classes to be assigned to the current `td` element
    */
   this.getHourClassName = function( hour, date ) {

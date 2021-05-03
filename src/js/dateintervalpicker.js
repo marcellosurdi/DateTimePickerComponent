@@ -40,13 +40,16 @@ export function DateIntervalPicker( start_id, end_id, settings ) {
 
   // Settings
   this.i18n = ( settings?.i18n ) ? settings.i18n : this.i18n;
-  this.date_output = ( settings?.date_output ) ? settings.date_output : 'full_ISO';
+  this.date_output = ( settings?.date_output ) ? settings.date_output : 'short_ISO';
 
   const start_date = ( settings?.start_date ) ? settings.start_date : null;
   const first_date = ( settings?.first_date ) ? settings.first_date : null;
   const last_date = ( settings?.last_date ) ? settings.last_date : null;
   const first_day_no = ( typeof settings?.first_day_no !== 'undefined' ) ? settings.first_day_no : 1;
   this.setStartPickerProps( start_id, start_date, first_date, last_date, first_day_no );
+
+  const end_date = ( settings?.end_date ) ? settings.end_date : null;
+  this.setEndPickerProps( end_id, end_date );
 
 
   // Start date
@@ -71,9 +74,6 @@ export function DateIntervalPicker( start_id, end_id, settings ) {
 
 
   // End date
-  const end_date = ( settings?.end_date ) ? settings.end_date : null;
-  this.setEndPickerProps( end_id, end_date );
-
   this.end_container.classList.add( 'datetime-container', 'fix-float' );
   this.end_container.insertAdjacentHTML( 'afterbegin',
   `<div class="buttons-container fix-float">

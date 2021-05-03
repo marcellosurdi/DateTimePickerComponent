@@ -50,8 +50,8 @@ let it = {
 
 
 new DateIntervalPicker( 'start_date', 'end_date', {
-  end_date: '2021-05-16T23:12:00',
-  last_date: '2021-05-15',
+  end_date: '2021-05-13T23:12:00',
+  last_date: '2021-05-25',
   i18n: it
 } );
 

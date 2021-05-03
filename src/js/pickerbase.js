@@ -591,13 +591,13 @@ export function PickerBase() {
 
     // Default end selected date is one day more than start selected date
     const end_date_default = new Date( this.start_date.getTime() + ms_per_day );
-    let end_date = getDateBetween( end_date_default, end_date_param, el.querySelector( 'input.end_date' ) );
+    let end_date = getDateBetween( end_date_default, end_date_param, this.start_container.querySelector( 'input.end_date' ) );
     // End selected date must be less than last selectable date
     if( end_date > this.last_date ) {
       end_date = this.last_date;
     }
 
-    end_date = roundMinutes( end_date );
+    roundMinutes( end_date );
     // console.log( end_date );
 
     this.end_container = el;
@@ -647,11 +647,11 @@ export function PickerBase() {
       last_date = last_date_default;
     }
 
-    start_date = roundMinutes( start_date );
+    roundMinutes( start_date );
     // console.log( start_date );
-    first_date = roundMinutes( first_date );
+    roundMinutes( first_date );
     // console.log( first_date );
-    last_date = roundMinutes( last_date );
+    roundMinutes( last_date );
     // console.log( last_date );
 
     first_day_no = +first_day_no;
@@ -878,12 +878,12 @@ export function PickerBase() {
   }
 
 
-  // ---
+
 
 
   /**
    * @desc
-   * Returns the day of the week as number accordingly to `user_days_order` (if any) or `date.getDay` method.
+   * Returns the day of the week as number accordingly to `user_days_order` (if any) or `Date.prototype.getDay` method.
    *
    * @param {Date} date Date we get the day of the week from
    * @return {number} The day of the week as number
@@ -943,7 +943,6 @@ export function PickerBase() {
    * Rounds minutes to the next half hour.
    *
    * @param {Date} date The date to be rounded
-   * @return {Date} The rounded date
    */
   function roundMinutes( date ) {
     date.setSeconds( 0, 0 );
@@ -955,16 +954,14 @@ export function PickerBase() {
     }
     else if( m > 30 ) {
       m = 0;
-      // If we round the minutes to 0 we have to take one more hour into account
+      // If we round the minutes to 0 we have to sum +1 hour
       h = h + 1;
-      // If, after rounding, midnight is reached, we have to take one more day into account
+      // If, after rounding, the midnight is reached, we have to sum +1 day
       if( h == 24 ) {
         h = 0;
         date = new Date( date.getTime() + ms_per_day );
       }
     }
     date.setHours( h, m );
-
-    return date;
   }
 }

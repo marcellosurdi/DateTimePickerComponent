@@ -135,6 +135,20 @@ export function PickerBase() {
 
 
 
+  /**
+   * Checks if dates are consistent after user selection.
+  */
+  this.checkDateTimeConsistency = function() {
+    if( mode == 'start' ) {
+      console.log( 'start', this.start_date );
+    } else {
+      console.log( 'end', this.end_date );
+    }
+  }
+
+
+
+
 
   /**
    * Closes the open picker and removes the active state from the the corresponding button.
@@ -512,7 +526,7 @@ export function PickerBase() {
       o.date.setFullYear( this.current_month.getFullYear(), this.current_month.getMonth(), o.text );
     }
 
-    // this.checkDateTimeConstraints();
+    this.checkDateTimeConsistency();
 
     // Updates day classes after user selection
     let coll = document.querySelectorAll( 'td.selectable' );
@@ -555,7 +569,7 @@ export function PickerBase() {
     // Updates hour and minute with those selected by the user
     o.date.setHours( o.hour, o.minute, 0, 0 );
 
-    // this.checkDateTimeConstraints();
+    this.checkDateTimeConsistency();
 
     // Updates the table after user selection
     let coll = document.querySelectorAll( 'td.selectable' );
@@ -590,15 +604,20 @@ export function PickerBase() {
     }
 
     // Default end selected date is one day more than start selected date
-    const end_date_default = new Date( this.start_date.getTime() + ms_per_day );
+    const end_date_default = new Date( this.start_date.getTime() + this.min_interval );
     let end_date = getDateBetween( end_date_default, end_date_param, this.start_container.querySelector( 'input.end_date' ) );
-    // End selected date must be less than last selectable date
-    if( end_date > this.last_date ) {
-      end_date = this.last_date;
+    // End selected date must be greater than start selected date
+    if( end_date < this.start_date) {
+      end_date = end_date_default;
     }
 
     roundMinutes( end_date );
-    // console.log( end_date );
+    // console.log( 'end_date: ' + end_date );
+
+    // End selected date can't be greater than last selectable date
+    if( end_date > this.last_date ) {
+      this.last_date = end_date;
+    }
 
     this.end_container = el;
     this.end_date = end_date;
@@ -633,26 +652,26 @@ export function PickerBase() {
 
     // Default first selectable date is the current date
     const first_date_default = new Date;
-    let first_date = getDateBetween( first_date_default, first_date_param, el.querySelector( 'input.first_date' ) );
-    // Start selected date must be greater than or equal to first selectable date
+    let first_date = getDateBetween( first_date_default, first_date_param );
+    // Start selected date must be greater than first selectable date
     if( start_date < first_date ) {
       first_date = start_date;
     }
 
     // Default last selectable date is one year more than start selected date
     const last_date_default = new Date( start_date.getTime() + ( ms_per_day * 365 ) );
-    let last_date = getDateBetween( last_date_default, last_date_param, el.querySelector( 'input.last_date' ) );
+    let last_date = getDateBetween( last_date_default, last_date_param );
     // Last selectable date must be greater than start selected date
     if( last_date < start_date ) {
       last_date = last_date_default;
     }
 
     roundMinutes( start_date );
-    // console.log( start_date );
+    // console.log( 'start_date: ' + start_date );
     roundMinutes( first_date );
-    // console.log( first_date );
+    // console.log( 'first_date: ' + first_date );
     roundMinutes( last_date );
-    // console.log( last_date );
+    // console.log( 'last_date:' + last_date );
 
     first_day_no = +first_day_no;
     if( first_day_no > 6 ) {
@@ -849,12 +868,12 @@ export function PickerBase() {
    *
    * @param {Date} date_default Default date
    * @param {Date|string} date_param The date provided by the settings object
-   * @param {HTMLInputElement|null} input A hidden input field with ISO date string in its value attribute
+   * @param {HTMLInputElement|null} [input=null] A hidden input field with ISO date string in its value attribute
    * @return {Date}
    *
    * @see {@link module:js/pickerbase.PickerBase~ISO2Date|ISO2Date}
    */
-  function getDateBetween( date_default, date_param, input ) {
+  function getDateBetween( date_default, date_param, input = null ) {
     let date;
 
     const prev_date = input?.value;
@@ -959,7 +978,7 @@ export function PickerBase() {
       // If, after rounding, the midnight is reached, we have to sum +1 day
       if( h == 24 ) {
         h = 0;
-        date = new Date( date.getTime() + ms_per_day );
+        date.setDate( date.getDate() + 1 );
       }
     }
     date.setHours( h, m );

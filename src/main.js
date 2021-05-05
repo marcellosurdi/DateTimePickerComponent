@@ -50,8 +50,9 @@ let it = {
 
 
 new DateIntervalPicker( 'start_date', 'end_date', {
-  end_date: '2021-05-13T23:12:00',
-  last_date: '2021-05-25',
+  // last_date: '2021-05-07T23:15:00',
+  // end_date: '2023-05-01T23:12:00',
+  min_interval_hours: 3,
   i18n: it
 } );
 
@@ -59,19 +60,19 @@ new DateIntervalPicker( 'start_date', 'end_date', {
 
 
 
-new DateTimePicker( 'select_datetime', { i18n: it } );
-
-
-
-
-
-new DatePicker( 'select_date', { first_day_no: 0 } );
-
-new DatePicker( 'select_date_2', {
-  first_date: "2020-12-01",
-  start_date: "2021-01-05",
-  last_date: new Date( 2021, 0, 29 ),
-  i18n: it
-} );
-
-new DatePicker( 'select_date_3', { first_day_no: 0 } );
+// new DateTimePicker( 'select_datetime', { i18n: it } );
+//
+//
+//
+//
+//
+// new DatePicker( 'select_date', { first_day_no: 0 } );
+//
+// new DatePicker( 'select_date_2', {
+//   first_date: "2020-12-01",
+//   start_date: "2021-01-05",
+//   last_date: new Date( 2021, 0, 29 ),
+//   i18n: it
+// } );
+//
+// new DatePicker( 'select_date_3', { first_day_no: 0 } );

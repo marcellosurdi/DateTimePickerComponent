@@ -136,7 +136,8 @@ export function PickerBase() {
 
 
   /**
-   * Checks if dates are consistent after user selection.
+   * Checks if dates are still consistent after user selection (e.g. `this.start_date` may be
+   * greater than `this.end_start`...) and fixes any inconsistencies.
   */
   this.checkDateTimeConsistency = function() {
     if( mode == 'start' ) {
@@ -175,43 +176,36 @@ export function PickerBase() {
    * It's used inside a loop both when building table ({@link module:js/pickerbase.PickerBase#onOpenPicker|onOpenPicker})
    * and when updating it ({@link module:js/pickerbase.PickerBase#selectDay|selectDay}).
    *
-   * @param {string} day Current day inside a loop
-   * @param {Date} date Date object with year/month information
-   * @return {string} Classes to be assigned to the current `td` element
+   * @param {string} day The day inside a loop iteration
+   * @param {Date} date Date object with current year/month information
+   * @return {string} Classes to be assigned to the `td` element
   */
   this.getDayClassName = function( day, date ) {
     let class_name;
 
-    // We use milliseconds without hours/minutes information for subsequent date comparisons
-    const today_ms = new Date().setHours( 0, 0, 0, 0 );
-    const start_date_ms = new Date( this.start_date ).setHours( 0, 0, 0, 0 );
-    const curr_day_ms = new Date( date.getFullYear(), date.getMonth(), day ).getTime();
-    const first_date_ms = new Date( this.first_date ).setHours( 0, 0, 0, 0 );
-    const last_date_ms = new Date( this.last_date ).setHours( 0, 0, 0, 0 );
+    const tmp_day_ms = new Date( date.getFullYear(), date.getMonth(), day ).getTime();
 
     class_name = 'day ';
-    if( curr_day_ms < first_date_ms || curr_day_ms > last_date_ms ) {
+    if( tmp_day_ms < this.first_date_ms || tmp_day_ms > this.last_date_ms ) {
       class_name += 'disabled ';
     } else {
       class_name += 'selectable ';
     }
 
-    if( curr_day_ms == today_ms ) {
+    if( tmp_day_ms == this.today_ms ) {
       class_name += 'today ';
     }
 
-    if( curr_day_ms == start_date_ms ) {
+    if( tmp_day_ms == this.start_date_ms ) {
       class_name += 'start-day ';
     }
 
     if( this.end_date ) {
-      let end_date_ms = new Date( this.end_date ).setHours( 0, 0, 0, 0 );
-
-    	if( curr_day_ms > start_date_ms && curr_day_ms < end_date_ms ) {
+    	if( tmp_day_ms > this.start_date_ms && tmp_day_ms < this.end_date_ms ) {
     		class_name += ' interval';
     	}
 
-    	if( curr_day_ms == end_date_ms ) {
+    	if( tmp_day_ms == this.end_date_ms ) {
     		class_name += ' end-day ';
     	}
     }
@@ -228,9 +222,9 @@ export function PickerBase() {
    * It's used inside a loop both when building table ({@link module:js/pickerbase.PickerBase#onOpenPicker|onOpenPicker})
    * and when updating it ({@link module:js/pickerbase.PickerBase#selectHour|selectHour}).
    *
-   * @param {string} hour Current hour/minute pair (HH:mm) inside a loop
-   * @param {Date} date Date object with hour/minutes information
-   * @return {string} Classes to be assigned to the current `td` element
+   * @param {string} hour An hour/minute pair (HH:mm) inside a loop iteration
+   * @param {Date} date Date object with current hour/minutes information
+   * @return {string} Classes to be assigned to the `td` element
    */
   this.getHourClassName = function( hour, date ) {
     const selected_hour = ( '0' + date.getHours() ).slice( -2 ) + ':' + ( '0' + date.getMinutes() ).slice( -2 );
@@ -526,6 +520,10 @@ export function PickerBase() {
       o.date.setFullYear( this.current_month.getFullYear(), this.current_month.getMonth(), o.text );
     }
 
+    ( mode == 'start' )
+      ? this.start_date_ms = new Date( o.date ).setHours( 0, 0, 0, 0 )
+      : this.end_date_ms = new Date( o.date ).setHours( 0, 0, 0, 0 );
+
     this.checkDateTimeConsistency();
 
     // Updates day classes after user selection
@@ -617,10 +615,13 @@ export function PickerBase() {
     // End selected date can't be greater than last selectable date
     if( end_date > this.last_date ) {
       this.last_date = end_date;
+      this.last_date_ms = new Date( this.last_date ).setHours( 0, 0, 0, 0 );
     }
 
     this.end_container = el;
     this.end_date = end_date;
+
+    this.end_date_ms = new Date( this.end_date ).setHours( 0, 0, 0, 0 );
   }
 
 
@@ -689,6 +690,12 @@ export function PickerBase() {
     this.start_date = start_date;
     this.first_date = first_date;
     this.last_date = last_date;
+
+    // We get dates converted in milliseconds without hours/minutes information for subsequent comparisons of dates
+    this.today_ms = new Date().setHours( 0, 0, 0, 0 );
+    this.start_date_ms = new Date( this.start_date ).setHours( 0, 0, 0, 0 );
+    this.first_date_ms = new Date( this.first_date ).setHours( 0, 0, 0, 0 );
+    this.last_date_ms = new Date( this.last_date ).setHours( 0, 0, 0, 0 );
   }
 
 

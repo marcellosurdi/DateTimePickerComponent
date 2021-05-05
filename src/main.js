@@ -60,19 +60,19 @@ new DateIntervalPicker( 'start_date', 'end_date', {
 
 
 
-// new DateTimePicker( 'select_datetime', { i18n: it } );
-//
-//
-//
-//
-//
-// new DatePicker( 'select_date', { first_day_no: 0 } );
-//
-// new DatePicker( 'select_date_2', {
-//   first_date: "2020-12-01",
-//   start_date: "2021-01-05",
-//   last_date: new Date( 2021, 0, 29 ),
-//   i18n: it
-// } );
-//
-// new DatePicker( 'select_date_3', { first_day_no: 0 } );
+new DateTimePicker( 'select_datetime', { i18n: it } );
+
+
+
+
+
+new DatePicker( 'select_date', { first_day_no: 0 } );
+
+new DatePicker( 'select_date_2', {
+  first_date: "2020-12-01",
+  start_date: "2021-01-05",
+  last_date: new Date( 2021, 0, 29 ),
+  i18n: it
+} );
+
+new DatePicker( 'select_date_3', { first_day_no: 0 } );

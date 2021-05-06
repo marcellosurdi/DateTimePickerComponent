@@ -136,19 +136,25 @@ export function PickerBase() {
 
 
   /**
-   * Checks if dates are still consistent after user selection (e.g. `this.start_date` may be
+   * Checks if dates are still consistent after user selection (`this.start_date` may be
    * greater than `this.end_start`...) and fixes any inconsistencies.
   */
   this.checkDateTimeConsistency = function() {
     if( mode == 'start' ) {
-      console.log( 'start', this.start_date );
+      if( this.start_date > this.end_date ) {
+        this.setDate( 'end_date', this.start_date.getTime() + this.min_interval );
+				this.printDateAndTime( this.end_container, this.end_date, 'date' );
+			}
     } else {
       console.log( 'end', this.end_date );
     }
   }
 
 
-
+  this.setDate = function( variable, new_value ) {
+    this[ variable ] = new Date( new_value );
+    this[ variable + '_ms' ] = new Date( this[ variable ] ).setHours( 0, 0, 0, 0 );
+  }
 
 
   /**
@@ -181,11 +187,9 @@ export function PickerBase() {
    * @return {string} Classes to be assigned to the `td` element
   */
   this.getDayClassName = function( day, date ) {
-    let class_name;
-
     const tmp_day_ms = new Date( date.getFullYear(), date.getMonth(), day ).getTime();
 
-    class_name = 'day ';
+    let class_name = 'day ';
     if( tmp_day_ms < this.first_date_ms || tmp_day_ms > this.last_date_ms ) {
       class_name += 'disabled ';
     } else {
@@ -287,11 +291,13 @@ export function PickerBase() {
 
   /**
    * This is a click handler triggered when the user opens the picker by clicking either a date button or a time button.
+   * This method sets the value of the mode variable.
    *
    * @param {Event} e
    *
    * @see {@link module:js/pickerbase.PickerBase#showDateTable|showDateTable}
    * @see {@link module:js/pickerbase.PickerBase#showTimeTable|showTimeTable}
+   * @see {@link module:js/pickerbase.PickerBase~scrollPage|scrollPage}
   */
   this.onOpenPicker = ( e ) => {
     const btn = e.currentTarget;
@@ -309,7 +315,6 @@ export function PickerBase() {
       }
     } );
 
-    // Is the start or the end date of the interval?
     // If there is not an interval, only the start date exists
     if( btn.classList.contains( 'start' ) ) {
       picker = this.start_picker_div;
@@ -337,22 +342,7 @@ export function PickerBase() {
       let method = 'show' + substr + 'Table';
       this[ method ]( picker, date );
 
-      // Checks if the picker exceeds the viewport height
-      const rect = picker.getBoundingClientRect();
-      const diff = ( rect.top + picker.offsetHeight ) - document.documentElement.clientHeight
-
-      if( diff > 0 ) {
-        // Checks if scroll behavior is supported
-        if( 'scrollBehavior' in document.documentElement.style ) {
-          window.scrollBy( {
-            top: diff,
-            left: 0,
-            behavior: 'smooth'
-          } );
-        } else {
-          window.scrollBy( 0, diff );
-        }
-      }
+      scrollPage( picker );
     }
 
     // ...otherwise
@@ -445,29 +435,7 @@ export function PickerBase() {
         updateTime();
     }
 
-    // Offset in milliseconds (because Date.getTimezoneOffset returns minutes)
-    var time_zone_offset = ( new Date() ).getTimezoneOffset() * 60000;
-    // toISOString with timezone offset, the slice(0, -5) gets rid of the trailing .ssssZ
-    var full_iso = ( new Date( date.getTime() - time_zone_offset ) ).toISOString().slice( 0, -5 );
-
-    let output_date;
-    switch( this.date_output ) {
-      // YYYY-MM-DDTHH:mm:ss
-      case 'full_ISO':
-        output_date = full_iso;
-      break;
-      // YYYY-MM-DD
-      case 'short_ISO':
-        let arr = full_iso.split( 'T' );
-        output_date = arr[ 0 ];
-        // [ output_date, ] = full_iso.split( 'T' );
-      break;
-      case 'timestamp':
-      default:
-        output_date = Math.round( date.getTime() / 1000 );
-    }
-
-    div.querySelector( 'input.date_output' ).value = output_date;
+    outputDate();
 
 
     function updateDate() {
@@ -493,6 +461,32 @@ export function PickerBase() {
 
       hours.textContent = ( '0' + date.getHours() ).slice( -2 );
       minutes.textContent = `:${ ( '0' + date.getMinutes() ).slice( -2 ) }`;
+    }
+
+    function outputDate() {
+      // Offset in milliseconds (because Date.getTimezoneOffset returns minutes)
+      var time_zone_offset = ( new Date() ).getTimezoneOffset() * 60000;
+      // toISOString with timezone offset, the slice(0, -5) gets rid of the trailing .ssssZ
+      var full_iso = ( new Date( date.getTime() - time_zone_offset ) ).toISOString().slice( 0, -5 );
+
+      let output_date;
+      switch( self.date_output ) {
+        // YYYY-MM-DDTHH:mm:ss
+        case 'full_ISO':
+          output_date = full_iso;
+        break;
+        // YYYY-MM-DD
+        case 'short_ISO':
+          let arr = full_iso.split( 'T' );
+          output_date = arr[ 0 ];
+          // [ output_date, ] = full_iso.split( 'T' );
+        break;
+        case 'timestamp':
+        default:
+          output_date = Math.round( date.getTime() / 1000 );
+      }
+
+      div.querySelector( 'input.date_output' ).value = output_date;
     }
   }
 
@@ -620,7 +614,6 @@ export function PickerBase() {
 
     this.end_container = el;
     this.end_date = end_date;
-
     this.end_date_ms = new Date( this.end_date ).setHours( 0, 0, 0, 0 );
   }
 
@@ -690,8 +683,7 @@ export function PickerBase() {
     this.start_date = start_date;
     this.first_date = first_date;
     this.last_date = last_date;
-
-    // We get dates converted in milliseconds without hours/minutes information for subsequent comparisons of dates
+    // We get dates converted in milliseconds without hours/minutes information for subsequent comparisons
     this.today_ms = new Date().setHours( 0, 0, 0, 0 );
     this.start_date_ms = new Date( this.start_date ).setHours( 0, 0, 0, 0 );
     this.first_date_ms = new Date( this.first_date ).setHours( 0, 0, 0, 0 );
@@ -934,7 +926,7 @@ export function PickerBase() {
    * Accepted values: 'HHHH-MM-DD', 'HHHH-MM-DDTHH:mm:ss''.
    *
    * @param {string} iso_date Date string
-   * @return {Date|null} `Date` if `iso_date` had a right format and is a valid date, `null` otherwise
+   * @return {Date|null} `Date` if `iso_date` had a right format and was a valid date, `null` otherwise
    *
    * @see {@link https://css-tricks.com/everything-you-need-to-know-about-date-in-javascript/|Everything you need to know about date in JavaScript}
    */
@@ -989,5 +981,32 @@ export function PickerBase() {
       }
     }
     date.setHours( h, m );
+  }
+
+
+
+
+
+  /**
+   * Scrolls the page if the picker exceeds the viewport height.
+   *
+   * @param {HTMLDivElement} picker The open picker
+  */
+  function scrollPage( picker ) {
+    const rect = picker.getBoundingClientRect();
+    const diff = ( rect.top + picker.offsetHeight ) - document.documentElement.clientHeight
+
+    if( diff > 0 ) {
+      // Checks if scroll behavior is supported
+      if( 'scrollBehavior' in document.documentElement.style ) {
+        window.scrollBy( {
+          top: diff,
+          left: 0,
+          behavior: 'smooth'
+        } );
+      } else {
+        window.scrollBy( 0, diff );
+      }
+    }
   }
 }

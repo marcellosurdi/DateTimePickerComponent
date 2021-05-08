@@ -141,13 +141,19 @@ export function PickerBase() {
    * greater than `this.end_start`...) and fixes any inconsistencies.
   */
   this.checkDateTimeConsistency = function() {
+    const _dates = this.get_Dates();
+
     if( mode == 'start' ) {
-      if( this.start_date > this.end_date ) {
+      if( _dates._start_date >= _dates._end_date ) {
+        if( _dates._start_date >= _dates._last_date ) {
+          this.start_date = new Date( _dates._last_date - this.min_interval );
+        }
+
         this.end_date = new Date( this.start_date.getTime() + this.min_interval );
 				this.showDateAndTime( this.end_container, this.end_date );
 			}
     } else {
-      console.log( 'end', this.end_date );
+      // console.log( 'end', this.end_date );
     }
   }
 
@@ -545,7 +551,6 @@ export function PickerBase() {
     }
 
     roundMinutes( [ end_date ] );
-    // console.log( 'end_date: ' + end_date );
 
     // End selected date can't be greater than last selectable date
     if( end_date > this.last_date ) {
@@ -601,9 +606,6 @@ export function PickerBase() {
     }
 
     roundMinutes( [ start_date, first_date, last_date ] );
-    // console.log( 'start_date: ' + start_date );
-    // console.log( 'first_date: ' + first_date );
-    // console.log( 'last_date:' + last_date );
 
     setDaysOrder( first_day_no );
 
@@ -933,7 +935,7 @@ export function PickerBase() {
    * Accepted values are 'HHHH-MM-DD' and 'HHHH-MM-DDTHH:mm:ss''.
    *
    * @param {string} iso_date Date string
-   * @return {Date|null} `Date` if `iso_date` had a right format and was a valid date, `null` otherwise
+   * @return {Date|null} `Date` if `iso_date` had a right pattern and was a valid date, `null` otherwise
    *
    * @see {@link https://css-tricks.com/everything-you-need-to-know-about-date-in-javascript/|Everything you need to know about date in JavaScript}
    */
@@ -941,7 +943,7 @@ export function PickerBase() {
     let date = null;
     const arr = iso_date.match( /^(\d{4})-(\d{2})-(\d{2})(T(\d{2}):(\d{2}):(\d{2}))?$/ );
 
-    // If `iso_date` has the right format and it's a valid date (i.e. new Date doesn't return NaN)
+    // If `iso_date` has the right pattern and it's a valid date (i.e. new Date doesn't return NaN)
     if( arr && +new Date( arr[0] ) ) {
       const year = arr[1];
       const month = arr[2] - 1;

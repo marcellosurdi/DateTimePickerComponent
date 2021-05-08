@@ -62,7 +62,7 @@ export function DateTimePicker( id, settings ) {
   <div class="picker"></div>
   <input type="hidden" class="date_output" value="">`
   );
-  this.printDateAndTime( this.start_container, this.start_date );
+  this.showDateAndTime( this.start_container, this.start_date );
 
   this.start_date_btn = this.start_container.querySelector( 'button.date.start' );
   this.start_time_btn = this.start_container.querySelector( 'button.time.start' );

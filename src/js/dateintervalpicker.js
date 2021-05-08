@@ -65,7 +65,7 @@ export function DateIntervalPicker( start_id, end_id, settings ) {
   <div class="picker"></div>
   <input type="hidden" class="date_output" value="">`
   );
-  this.printDateAndTime( this.start_container, this.start_date, 'date' );
+  this.showDateAndTime( this.start_container, this.start_date );
 
   this.start_date_btn = this.start_container.querySelector( 'button.date.start' );
   this.start_picker_div = this.start_container.querySelector( 'div.picker' );
@@ -85,7 +85,7 @@ export function DateIntervalPicker( start_id, end_id, settings ) {
   <div class="picker"></div>
   <input type="hidden" class="date_output" value="">`
   );
-  this.printDateAndTime( this.end_container, this.end_date, 'date' );
+  this.showDateAndTime( this.end_container, this.end_date );
 
   this.end_date_btn = this.end_container.querySelector( 'button.date.end' );
   this.end_picker_div = this.end_container.querySelector( 'div.picker' );

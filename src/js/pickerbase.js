@@ -8,7 +8,7 @@
  *
  * @todo Provide support to disable days and hours even if these are between `first_date` and `last_date`
  * @todo Provide support for touch events
- * @todo Provide a year picker
+ * @todo Provide a year/month picker
  */
 
 // IE11 backcompatibility notes
@@ -57,11 +57,24 @@
  * @class
  *
  * @classdesc
- * It's the base class for Date*Picker classes. Objects of this class are **never** created.
+ * It's the base class for Date*Picker classes. Objects of this class
+ * are **never** created, subclasses inherit from it.
  *
  * @property {object} i18n Strings for translation
+ * @property {HTMLDivElement} start_container Top level `div` container for start date/time buttons
+ * @property {HTMLButtonElement} start_date_btn `button.date.start` inside `start_container`
+ * @property {HTMLButtonElement} start_time_btn `button.time.start` inside `start_container`
+ * @property {HTMLDivElement} start_picker `div.picker` inside `start_container`. It contains the calendar or the timetable
+ * @property {HTMLDivElement} end_container Top level `div` container for end date/time buttons (end_* properties are present **only** if there's an interval)
+ * @property {HTMLButtonElement} end_date_btn `button.date.end` inside `end_container`
+ * @property {HTMLButtonElement} start_time_btn `button.time.end` inside `end_container`
+ * @property {HTMLDivElement} end_picker `div.picker` inside `end_container`. It contains the calendar or the timetable
  * @property {Date} first_date First selectable date
  * @property {Date} start_date Start selected date
+ * @property {Date} end_date End selected date
+ * @property {Date} last_date Last selectable date
+ * @property {string} date_output Denotes the date format returned to the value attribute of `input.date_output` (accepted values are short_ISO, full_ISO and timestamp)
+ * @property {number} min_interval Denotes the minimum interval in milliseconds that must elapse between `start_date` and `end_date`
  */
 export function PickerBase() {
   this.i18n = {
@@ -118,10 +131,14 @@ export function PickerBase() {
   let user_days_order, days_order;
   let mode = 'start';
 
+
+
+
+
   /**
    * Adds an event handler to `td.selectable` elements.
-   * It's called by {@link module:js/pickerbase.PickerBase#showCalendar|showCalendar} and
-   * {@link module:js/pickerbase.PickerBase#showTimeTable|showTimeTable} methods.
+   * It's used by both {@link module:js/pickerbase.PickerBase#showCalendar|showCalendar}
+   * and {@link module:js/pickerbase.PickerBase#showTimeTable|showTimeTable} methods.
    *
    * @param {HTMLDivElement} picker The picker currently open
    */
@@ -138,22 +155,40 @@ export function PickerBase() {
 
   /**
    * Checks if dates are still consistent after user selection (`this.start_date` may be
-   * greater than `this.end_start`...) and fixes any inconsistencies.
+   * greater than `this.end_start` and other similar cases) and fixes any inconsistencies.
+   * It's used by both {@link module:js/pickerbase.PickerBase#selectDay|selectDay}
+   * and {@link module:js/pickerbase.PickerBase#selectHour|selectHour} methods.
   */
   this.checkDateTimeConsistency = function() {
-    const _dates = this.get_Dates();
+    if( !this.end_date ) {
+      return;
+    }
+
+    const start_date_ms = this.start_date.getTime();
+    const end_date_ms = this.end_date.getTime();
+    const first_date_ms = this.first_date.getTime();
+    const last_date_ms = this.last_date.getTime();
 
     if( mode == 'start' ) {
-      if( _dates._start_date >= _dates._end_date ) {
-        if( _dates._start_date >= _dates._last_date ) {
-          this.start_date = new Date( _dates._last_date - this.min_interval );
+      if( start_date_ms >= end_date_ms ) {
+        if( start_date_ms >= last_date_ms ) {
+          this.start_date = new Date( last_date_ms - this.min_interval );
         }
 
-        this.end_date = new Date( this.start_date.getTime() + this.min_interval );
+        this.end_date = new Date( start_date_ms + this.min_interval );
 				this.showDateAndTime( this.end_container, this.end_date );
 			}
-    } else {
-      // console.log( 'end', this.end_date );
+    }
+
+    else {
+      if( end_date_ms <= start_date_ms ) {
+        if( end_date_ms <= first_date_ms ) {
+          this.end_date = new Date( first_date_ms + this.min_interval );
+        }
+
+        this.start_date = new Date( end_date_ms - this.min_interval );
+        this.showDateAndTime( this.start_container, this.start_date );
+      }
     }
   }
 
@@ -182,10 +217,10 @@ export function PickerBase() {
 
   /**
    * @desc
-   * Gets dates (named `_dates`) converted in milliseconds and without hours/minutes information for comparisons in
-   * {@link module:js/pickerbase.PickerBase#getDayClassName|getDayClassName} method.
+   * Gets dates (named `_dates`) converted in milliseconds and without hours/minutes information for
+   * comparisons in {@link module:js/pickerbase.PickerBase#getDayClassName|getDayClassName} method.
    *
-   * @return {object} The object that contains `_dates`
+   * @return {object} The object containing `_dates`
    */
   this.get_Dates = function() {
     const _today = new Date().setHours( 0, 0, 0, 0 );
@@ -213,7 +248,7 @@ export function PickerBase() {
 
   /**
    * @desc
-   * Returns the classes for `td` elements that contain the days of calendar.
+   * Returns classes for `td` elements that contain the days of calendar.
    * It's used inside a loop both when building table ({@link module:js/pickerbase.PickerBase#onOpenPicker|onOpenPicker})
    * and when updating it ({@link module:js/pickerbase.PickerBase#selectDay|selectDay}).
    *
@@ -257,7 +292,7 @@ export function PickerBase() {
 
 
   /**
-   * Returns the classes for `td` elements that contain the hour/minute pairs (HH:mm).
+   * Returns classes for `td` elements that contain the hour/minute pairs (HH:mm).
    * It's used inside a loop both when building table ({@link module:js/pickerbase.PickerBase#onOpenPicker|onOpenPicker})
    * and when updating it ({@link module:js/pickerbase.PickerBase#selectHour|selectHour}).
    *
@@ -299,7 +334,7 @@ export function PickerBase() {
    * @see {@link module:js/pickerbase.PickerBase#closePicker|closePicker}
   */
   this.onClickOutside = ( e ) => {
-    let div = ( mode == 'start' ) ? this.start_picker_div : this.end_picker_div;
+    let div = ( mode == 'start' ) ? this.start_picker : this.end_picker;
 
     if( e.type == 'touchstart' ) {
       e.clientX = e.touches[0].clientX;
@@ -325,8 +360,8 @@ export function PickerBase() {
 
 
   /**
-   * This is a click handler triggered when the user opens the picker by clicking either a date button or a time button.
-   * This method sets the value of the mode variable.
+   * This is a click handler triggered when the user opens the picker by clicking either a
+   * date or a time button. This method sets the value of the mode variable.
    *
    * @param {Event} e
    *
@@ -352,13 +387,13 @@ export function PickerBase() {
 
     // If there is not an interval, only the start date exists
     if( btn.classList.contains( 'start' ) ) {
-      picker = this.start_picker_div;
-      close = this.end_picker_div;
+      picker = this.start_picker;
+      close = this.end_picker;
       date = this.start_date;
       mode = 'start';
     } else {
-      picker = this.end_picker_div;
-      close = this.start_picker_div;
+      picker = this.end_picker;
+      close = this.start_picker;
       date = this.end_date;
       mode = 'end';
     }
@@ -417,12 +452,12 @@ export function PickerBase() {
       o.date = this.start_date;
       o.container = this.start_container;
       o.btn = ( !if_hour ) ? this.start_date_btn : this.start_time_btn;
-      o.picker = this.start_picker_div;
+      o.picker = this.start_picker;
     } else {
       o.date = this.end_date;
       o.container = this.end_container;
       o.btn = ( !if_hour ) ? this.end_date_btn : this.end_time_btn;
-      o.picker = this.end_picker_div;
+      o.picker = this.end_picker;
     }
 
     if( if_hour ) {
@@ -446,8 +481,8 @@ export function PickerBase() {
 
   /**
    * @desc
-   * Selects the day clicked by the user and then closes the picker,
-   * it's called by {@link module:js/pickerbase.PickerBase#onSelectDayOrHour|onSelectDayOrHour} method.
+   * Selects the day clicked by the user and then closes the picker. It's used by
+   * {@link module:js/pickerbase.PickerBase#onSelectDayOrHour|onSelectDayOrHour} method.
    *
    * @param {module:js/pickerbase.PickerBaseNS.UserSelection} o Object with contextual info
    *
@@ -497,7 +532,7 @@ export function PickerBase() {
 
 
   /**
-   * Selects the hour/minute pair clicked by the user and then closes the picker
+   * Selects the hour/minute pair clicked by the user and then closes the picker.
    *
    * @param {module:js/pickerbase.PickerBaseNS.UserSelection} o Object with contextual info
    *
@@ -786,6 +821,7 @@ export function PickerBase() {
         output_date = arr[ 0 ];
         // [ output_date, ] = full_iso.split( 'T' );
       break;
+      // Timestamp value without milliseconds information
       case 'timestamp':
       default:
         output_date = Math.round( date.getTime() / 1000 );
@@ -893,7 +929,7 @@ export function PickerBase() {
 
   /**
    * Returns a ISO string with timezone offset from date passed as parameter.
-   * It's called by {@link module:js/pickerbase.PickerBase#showDateAndTime|showDateAndTime}.
+   * It's used by {@link module:js/pickerbase.PickerBase#showDateAndTime|showDateAndTime}.
    *
    * @param {Date} date
    */
@@ -1000,7 +1036,7 @@ export function PickerBase() {
 
   /**
    * Scrolls the page if the picker exceeds the viewport height.
-   * It's called by {@link module:js/pickerbase.PickerBase#onOpenPicker|onOpenPicker}.
+   * It's used by {@link module:js/pickerbase.PickerBase#onOpenPicker|onOpenPicker}.
    *
    * @param {HTMLDivElement} picker The open picker
    */
@@ -1028,7 +1064,7 @@ export function PickerBase() {
 
   /**
    * Sets the `days_order` variable depending on `first_day_no` parameter.
-   * It's called by {@link module:js/pickerbase.PickerBase#setStartPickerProps|setStartPickerProps}.
+   * It's used by {@link module:js/pickerbase.PickerBase#setStartPickerProps|setStartPickerProps}.
    *
    * @param {number} first_day_no The first day of week number from settings object
    */

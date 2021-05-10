@@ -1,16 +1,16 @@
 /**
- * @module js/dateintervalpicker
+ * @module js/date-time-interval-picker
  * @author Marcello Surdi
  * @version 1.0.0
  *
  * @desc
- * This module contains the DateIntervalPicker class
+ * This module contains the DateTimeIntervalPicker class
  */
 
-import { PickerBase } from './pickerbase';
+import { PickerBase } from './picker-base';
 
-DateIntervalPicker.prototype = Object.create( PickerBase.prototype );
-DateIntervalPicker.prototype.constructor = DateIntervalPicker;
+DateTimeIntervalPicker.prototype = Object.create( PickerBase.prototype );
+DateTimeIntervalPicker.prototype.constructor = DateTimeIntervalPicker;
 
 
 
@@ -20,7 +20,7 @@ DateIntervalPicker.prototype.constructor = DateIntervalPicker;
  * @class
  *
  * @classdesc
- * Creates a date interval picker inside the `div` elements passed as parameters
+ * Creates a date time interval picker inside the `div` elements passed as parameters
  *
  * @param {string} start_id Id of the `div` element that will contain the start date button
  * @param {string} end_id Id of the `div` element that will contain the end date button
@@ -35,8 +35,9 @@ DateIntervalPicker.prototype.constructor = DateIntervalPicker;
  *  end_date: "2021-01-07"
  * } );
  */
-export function DateIntervalPicker( start_id, end_id, settings ) {
+export function DateTimeIntervalPicker( start_id, end_id, settings ) {
   PickerBase.call( this );
+
 
   // Settings
   this.i18n = ( settings?.i18n ) ? settings.i18n : this.i18n;
@@ -52,43 +53,29 @@ export function DateIntervalPicker( start_id, end_id, settings ) {
   const end_date = ( settings?.end_date ) ? settings.end_date : null;
   this.setEndPickerProps( end_id, end_date );
 
+
   // Start date
   this.start_container.classList.add( 'datetime-container', 'fix-float' );
-  this.start_container.insertAdjacentHTML( 'afterbegin',
-  `<div class="buttons-container fix-float">
-    <button type="button" class="date start">
-      <span class="week-day">mon</span>
-      <span class="month-day">00</span>
-      <span class="month-year"><span>jan</span><br>2000</span>
-    </button>
-  </div>
-  <div class="picker"></div>
-  <input type="hidden" class="date_output" value="">`
-  );
+  this.start_container.insertAdjacentHTML( 'afterbegin', this.getHTMLButton( 'datetime' ) );
   this.showDateAndTime( this.start_container, this.start_date );
 
   this.start_date_btn = this.start_container.querySelector( 'button.date.start' );
+  this.start_time_btn = this.start_container.querySelector( 'button.time.start' );
   this.start_picker = this.start_container.querySelector( 'div.picker' );
 
   this.start_date_btn.addEventListener( 'click', this.onOpenPicker );
+  this.start_time_btn.addEventListener( 'click', this.onOpenPicker );
+
 
   // End date
   this.end_container.classList.add( 'datetime-container', 'fix-float' );
-  this.end_container.insertAdjacentHTML( 'afterbegin',
-  `<div class="buttons-container fix-float">
-    <button type="button" class="date end">
-      <span class="week-day">mon</span>
-      <span class="month-day">00</span>
-      <span class="month-year"><span>jan</span><br>2000</span>
-    </button>
-  </div>
-  <div class="picker"></div>
-  <input type="hidden" class="date_output" value="">`
-  );
+  this.end_container.insertAdjacentHTML( 'afterbegin', this.getHTMLButton( 'datetime', 'end' ) );
   this.showDateAndTime( this.end_container, this.end_date );
 
   this.end_date_btn = this.end_container.querySelector( 'button.date.end' );
+  this.end_time_btn = this.end_container.querySelector( 'button.time.end' );
   this.end_picker = this.end_container.querySelector( 'div.picker' );
 
   this.end_date_btn.addEventListener( 'click', this.onOpenPicker );
+  this.end_time_btn.addEventListener( 'click', this.onOpenPicker );
 }

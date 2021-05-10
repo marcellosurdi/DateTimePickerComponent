@@ -1,7 +1,8 @@
 import './css/style.scss';
-import { DatePicker } from './js/datepicker';
-import { DateTimePicker } from './js/datetimepicker';
-import { DateIntervalPicker } from './js/dateintervalpicker';
+import { DatePicker } from './js/date-picker';
+import { DateTimePicker } from './js/date-time-picker';
+import { DateIntervalPicker } from './js/date-interval-picker';
+import { DateTimeIntervalPicker } from './js/date-time-interval-picker';
 
 
 let it = {
@@ -44,6 +45,16 @@ let it = {
   'sat_':'Sabato',
   'sun_':'Domenica',
 };
+
+
+
+
+
+new DateTimeIntervalPicker( 'start_date_time', 'end_date_time', {
+  // last_date: '2021-05-07T23:15:00',
+  // end_date: '2023-05-01T23:12:00',
+  min_interval_hours: 18
+} );
 
 
 

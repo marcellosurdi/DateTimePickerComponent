@@ -1,5 +1,5 @@
 /**
- * @module js/datetimepicker
+ * @module js/date-time-picker
  * @author Marcello Surdi
  * @version 1.0.0
  *
@@ -7,7 +7,7 @@
  * This module contains the DateTimePicker class
  */
 
-import { PickerBase } from './pickerbase';
+import { PickerBase } from './picker-base';
 
 DateTimePicker.prototype = Object.create( PickerBase.prototype );
 DateTimePicker.prototype.constructor = DateTimePicker;
@@ -36,6 +36,7 @@ DateTimePicker.prototype.constructor = DateTimePicker;
 export function DateTimePicker( id, settings ) {
   PickerBase.call( this );
 
+
   // Settings
   this.i18n = ( settings?.i18n ) ? settings.i18n : this.i18n;
   this.date_output = ( settings?.date_output ) ? settings.date_output : 'full_ISO';
@@ -47,22 +48,9 @@ export function DateTimePicker( id, settings ) {
   this.setStartPickerProps( id, start_date, first_date, last_date, first_day_no );
 
 
+  // Start date
   this.start_container.classList.add( 'datetime-container', 'fix-float' );
-  this.start_container.insertAdjacentHTML( 'afterbegin',
-  `<div class="buttons-container fix-float">
-    <button type="button" class="date start w-50">
-      <span class="week-day">mon</span>
-      <span class="month-day">00</span>
-      <span class="month-year"><span>jan</span><br>2000</span>
-    </button>
-    <button type="button" class="time start w-50">
-      <span class="hours">00</span>
-      <span class="minutes">:00</span>
-    </button>
-  </div>
-  <div class="picker"></div>
-  <input type="hidden" class="date_output" value="">`
-  );
+  this.start_container.insertAdjacentHTML( 'afterbegin', this.getHTMLButton( 'datetime' ) );
   this.showDateAndTime( this.start_container, this.start_date );
 
   this.start_date_btn = this.start_container.querySelector( 'button.date.start' );

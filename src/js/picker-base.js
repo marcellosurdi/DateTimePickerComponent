@@ -1,5 +1,5 @@
 /**
- * @module js/pickerbase
+ * @module js/picker-base
  * @author Marcello Surdi
  * @version 1.0.0
  *
@@ -31,12 +31,12 @@
 
 /**
  * @namespace PickerBaseNS
- * @memberof module:js/pickerbase
+ * @memberof module:js/picker-base
  */
 
 /**
  * @typedef {object} UserSelection
- * @memberof module:js/pickerbase.PickerBaseNS
+ * @memberof module:js/picker-base.PickerBaseNS
  *
  * @property {HTMLButtonElement} btn The active button
  * @property {HTMLDivElement} container Start or end top level container depending on which button was clicked
@@ -67,7 +67,7 @@
  * @property {HTMLDivElement} start_picker `div.picker` inside `start_container`. It contains the calendar or the timetable
  * @property {HTMLDivElement} end_container Top level `div` container for end date/time buttons (end_* properties are present **only** if there's an interval)
  * @property {HTMLButtonElement} end_date_btn `button.date.end` inside `end_container`
- * @property {HTMLButtonElement} start_time_btn `button.time.end` inside `end_container`
+ * @property {HTMLButtonElement} end_time_btn `button.time.end` inside `end_container`
  * @property {HTMLDivElement} end_picker `div.picker` inside `end_container`. It contains the calendar or the timetable
  * @property {Date} first_date First selectable date
  * @property {Date} start_date Start selected date
@@ -137,8 +137,8 @@ export function PickerBase() {
 
   /**
    * Adds an event handler to `td.selectable` elements.
-   * It's used by both {@link module:js/pickerbase.PickerBase#showCalendar|showCalendar}
-   * and {@link module:js/pickerbase.PickerBase#showTimeTable|showTimeTable} methods.
+   * It's used by both {@link module:js/picker-base.PickerBase#showCalendar|showCalendar}
+   * and {@link module:js/picker-base.PickerBase#showTimeTable|showTimeTable} methods.
    *
    * @param {HTMLDivElement} picker The picker currently open
    */
@@ -156,8 +156,8 @@ export function PickerBase() {
   /**
    * Checks if dates are still consistent after user selection (`this.start_date` may be
    * greater than `this.end_start` and other similar cases) and fixes any inconsistencies.
-   * It's used by both {@link module:js/pickerbase.PickerBase#selectDay|selectDay}
-   * and {@link module:js/pickerbase.PickerBase#selectHour|selectHour} methods.
+   * It's used by both {@link module:js/picker-base.PickerBase#selectDay|selectDay}
+   * and {@link module:js/picker-base.PickerBase#selectHour|selectHour} methods.
   */
   this.checkDateTimeConsistency = function() {
     if( !this.end_date ) {
@@ -217,8 +217,8 @@ export function PickerBase() {
 
   /**
    * @desc
-   * Gets dates (named `_dates`) converted in milliseconds and without hours/minutes information for
-   * comparisons in {@link module:js/pickerbase.PickerBase#getDayClassName|getDayClassName} method.
+   * Returns dates (named `_dates`) converted in milliseconds and without hours/minutes information for
+   * comparisons in {@link module:js/picker-base.PickerBase#getDayClassName|getDayClassName} method.
    *
    * @return {object} The object containing `_dates`
    */
@@ -249,8 +249,8 @@ export function PickerBase() {
   /**
    * @desc
    * Returns classes for `td` elements that contain the days of calendar.
-   * It's used inside a loop both when building table ({@link module:js/pickerbase.PickerBase#onOpenPicker|onOpenPicker})
-   * and when updating it ({@link module:js/pickerbase.PickerBase#selectDay|selectDay}).
+   * It's used inside a loop both when building table ({@link module:js/picker-base.PickerBase#onOpenPicker|onOpenPicker})
+   * and when updating it ({@link module:js/picker-base.PickerBase#selectDay|selectDay}).
    *
    * @param {string} day The day inside a loop iteration
    * @param {Date} date Date object with current year/month information
@@ -293,8 +293,8 @@ export function PickerBase() {
 
   /**
    * Returns classes for `td` elements that contain the hour/minute pairs (HH:mm).
-   * It's used inside a loop both when building table ({@link module:js/pickerbase.PickerBase#onOpenPicker|onOpenPicker})
-   * and when updating it ({@link module:js/pickerbase.PickerBase#selectHour|selectHour}).
+   * It's used inside a loop both when building table ({@link module:js/picker-base.PickerBase#onOpenPicker|onOpenPicker})
+   * and when updating it ({@link module:js/picker-base.PickerBase#selectHour|selectHour}).
    *
    * @param {string} hour An hour/minute pair (HH:mm) inside a loop iteration
    * @param {Date} date Date object with current hour/minutes information
@@ -327,11 +327,59 @@ export function PickerBase() {
 
 
   /**
+   * @desc
+   * Returns HTML for buttons. It's used to populate `start_container` and `end_container`.
+   *
+   * @param {string} type 'date' or 'datetime'
+   * @param {string} mode='start' 'start' or 'end'
+   * @return {string} HTML for requested button
+   */
+  this.getHTMLButton = function( type, mode = 'start' ) {
+    let html;
+
+    switch( type ) {
+      case 'datetime':
+        html =
+        `<div class="buttons-container fix-float">
+          <button type="button" class="date ${ mode } w-50">
+            <span class="week-day">mon</span>
+            <span class="month-day">00</span>
+            <span class="month-year"><span>jan</span><br>2000</span>
+          </button>
+          <button type="button" class="time ${ mode } w-50">
+            <span class="hours">00</span>
+            <span class="minutes">:00</span>
+          </button>
+        </div>
+        <div class="picker"></div>
+        <input type="hidden" class="date_output" value="">`;
+      break;
+      default:
+        html =
+        `<div class="buttons-container">
+          <button type="button" class="date ${ mode }">
+            <span class="week-day">mon</span>
+            <span class="month-day">00</span>
+            <span class="month-year"><span>jan</span><br>2000</span>
+          </button>
+        </div>
+        <div class="picker"></div>
+        <input type="hidden" class="date_output" value="">`;
+    }
+
+    return html;
+  }
+
+
+
+
+
+  /**
    * This is a click handler that closes the picker if the user clicks outside of it.
    *
    * @param {Event} e
    *
-   * @see {@link module:js/pickerbase.PickerBase#closePicker|closePicker}
+   * @see {@link module:js/picker-base.PickerBase#closePicker|closePicker}
   */
   this.onClickOutside = ( e ) => {
     let div = ( mode == 'start' ) ? this.start_picker : this.end_picker;
@@ -365,9 +413,9 @@ export function PickerBase() {
    *
    * @param {Event} e
    *
-   * @see {@link module:js/pickerbase.PickerBase#showCalendar|showCalendar}
-   * @see {@link module:js/pickerbase.PickerBase#showTimeTable|showTimeTable}
-   * @see {@link module:js/pickerbase.PickerBase~scrollPage|scrollPage}
+   * @see {@link module:js/picker-base.PickerBase#showCalendar|showCalendar}
+   * @see {@link module:js/picker-base.PickerBase#showTimeTable|showTimeTable}
+   * @see {@link module:js/picker-base.PickerBase~scrollPage|scrollPage}
   */
   this.onOpenPicker = ( e ) => {
     const btn = e.currentTarget;
@@ -430,15 +478,15 @@ export function PickerBase() {
   /**
   * @desc
   * This is a click handler triggered when the user clicks to select either a day or an hour.
-  * It passes an {@link module:js/pickerbase.PickerBaseNS.UserSelection|UserSelection} object as
-  * parameter to {@link module:js/pickerbase.PickerBase#selectDay|selectDay} or to
-  * {@link module:js/pickerbase.PickerBase#selectHour|selectHour} methods, depending on the user
+  * It passes an {@link module:js/picker-base.PickerBaseNS.UserSelection|UserSelection} object as
+  * parameter to {@link module:js/picker-base.PickerBase#selectDay|selectDay} or to
+  * {@link module:js/picker-base.PickerBase#selectHour|selectHour} methods, depending on the user
   * clicks on a day button or on an hour button respectively.
   *
   * @param {Event} e
   *
-  * @see {@link module:js/pickerbase.PickerBase#selectDay|selectDay}
-  * @see {@link module:js/pickerbase.PickerBase#selectHour|selectHour}
+  * @see {@link module:js/picker-base.PickerBase#selectDay|selectDay}
+  * @see {@link module:js/picker-base.PickerBase#selectHour|selectHour}
   */
   this.onSelectDayOrHour = ( e ) => {
     const o = {};
@@ -482,12 +530,12 @@ export function PickerBase() {
   /**
    * @desc
    * Selects the day clicked by the user and then closes the picker. It's used by
-   * {@link module:js/pickerbase.PickerBase#onSelectDayOrHour|onSelectDayOrHour} method.
+   * {@link module:js/picker-base.PickerBase#onSelectDayOrHour|onSelectDayOrHour} method.
    *
-   * @param {module:js/pickerbase.PickerBaseNS.UserSelection} o Object with contextual info
+   * @param {module:js/picker-base.PickerBaseNS.UserSelection} o Object with contextual info
    *
-   * @see {@link module:js/pickerbase.PickerBase#showDateAndTime|showDateAndTime}
-   * @see {@link module:js/pickerbase.PickerBase#closePicker|closePicker}
+   * @see {@link module:js/picker-base.PickerBase#showDateAndTime|showDateAndTime}
+   * @see {@link module:js/picker-base.PickerBase#closePicker|closePicker}
    */
   this.selectDay = function( o ) {
     // Updates this.start_date or this.end_date after user selection
@@ -534,10 +582,10 @@ export function PickerBase() {
   /**
    * Selects the hour/minute pair clicked by the user and then closes the picker.
    *
-   * @param {module:js/pickerbase.PickerBaseNS.UserSelection} o Object with contextual info
+   * @param {module:js/picker-base.PickerBaseNS.UserSelection} o Object with contextual info
    *
-   * @see {@link module:js/pickerbase.PickerBase#showDateAndTime|showDateAndTime}
-   * @see {@link module:js/pickerbase.PickerBase#closePicker|closePicker}
+   * @see {@link module:js/picker-base.PickerBase#showDateAndTime|showDateAndTime}
+   * @see {@link module:js/picker-base.PickerBase#closePicker|closePicker}
    */
   this.selectHour = function( o ) {
     // Updates hour and minute with those selected by the user
@@ -568,8 +616,8 @@ export function PickerBase() {
    * @param {string} id id of the `div` element that will contain the button(s)
    * @param {Date|string|null} [end_date_setting] End selected date from settings
    *
-   * @see {@link module:js/pickerbase.PickerBase~getDateBetween|getDateBetween}
-   * @see {@link module:js/pickerbase.PickerBase~roundMinutes|roundMinutes}
+   * @see {@link module:js/picker-base.PickerBase~getDateBetween|getDateBetween}
+   * @see {@link module:js/picker-base.PickerBase~roundMinutes|roundMinutes}
    */
   this.setEndPickerProps = function( id, end_date_setting ) {
     const el = document.getElementById( id );
@@ -610,9 +658,9 @@ export function PickerBase() {
    * @param {Date} [last_date_setting] Last selectable date from settings
    * @param {number} [first_day_no] Day the week must start with. Accordingly to returned values of `Date.getDate` method, accepted range values are 0-6 where 0 means Sunday, 1 means Monday and so on
    *
-   * @see {@link module:js/pickerbase.PickerBase~getDateBetween|getDateBetween}
-   * @see {@link module:js/pickerbase.PickerBase~roundMinutes|roundMinutes}
-   * @see {@link module:js/pickerbase.PickerBase~setDaysOrder|setDaysOrder}
+   * @see {@link module:js/picker-base.PickerBase~getDateBetween|getDateBetween}
+   * @see {@link module:js/picker-base.PickerBase~roundMinutes|roundMinutes}
+   * @see {@link module:js/picker-base.PickerBase~setDaysOrder|setDaysOrder}
    */
   this.setStartPickerProps = function( id, start_date_setting, first_date_setting, last_date_setting, first_day_no ) {
     const el = document.getElementById( id );
@@ -661,9 +709,9 @@ export function PickerBase() {
    * @param {HTMLDivElement} picker The picker that contains the calendar
    * @param {Date} date Current date
    *
-   * @see {@link module:js/pickerbase.PickerBase~getWeekDayNo|getWeekDayNo}
-   * @see {@link module:js/pickerbase.PickerBase#getDayClassName|getDayClassName}
-   * @see {@link module:js/pickerbase.PickerBase#addEventOnSelect|addEventOnSelect}
+   * @see {@link module:js/picker-base.PickerBase~getWeekDayNo|getWeekDayNo}
+   * @see {@link module:js/picker-base.PickerBase#getDayClassName|getDayClassName}
+   * @see {@link module:js/picker-base.PickerBase#addEventOnSelect|addEventOnSelect}
    */
   this.showCalendar = function( picker, date ) {
     let class_name, html = '';
@@ -775,8 +823,8 @@ export function PickerBase() {
    * @param {HTMLDivElement} div `div` element where to display the date/time
    * @param {Date} date Date to be displayed
    *
-   * @see {@link module:js/pickerbase.PickerBase~getWeekDayNo|getWeekDayNo}
-   * @see {@link module:js/pickerbase.PickerBase~getISOStringTZ|getISOStringTZ}
+   * @see {@link module:js/picker-base.PickerBase~getWeekDayNo|getWeekDayNo}
+   * @see {@link module:js/picker-base.PickerBase~getISOStringTZ|getISOStringTZ}
    */
   this.showDateAndTime = function( div, date ) {
     // Displays date
@@ -841,9 +889,9 @@ export function PickerBase() {
    * @param {HTMLDivElement} picker The picker that contains the table
    * @param {Date} day Current day
    *
-   * @see {@link module:js/pickerbase.PickerBase~getWeekDayNo|getWeekDayNo}
-   * @see {@link module:js/pickerbase.PickerBase#getHourClassName|getHourClassName}
-   * @see {@link module:js/pickerbase.PickerBase#addEventOnSelect|addEventOnSelect}
+   * @see {@link module:js/picker-base.PickerBase~getWeekDayNo|getWeekDayNo}
+   * @see {@link module:js/picker-base.PickerBase#getHourClassName|getHourClassName}
+   * @see {@link module:js/picker-base.PickerBase#addEventOnSelect|addEventOnSelect}
    */
   this.showTimeTable = function( picker, day ) {
     let i = 0, html = '', class_name;
@@ -891,14 +939,14 @@ export function PickerBase() {
    * Returns a date depending on these precedence criteria:
    * - the date provided in a hidden input field (if any) takes priority over other dates;
    * - then follows the date provided by the settings object;
-   * - default date provided by the {@link module:js/pickerbase.PickerBase#setStartPickerProps|setStartPickerProps} method comes last.
+   * - default date provided by the {@link module:js/picker-base.PickerBase#setStartPickerProps|setStartPickerProps} method comes last.
    *
    * @param {Date} date_default Default date
    * @param {Date|string} date_param The date provided by the settings object
    * @param {HTMLInputElement|null} [input=null] A hidden input field with ISO date string in its value attribute
    * @return {Date}
    *
-   * @see {@link module:js/pickerbase.PickerBase~ISO2Date|ISO2Date}
+   * @see {@link module:js/picker-base.PickerBase~ISO2Date|ISO2Date}
    */
   function getDateBetween( date_default, date_param, input = null ) {
     let date;
@@ -929,7 +977,7 @@ export function PickerBase() {
 
   /**
    * Returns a ISO string with timezone offset from date passed as parameter.
-   * It's used by {@link module:js/pickerbase.PickerBase#showDateAndTime|showDateAndTime}.
+   * It's used by {@link module:js/picker-base.PickerBase#showDateAndTime|showDateAndTime}.
    *
    * @param {Date} date
    */
@@ -1036,7 +1084,7 @@ export function PickerBase() {
 
   /**
    * Scrolls the page if the picker exceeds the viewport height.
-   * It's used by {@link module:js/pickerbase.PickerBase#onOpenPicker|onOpenPicker}.
+   * It's used by {@link module:js/picker-base.PickerBase#onOpenPicker|onOpenPicker}.
    *
    * @param {HTMLDivElement} picker The open picker
    */
@@ -1064,7 +1112,7 @@ export function PickerBase() {
 
   /**
    * Sets the `days_order` variable depending on `first_day_no` parameter.
-   * It's used by {@link module:js/pickerbase.PickerBase#setStartPickerProps|setStartPickerProps}.
+   * It's used by {@link module:js/picker-base.PickerBase#setStartPickerProps|setStartPickerProps}.
    *
    * @param {number} first_day_no The first day of week number from settings object
    */

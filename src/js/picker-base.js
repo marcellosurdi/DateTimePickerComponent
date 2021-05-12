@@ -73,6 +73,9 @@
  * @property {Date} start_date Start selected date
  * @property {Date} end_date End selected date
  * @property {Date} last_date Last selectable date
+ * @property {Date} current_month Information about current month relative to the picker just opened (*_month values are updated **each time** a picker is opened)
+ * @property {Date} prev_month Information about previous month relative to the picker just opened
+ * @property {Date} next_month Information about next month relative to the picker just opened
  * @property {string} date_output Denotes the date format returned to the value attribute of `input.date_output` (accepted values are short_ISO, full_ISO and timestamp)
  * @property {number} min_interval Denotes the minimum interval in milliseconds that must elapse between `start_date` and `end_date`
  */
@@ -164,6 +167,7 @@ export function PickerBase() {
       return;
     }
 
+    // Calcolare con get_Dates
     const start_date_ms = this.start_date.getTime();
     const end_date_ms = this.end_date.getTime();
     const first_date_ms = this.first_date.getTime();
@@ -217,8 +221,8 @@ export function PickerBase() {
 
   /**
    * @desc
-   * Returns dates (named `_dates`) converted in milliseconds and without hours/minutes information for
-   * comparisons in {@link module:js/picker-base.PickerBase#getDayClassName|getDayClassName} method.
+   * Returns dates converted in milliseconds and without hour/minute information for comparisons
+   * in {@link module:js/picker-base.PickerBase#getDayClassName|getDayClassName} method.
    *
    * @return {object} The object containing `_dates`
    */
@@ -252,8 +256,9 @@ export function PickerBase() {
    * It's used inside a loop both when building table ({@link module:js/picker-base.PickerBase#onOpenPicker|onOpenPicker})
    * and when updating it ({@link module:js/picker-base.PickerBase#selectDay|selectDay}).
    *
-   * @param {string} day The day inside a loop iteration
+   * @param {string} day The current day inside a loop iteration
    * @param {Date} date Date object with current year/month information
+   * @param {object} _dates Dates converted in milliseconds and without hour/minute information
    * @return {string} Classes to be assigned to the `td` element
    */
   this.getDayClassName = function( day, date, _dates ) {
@@ -550,6 +555,7 @@ export function PickerBase() {
     this.checkDateTimeConsistency();
 
     const _dates = this.get_Dates();
+
     // Updates day classes after user selection
     const coll = document.querySelectorAll( 'td.selectable' );
 
@@ -566,6 +572,7 @@ export function PickerBase() {
       else {
         param = this.current_month;
       }
+
       class_name += this.getDayClassName( coll[ i ].textContent, param, _dates );
       coll[ i ].className = class_name;
     }
@@ -723,27 +730,27 @@ export function PickerBase() {
     const feb = ( ( year % 100 != 0 ) && ( year % 4 == 0 ) || ( year % 400 == 0 ) ) ? 29 : 28;
     const total_days = [ '31', feb, '31', '30', '31', '30', '31', '31', '30', '31', '30', '31' ];
 
+    const current_month = new Date( year, month, 1 );
     // First day of current month as number
-    let week_day = getWeekDayNo( new Date( year, month, 1 ) );
+    let week_day = getWeekDayNo( current_month );
+    const prev_month = new Date( year, ( month - 1 ), 1 );
+    const next_month = new Date( year, ( month + 1 ), 1 );
 
     const _dates = this.get_Dates();
 
-    // This loop displays the last days of the previous month
+    // Displays the last days of the previous month
     let i = 0
     let j = week_day;
-    this.prev_month = new Date( year, ( month - 1 ), 1, date.getHours(), date.getMinutes() );
-    const prev_month_total_days = total_days[ this.prev_month.getMonth() ];
+    const prev_month_total_days = total_days[ prev_month.getMonth() ];
     while( j > 0 ) {
       i = ( prev_month_total_days - ( j - 1 ) );
-      class_name = this.getDayClassName( i, this.prev_month, _dates );
+      class_name = this.getDayClassName( i, prev_month, _dates );
       html += `<td class="prev-month ${ class_name }">${ i }</td>`;
       j--;
     }
 
-
-    // This loop displays the days of the current month
+    // Displays the days of the current month
     i = 1;
-    this.current_month = new Date( date.getTime() );
     while ( i <= total_days[ month ] ) {
       // Starts a new row
       if( week_day > 6 ) {
@@ -751,17 +758,16 @@ export function PickerBase() {
         html += "</tr><tr>";
       }
 
-      class_name = this.getDayClassName( i, this.current_month, _dates );
+      class_name = this.getDayClassName( i, current_month, _dates );
       html += `<td class="${ class_name }">${ i }</td>`;
 
       week_day++;
       i++;
     }
 
-    // This loop displays the first days of the next month
-    this.next_month = new Date( year, ( month + 1 ), 1, date.getHours(), date.getMinutes() );
+    // Displays the first days of the next month
     for( i = 1; week_day <= 6; week_day++, i++ ) {
-      class_name = this.getDayClassName( i, this.next_month, _dates );
+      class_name = this.getDayClassName( i, next_month, _dates );
       html += `<td class="next-month ${ class_name }">${ i }</td>`;
     }
 
@@ -790,10 +796,10 @@ export function PickerBase() {
     </table>`;
 
     // Previous month button
-    this.prev_month.setDate( prev_month_total_days );
+    prev_month.setDate( prev_month_total_days );
     const prev_month_btn = picker.querySelector( '.prev-month' );
-    if( this.prev_month > this.first_date ) {
-      prev_month_btn.addEventListener( 'click', () => this.showCalendar( picker, this.prev_month ) );
+    if( prev_month > this.first_date ) {
+      prev_month_btn.addEventListener( 'click', () => this.showCalendar( picker, prev_month ) );
     }
     else {
       prev_month_btn.classList.add( 'disabled' );
@@ -801,14 +807,18 @@ export function PickerBase() {
 
     // Next month button
     const next_month_btn = picker.querySelector( '.next-month' );
-    if( this.last_date > this.next_month ) {
-      next_month_btn.addEventListener( 'click', () => this.showCalendar( picker, this.next_month ) );
+    if( this.last_date > next_month ) {
+      next_month_btn.addEventListener( 'click', () => this.showCalendar( picker, next_month ) );
     }
     else {
       next_month_btn.classList.add( 'disabled' );
     }
 
     this.addEventOnSelect( picker );
+
+    this.current_month = current_month;
+    this.prev_month = prev_month;
+    this.next_month = next_month;
   }
 
 

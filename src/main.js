@@ -51,8 +51,7 @@ let it = {
 
 
 new DateTimeIntervalPicker( 'start_date_time', 'end_date_time', {
-  // last_date: '2021-05-07T23:15:00',
-  // end_date: '2023-05-01T23:12:00',
+  last_date: '2021-05-30T20:00:00',
   min_interval_hours: 18
 } );
 
@@ -61,8 +60,6 @@ new DateTimeIntervalPicker( 'start_date_time', 'end_date_time', {
 
 
 new DateIntervalPicker( 'start_date', 'end_date', {
-  // last_date: '2021-05-07T23:15:00',
-  // end_date: '2023-05-01T23:12:00',
   min_interval_hours: 3,
   i18n: it
 } );

@@ -73,9 +73,9 @@
  * @property {Date} start_date Start selected date
  * @property {Date} end_date End selected date
  * @property {Date} last_date Last selectable date
- * @property {Date} current_month Information about current month relative to the picker just opened (*_month values are updated **each time** a picker is opened)
- * @property {Date} prev_month Information about previous month relative to the picker just opened
- * @property {Date} next_month Information about next month relative to the picker just opened
+ * @property {Date} current_month Information about current year/month relative to the picker just opened (*_month values are updated **each time** a picker is opened)
+ * @property {Date} prev_month Information about previous year/month relative to the picker just opened
+ * @property {Date} next_month Information about next year/month relative to the picker just opened
  * @property {string} date_output Denotes the date format returned to the value attribute of `input.date_output` (accepted values are short_ISO, full_ISO and timestamp)
  * @property {number} min_interval Denotes the minimum interval in milliseconds that must elapse between `start_date` and `end_date`
  */
@@ -157,8 +157,11 @@ export function PickerBase() {
 
 
   /**
-   * Checks if dates are still consistent after user selection (`this.start_date` may be
-   * greater than `this.end_start` and other similar cases of inconsistency) and fixes any problems.
+   * Checks if dates are still consistent after user selection and fixes any inconsistencies:
+   * - `start_date` plus `min_interval` must always be less or equal than `end_date`;
+   * - `start_date` must always be greater than `first_date`;
+   * - `end_date` minus `min_interval` must always be greater or equal than 'start_date';
+   * - `end_date` must always be less than `last_date`.
    * It's used by both {@link module:js/picker-base.PickerBase#selectDay|selectDay}
    * and {@link module:js/picker-base.PickerBase#selectHour|selectHour} methods.
   */
@@ -173,25 +176,34 @@ export function PickerBase() {
     const last_date_ms = this.last_date.getTime();
 
     if( mode == 'start' ) {
-      if( start_date_ms >= end_date_ms ) {
-        if( start_date_ms >= last_date_ms ) {
-          this.start_date = new Date( last_date_ms - this.min_interval );
+      if( ( start_date_ms + this.min_interval ) >= end_date_ms ) {
+        if( ( start_date_ms + this.min_interval ) >= last_date_ms ) {
+          this.start_date.setTime( last_date_ms - this.min_interval );
         }
 
-        this.end_date = new Date( start_date_ms + this.min_interval );
+        this.end_date.setTime( this.start_date.getTime() + this.min_interval );
 				this.showDateAndTime( this.end_container, this.end_date );
+			}
+
+			if( start_date_ms <= first_date_ms ) {
+				this.start_date.setHours( this.first_date.getHours(), this.first_date.getMinutes(), 0, 0 );
 			}
     }
 
+    // mode == 'end'
     else {
-      if( end_date_ms <= start_date_ms ) {
-        if( end_date_ms <= first_date_ms ) {
-          this.end_date = new Date( first_date_ms + this.min_interval );
+      if( ( end_date_ms - this.min_interval ) <= start_date_ms ) {
+        if( ( end_date_ms - this.min_interval ) <= first_date_ms ) {
+          this.end_date.setTime( first_date_ms + this.min_interval );
         }
 
-        this.start_date = new Date( end_date_ms - this.min_interval );
+        this.start_date.setTime( this.end_date.getTime() - this.min_interval );
         this.showDateAndTime( this.start_container, this.start_date );
       }
+
+      if( end_date_ms >= last_date_ms ) {
+				this.end_date.setHours( this.last_date.getHours(), this.last_date.getMinutes(), 0, 0 );
+			}
     }
   }
 
@@ -220,7 +232,7 @@ export function PickerBase() {
 
   /**
    * @desc
-   * Returns dates converted in milliseconds and without hour/minute information for comparisons
+   * Returns dates converted in milliseconds without hour/minute information for comparisons
    * in {@link module:js/picker-base.PickerBase#getDayClassName|getDayClassName} method.
    *
    * @return {object} The object containing `_dates`
@@ -257,7 +269,7 @@ export function PickerBase() {
    *
    * @param {string} day The current day inside a loop iteration
    * @param {Date} date Date object with current year/month information
-   * @param {object} _dates Dates converted in milliseconds and without hour/minute information
+   * @param {object} _dates Dates converted in milliseconds without hour/minute information
    * @return {string} Classes to be assigned to the `td` element
    */
   this.getDayClassName = function( day, date, _dates ) {

@@ -1,8 +1,8 @@
 {
   "name": "projects.datetimepicker",
   "description": "Date Time Picker Components",
-  "author": "Marcello Surdi",
-  "version": "0.0.64",
+  "author": "Marcello Surdi <marcello.surdi@gmail.com> (https://www.marcellosurdi.name)",
+  "version": "0.0.65",
   "keywords": [],
   "main": "main.js",
   "license": "ISC",

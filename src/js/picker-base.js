@@ -162,6 +162,7 @@ export function PickerBase() {
    * - `start_date` must always be greater than `first_date`;
    * - `end_date` minus `min_interval` must always be greater or equal than 'start_date';
    * - `end_date` must always be less than `last_date`.
+   *
    * It's used by both {@link module:js/picker-base.PickerBase#selectDay|selectDay}
    * and {@link module:js/picker-base.PickerBase#selectHour|selectHour} methods.
   */
@@ -264,7 +265,7 @@ export function PickerBase() {
   /**
    * @desc
    * Returns classes for `td` elements that contain the days of calendar.
-   * It's used inside a loop both when building table ({@link module:js/picker-base.PickerBase#onOpenPicker|onOpenPicker})
+   * It's used inside a loop both when building table ({@link module:js/picker-base.PickerBase#showCalendar|showCalendar})
    * and when updating it ({@link module:js/picker-base.PickerBase#selectDay|selectDay}).
    *
    * @param {string} day The current day inside a loop iteration
@@ -309,7 +310,7 @@ export function PickerBase() {
 
   /**
    * Returns classes for `td` elements that contain the hour/minute pairs (HH:mm).
-   * It's used inside a loop both when building table ({@link module:js/picker-base.PickerBase#onOpenPicker|onOpenPicker})
+   * It's used inside a loop both when building table ({@link module:js/picker-base.PickerBase#showTimeTable|showTimeTable})
    * and when updating it ({@link module:js/picker-base.PickerBase#selectHour|selectHour}).
    *
    * @param {string} hour An hour/minute pair (HH:mm) inside a loop iteration

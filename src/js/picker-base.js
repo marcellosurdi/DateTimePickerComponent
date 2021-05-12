@@ -158,7 +158,7 @@ export function PickerBase() {
 
   /**
    * Checks if dates are still consistent after user selection (`this.start_date` may be
-   * greater than `this.end_start` and other similar cases) and fixes any inconsistencies.
+   * greater than `this.end_start` and other similar cases of inconsistency) and fixes any problems.
    * It's used by both {@link module:js/picker-base.PickerBase#selectDay|selectDay}
    * and {@link module:js/picker-base.PickerBase#selectHour|selectHour} methods.
   */
@@ -167,7 +167,6 @@ export function PickerBase() {
       return;
     }
 
-    // Calcolare con get_Dates
     const start_date_ms = this.start_date.getTime();
     const end_date_ms = this.end_date.getTime();
     const first_date_ms = this.first_date.getTime();

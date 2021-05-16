@@ -22,15 +22,11 @@ module.exports = ( env, argv ) => {
         ],
       },
 
-      output: {
-        filename: 'js/[name].js',
-      },
-
       devServer: {
         contentBase: paths.static,
         watchContentBase: true,
         hot: true,
-        port: 3000,
+        port: 3001,
       },
 
       plugins: [

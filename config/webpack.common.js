@@ -44,7 +44,14 @@ const config = {
 
   output: {
     path: paths.build,
+    filename: 'js/[name].js',
     publicPath: '/',
+
+    library: {
+      name: '$',
+      type: 'umd',
+    },
+
     environment: {
       arrowFunction: false,
       bigIntLiteral: false,
@@ -63,8 +70,9 @@ const config = {
       filename: 'index.html',
       title: 'index@' + version,
       template: paths.static + '/tpl/index.html',
+      // inject: false,
+      // scriptLoading: 'blocking',
       chunks: [ 'main' ],
-      // scriptLoading: 'defer',
     }),
   ],
 };

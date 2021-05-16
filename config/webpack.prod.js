@@ -27,15 +27,11 @@ module.exports = ( env, argv ) => {
         ],
       },
 
-      output: {
-        filename: 'js/[name].[contenthash].js',
-      },
-
       plugins: [
         new webpack.EnvironmentPlugin( { BUILD: ( env && env.BUILD ) ? env.BUILD : false } ),
 
         new MiniCssExtractPlugin({
-          filename: 'css/[name].[contenthash].css',
+          filename: 'css/[name].css',
         }),
       ],
 

@@ -1,7 +1,7 @@
 {
   "name": "date-time-picker-component",
-  "description": "Date time picker is a lightweight, no dependencies and mobile-friendly vanilla JavaScript component. It supports internazionalization, date format, date range and disabled dates.",
-  "version": "0.0.67",
+  "description": "Date time picker is a lightweight, no dependencies and mobile-friendly vanilla JavaScript component. It supports internationalization, date format, date range and disabled dates.",
+  "version": "0.0.68",
   "keywords": [
     "date",
     "time",

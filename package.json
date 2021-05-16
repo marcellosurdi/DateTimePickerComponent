@@ -1,14 +1,31 @@
 {
-  "name": "projects.datetimepicker",
-  "description": "Date Time Picker Components",
-  "author": "Marcello Surdi <marcello.surdi@gmail.com> (https://www.marcellosurdi.name)",
-  "version": "0.0.66",
-  "keywords": [],
+  "name": "date-time-picker-component",
+  "description": "Date time picker is a lightweight, no dependencies and mobile-friendly vanilla JavaScript component. It supports internazionalization, date format, date range and disabled dates.",
+  "version": "0.0.67",
+  "keywords": [
+    "date",
+    "time",
+    "range",
+    "picker",
+    "calendar",
+    "lightweight",
+    "mobile-friendly",
+    "vanilla",
+    "javascript"
+  ],
   "main": "main.js",
-  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rsp/node-caught.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rsp/node-caught/issues"
+  },
+  "homepage": "https://github.com/rsp/node-caught#readme",
+  "author": "Marcello Surdi <marcello.surdi@gmail.com> (https://www.marcellosurdi.name)",
+  "license": "MIT",
   "scripts": {
-    "start": "webpack serve --config config/webpack.dev.js --open chrome",
-    "current": "webpack serve --config config/webpack.dev.js --open chrome --open-page index.html",
+    "dev": "webpack serve --config config/webpack.dev.js --open chrome",
     "build": "webpack --config config/webpack.prod.js --output-public-path /www/project.datetimepicker/dist/ --env BUILD"
   },
   "devDependencies": {

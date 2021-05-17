@@ -48,7 +48,7 @@ const config = {
     publicPath: '/',
 
     library: {
-      name: '$',
+      name: 'DateTimeComponent',
       type: 'umd',
     },
 
@@ -70,9 +70,7 @@ const config = {
       filename: 'index.html',
       title: 'index@' + version,
       template: paths.static + '/tpl/index.html',
-      // inject: false,
-      // scriptLoading: 'blocking',
-      chunks: [ 'main' ],
+      inject: false,
     }),
   ],
 };

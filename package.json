@@ -1,7 +1,7 @@
 {
   "name": "date-time-picker-component",
   "description": "Date time picker is a lightweight and framework-agnostic web component written in pure JavaScript. It supports internationalization, date format, date range and disabled dates.",
-  "version": "0.0.70",
+  "version": "0.0.71",
   "keywords": [
     "date",
     "time",
@@ -16,17 +16,17 @@
   "main": "main.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rsp/node-caught.git"
+    "url": "https://github.com/marcellosurdi/DateTimePickerComponent.git"
   },
   "bugs": {
-    "url": "https://github.com/rsp/node-caught/issues"
+    "url": "https://github.com/marcellosurdi/DateTimePickerComponent/issues"
   },
   "homepage": "https://github.com/rsp/node-caught#readme",
   "author": "Marcello Surdi <marcello.surdi@gmail.com> (https://www.marcellosurdi.name)",
   "license": "MIT",
   "scripts": {
     "dev": "webpack serve --config config/webpack.dev.js --open chrome",
-    "build": "webpack --config config/webpack.prod.js --output-public-path /www/project.datetimepicker/dist/ --env BUILD"
+    "build": "webpack --config config/webpack.prod.js --env BUILD"
   },
   "devDependencies": {
     "@babel/core": "^7.13.15",

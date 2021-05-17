@@ -77,7 +77,7 @@
  * @property {Date} prev_month Information about previous year/month relative to the picker just opened
  * @property {Date} next_month Information about next year/month relative to the picker just opened
  * @property {string} date_output Denotes the date format returned to the value attribute of `input.date_output` (accepted values are short_ISO, full_ISO and timestamp)
- * @property {number} min_interval Denotes the minimum DateTimeRangePicker in milliseconds that must elapse between `start_date` and `end_date`
+ * @property {number} min_range Denotes the minimum range in milliseconds that must elapse between `start_date` and `end_date`
  */
 export function PickerBase() {
   this.i18n = {
@@ -158,9 +158,9 @@ export function PickerBase() {
 
   /**
    * Checks if dates are still consistent after user selection and fixes any inconsistencies:
-   * - `start_date` plus `min_interval` must always be less or equal than `end_date`;
+   * - `start_date` plus `min_range` must always be less or equal than `end_date`;
    * - `start_date` must always be greater than `first_date`;
-   * - `end_date` minus `min_interval` must always be greater or equal than 'start_date';
+   * - `end_date` minus `min_range` must always be greater or equal than 'start_date';
    * - `end_date` must always be less than `last_date`.
    *
    * It's used by both {@link module:js/picker-base.PickerBase#selectDay|selectDay}
@@ -177,12 +177,12 @@ export function PickerBase() {
     const last_date_ms = this.last_date.getTime();
 
     if( mode == 'start' ) {
-      if( ( start_date_ms + this.min_interval ) >= end_date_ms ) {
-        if( ( start_date_ms + this.min_interval ) >= last_date_ms ) {
-          this.start_date.setTime( last_date_ms - this.min_interval );
+      if( ( start_date_ms + this.min_range ) >= end_date_ms ) {
+        if( ( start_date_ms + this.min_range ) >= last_date_ms ) {
+          this.start_date.setTime( last_date_ms - this.min_range );
         }
 
-        this.end_date.setTime( this.start_date.getTime() + this.min_interval );
+        this.end_date.setTime( this.start_date.getTime() + this.min_range );
 				this.showDateAndTime( this.end_container, this.end_date );
 			}
 
@@ -193,12 +193,12 @@ export function PickerBase() {
 
     // mode == 'end'
     else {
-      if( ( end_date_ms - this.min_interval ) <= start_date_ms ) {
-        if( ( end_date_ms - this.min_interval ) <= first_date_ms ) {
-          this.end_date.setTime( first_date_ms + this.min_interval );
+      if( ( end_date_ms - this.min_range ) <= start_date_ms ) {
+        if( ( end_date_ms - this.min_range ) <= first_date_ms ) {
+          this.end_date.setTime( first_date_ms + this.min_range );
         }
 
-        this.start_date.setTime( this.end_date.getTime() - this.min_interval );
+        this.start_date.setTime( this.end_date.getTime() - this.min_range );
         this.showDateAndTime( this.start_container, this.start_date );
       }
 
@@ -293,7 +293,7 @@ export function PickerBase() {
 
     if( this.end_date ) {
     	if( _curr_day > _dates._start_date && _curr_day < _dates._end_date ) {
-    		class_name += ' interval';
+    		class_name += ' range';
     	}
 
     	if( _curr_day == _dates._end_date ) {
@@ -645,7 +645,7 @@ export function PickerBase() {
     }
 
     // Default end selected date is one day more than start selected date
-    const end_date_default = new Date( this.start_date.getTime() + this.min_interval );
+    const end_date_default = new Date( this.start_date.getTime() + this.min_range );
     let end_date = getDateBetween( end_date_default, end_date_setting, this.start_container.querySelector( 'input.end_date' ) );
     // End selected date must be greater than start selected date
     if( end_date < this.start_date) {

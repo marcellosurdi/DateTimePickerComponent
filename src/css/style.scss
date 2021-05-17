@@ -1,6 +1,6 @@
 $active_background: #fec601;
 $active_color: #000;
-$interval_background: #eee;
+$range_background: #eee;
 $end_background: #0b6e38;
 $end_color: #fff;
 $disabled_color: #ccc;
@@ -128,7 +128,7 @@ div.datetime-container {
           background-position: left center;
         }
 
-        table td.interval { background-color: $interval_background; }
+        table td.range { background-color: $range_background; }
 
 
         table td.start-day.end-day {

@@ -20,7 +20,7 @@ DateTimeRangePicker.prototype.constructor = DateTimeRangePicker;
  * @class
  *
  * @classdesc
- * Creates a date time interval picker inside the `div` elements passed as parameters
+ * Creates a date time range picker inside the `div` elements passed as parameters
  *
  * @param {string} start_id Id of the `div` element that will contain the start date button
  * @param {string} end_id Id of the `div` element that will contain the end date button
@@ -42,7 +42,7 @@ export function DateTimeRangePicker( start_id, end_id, settings ) {
   // Settings
   this.i18n = ( settings?.i18n ) ? settings.i18n : this.i18n;
   this.date_output = ( settings?.date_output ) ? settings.date_output : 'short_ISO';
-  this.min_interval = ( settings?.min_interval_hours ) ? ( settings.min_interval_hours * 60 * 60 * 1000 ) : ( 1 * 60 * 60 * 1000 );
+  this.min_range = ( settings?.min_range_hours ) ? ( settings.min_range_hours * 60 * 60 * 1000 ) : ( 1 * 60 * 60 * 1000 );
 
   const start_date = ( settings?.start_date ) ? settings.start_date : null;
   const first_date = ( settings?.first_date ) ? settings.first_date : null;

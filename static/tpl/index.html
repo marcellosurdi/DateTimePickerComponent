@@ -13,7 +13,7 @@
   h2:not(:first-child) { margin-top: 75px; }
   span.label { text-transform: uppercase; font-size: 14px; }
 
-  /* Available classes: prev-month, next-month, today, start-day, interval, end-day, time-selected */
+  /* Available classes: prev-month, next-month, today, start-day, range, end-day, time-selected */
   div#select_date td.today {
     /* background-color: #f9f9ce; */
   }
@@ -108,29 +108,29 @@
 
     new DateTimePickerComponent.DateTimeRangePicker( 'start_date_time', 'end_date_time', {
       last_date: '2021-05-30T20:00:00',
-      min_interval_hours: 18
+      min_range_hours: 18
     } );
 
 
-    // new DateIntervalPicker( 'start_date', 'end_date', {
-    //   min_interval_hours: 3,
-    //   i18n: it
-    // } );
-    //
-    //
-    // new DateTimePicker( 'select_datetime', { i18n: it } );
-    //
-    //
-    // new DatePicker( 'select_date', { first_day_no: 0 } );
-    //
-    // new DatePicker( 'select_date_2', {
-    //   first_date: "2020-12-01",
-    //   start_date: "2021-01-05",
-    //   last_date: new Date( 2021, 0, 29 ),
-    //   i18n: it
-    // } );
-    //
-    // new DatePicker( 'select_date_3', { first_day_no: 0 } );
+    new DateTimePickerComponent.DateRangePicker( 'start_date', 'end_date', {
+      min_range_hours: 3,
+      i18n: it
+    } );
+
+
+    new DateTimePickerComponent.DateTimePicker( 'select_datetime', { i18n: it } );
+
+
+    new DateTimePickerComponent.DatePicker( 'select_date', { first_day_no: 0 } );
+
+    new DateTimePickerComponent.DatePicker( 'select_date_2', {
+      first_date: "2020-12-01",
+      start_date: "2021-01-05",
+      last_date: new Date( 2021, 0, 29 ),
+      i18n: it
+    } );
+
+    new DateTimePickerComponent.DatePicker( 'select_date_3', { first_day_no: 0 } );
   </script>
 </body>
 

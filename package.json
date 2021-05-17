@@ -1,7 +1,7 @@
 {
   "name": "date-time-picker-component",
   "description": "Date time picker is a lightweight and framework-agnostic web component written in pure JavaScript. It supports internationalization, date format, date range and disabled dates.",
-  "version": "0.0.71",
+  "version": "0.0.73",
   "keywords": [
     "date",
     "time",
@@ -10,8 +10,7 @@
     "calendar",
     "lightweight",
     "mobile-friendly",
-    "vanilla",
-    "javascript"
+    "vanilla-javascript"
   ],
   "main": "main.js",
   "repository": {
@@ -21,7 +20,7 @@
   "bugs": {
     "url": "https://github.com/marcellosurdi/DateTimePickerComponent/issues"
   },
-  "homepage": "https://github.com/rsp/node-caught#readme",
+  "homepage": "https://github.com/marcellosurdi/DateTimePickerComponent#readme",
   "author": "Marcello Surdi <marcello.surdi@gmail.com> (https://www.marcellosurdi.name)",
   "license": "MIT",
   "scripts": {

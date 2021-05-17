@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang='it'>
+
+<head>
+<title><%= htmlWebpackPlugin.options.title %></title>
+<meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta name="format-detection" content="telephone=no">
+<style>
+  html, body { margin: 0; padding: 0; background: #eee; height: 100%; font: 100% arial, sans-serif; color: #444; }
+  div#container { margin: 10px auto; background: #fff; max-width: 640px; padding: 10px; }
+  h2:not(:first-child) { margin-top: 75px; }
+  span.label { text-transform: uppercase; font-size: 14px; }
+
+  /* Available classes: prev-month, next-month, today, start-day, range, end-day, time-selected */
+  div#select_date td.today {
+    /* background-color: #f9f9ce; */
+  }
+</style>
+</head>
+
+<body>
+  <div id="container">
+    <h2>DateTimeRangePicker</h2>
+    <span class="label">div#start_date_time</span>
+    <div id="start_date_time">
+    </div>
+    <span class="label">div#end_date_time</span>
+    <div id="end_date_time"></div>
+
+
+    <h2>DateRangePicker</h2>
+    <span class="label">div#start_date</span>
+    <div id="start_date">
+      <!-- <input type="hidden" class="end_date" value="2021-05-22"> -->
+    </div>
+    <span class="label">div#end_date</span>
+    <div id="end_date"></div>
+
+
+    <h2>DateTimePicker</h2>
+    <span class="label">div#select_datetime</span>
+    <div id="select_datetime"></div>
+
+
+    <h2>DatePicker</h2>
+    <span class="label">div#select_date</span>
+    <div id="select_date"></div>
+
+    <span class="label">div#select_date_2</span>
+    <div id="select_date_2"></div>
+
+    <span class="label">div#select_date_3</span>
+    <div id="select_date_3">
+      <input type="hidden" class="start_date" value="2022-08-23">
+    </div>
+  </div>
+</body>
+
+</html>

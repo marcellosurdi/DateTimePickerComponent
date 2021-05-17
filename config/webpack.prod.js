@@ -1,16 +1,23 @@
+const version = JSON.stringify( require( '../package.json' ).version ).replace( /"/g, '' );
 const paths = require( './project-paths' );
 const common = require( './webpack.common' );
-const webpack = require( 'webpack' );
 const { merge } = require( 'webpack-merge' );
 const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
-const TerserWebpackPlugin = require( 'terser-webpack-plugin' );
 const CssMinimizerWebpackPlugin = require( 'css-minimizer-webpack-plugin' );
+const TerserWebpackPlugin = require( 'terser-webpack-plugin' );
+const HtmlWebpackPlugin = require( 'html-webpack-plugin' );
+
 
 module.exports = ( env, argv ) => {
    return merge( common, {
       mode: 'production',
 
       devtool: false,
+
+      entry: {
+        "date-time-picker-component": paths.src + '/export.js',
+      },
+
 
       module: {
         rules: [
@@ -27,11 +34,24 @@ module.exports = ( env, argv ) => {
         ],
       },
 
-      plugins: [
-        new webpack.EnvironmentPlugin( { BUILD: ( env && env.BUILD ) ? env.BUILD : false } ),
+      output: {
+        library: {
+          name: 'DateTimePickerComponent',
+          type: 'umd',
+        },
+      },
 
+      plugins: [
         new MiniCssExtractPlugin({
           filename: 'css/[name].css',
+        }),
+
+        new HtmlWebpackPlugin({
+          filename: 'index.html',
+          title: 'index@' + version,
+          template: paths.static + '/tpl/export.html',
+          inject: false,
+          minify: false,
         }),
       ],
 

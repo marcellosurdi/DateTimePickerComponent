@@ -1,16 +1,16 @@
 /**
- * @module js/date-interval-picker
+ * @module js/date-range-picker
  * @author Marcello Surdi
  * @version 1.0.0
  *
  * @desc
- * This module contains the DateIntervalPicker class
+ * This module contains the DateRangePicker class
  */
 
 import { PickerBase } from './picker-base';
 
-DateIntervalPicker.prototype = Object.create( PickerBase.prototype );
-DateIntervalPicker.prototype.constructor = DateIntervalPicker;
+DateRangePicker.prototype = Object.create( PickerBase.prototype );
+DateRangePicker.prototype.constructor = DateRangePicker;
 
 
 
@@ -35,7 +35,7 @@ DateIntervalPicker.prototype.constructor = DateIntervalPicker;
  *  end_date: "2021-01-07"
  * } );
  */
-export function DateIntervalPicker( start_id, end_id, settings ) {
+export function DateRangePicker( start_id, end_id, settings ) {
   PickerBase.call( this );
 
 

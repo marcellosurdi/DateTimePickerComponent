@@ -48,7 +48,7 @@ const config = {
     publicPath: '/',
 
     library: {
-      name: 'DateTimeComponent',
+      name: 'DateTimePickerComponent',
       type: 'umd',
     },
 

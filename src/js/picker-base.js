@@ -65,7 +65,7 @@
  * @property {HTMLButtonElement} start_date_btn `button.date.start` inside `start_container`
  * @property {HTMLButtonElement} start_time_btn `button.time.start` inside `start_container`
  * @property {HTMLDivElement} start_picker `div.picker` inside `start_container`. It contains the calendar or the timetable
- * @property {HTMLDivElement} end_container Top level `div` container for end date/time buttons (end_* properties are present **only** if there's an interval)
+ * @property {HTMLDivElement} end_container Top level `div` container for end date/time buttons (end_* properties are present **only** if there's a range)
  * @property {HTMLButtonElement} end_date_btn `button.date.end` inside `end_container`
  * @property {HTMLButtonElement} end_time_btn `button.time.end` inside `end_container`
  * @property {HTMLDivElement} end_picker `div.picker` inside `end_container`. It contains the calendar or the timetable
@@ -77,7 +77,7 @@
  * @property {Date} prev_month Information about previous year/month relative to the picker just opened
  * @property {Date} next_month Information about next year/month relative to the picker just opened
  * @property {string} date_output Denotes the date format returned to the value attribute of `input.date_output` (accepted values are short_ISO, full_ISO and timestamp)
- * @property {number} min_interval Denotes the minimum interval in milliseconds that must elapse between `start_date` and `end_date`
+ * @property {number} min_interval Denotes the minimum DateTimeRangePicker in milliseconds that must elapse between `start_date` and `end_date`
  */
 export function PickerBase() {
   this.i18n = {
@@ -450,7 +450,7 @@ export function PickerBase() {
       }
     } );
 
-    // If there is not an interval, only the start date exists
+    // If there is not a range, only the start date exists
     if( btn.classList.contains( 'start' ) ) {
       picker = this.start_picker;
       close = this.end_picker;

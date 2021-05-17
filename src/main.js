@@ -1,7 +1,7 @@
 import './css/style.scss';
 import { DatePicker } from './js/date-picker';
 import { DateTimePicker } from './js/date-time-picker';
-import { DateIntervalPicker } from './js/date-interval-picker';
-import { DateTimeIntervalPicker } from './js/date-time-interval-picker';
+import { DateRangePicker } from './js/date-range-picker';
+import { DateTimeRangePicker } from './js/date-time-range-picker';
 
-export { DatePicker, DateTimePicker, DateIntervalPicker, DateTimeIntervalPicker }
+export { DatePicker, DateTimePicker, DateRangePicker, DateTimeRangePicker }

@@ -8,7 +8,7 @@ const HtmlWebpackPlugin = require( 'html-webpack-plugin' );
 
 const config = {
   entry: {
-    main: paths.src + '/main.js',
+    "date-time-picker-component": paths.src + '/main.js',
   },
 
   module: {

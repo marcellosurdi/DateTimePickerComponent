@@ -22,7 +22,7 @@ DatePicker.prototype.constructor = DatePicker;
  * @classdesc
  * Creates a date picker inside the `div` passed as parameter
  *
- * @param {string} id Id of the `div` element
+ * @param {string} id Id of the `div` element where to append the component
  * @param {object} [settings] Object with user defined values
  *
  * @example

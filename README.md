@@ -59,7 +59,9 @@ new DateTimePickerComponent.DatePicker( 'select_date', {
 );
 ```
 ## Usage
-The picker is dynamically appended to the `div` element passed as parameter. As the picker is not tied to an input text, the selected date is returned to the value attribute of `input.date_output`.
+
+### How does the component work?
+The HTML of the component is dynamically appended to the `div` element passed as parameter (see param sections below). As the picker **is not tied** to an input text, the selected date is returned to the value attribute of `input.date_output` inside the `div`.
 
 ### DatePicker
 This class allows to select a single date.
@@ -80,7 +82,7 @@ new DatePicker( 'select_date', {
 #### Params
 | Property | Type | Default | Description |
 | -------- | ---- | ------- | ----------- |
-| `id`         | `{string}` | None        | Id of the `div` element. **An error is thrown** if no value or invalid value is passed |
+| `id`         | `{string}` | None        | Id of the `div` element where to append the component. **An error is thrown** if no value or invalid value is passed |
 | [`settings`] | `{object}` | `undefined` | Object with user defined values |
 
 #### Settings
@@ -93,4 +95,52 @@ new DatePicker( 'select_date', {
 | `date_output`  | `{string}`       | `"short_ISO"`                   | Denotes the date format returned to the value attribute of `input.date_output` (accepted values are short_ISO (`"2030-01-05"`), full_ISO and timestamp) |
 
 ### Localization (i10n)
-All classes support property `l10n` to localize the component in your language. You have to pass an object to that property.
+All classes support property `l10n` to localize the component in your language. You just have to pass an object like the one below to that property.
+
+```
+let it = {
+  'jan':'Gen',
+  'feb':'Feb',
+  'mar':'Mar',
+  'apr':'Apr',
+  'may':'Mag',
+  'jun':'Giu',
+  'jul':'Lug',
+  'aug':'Ago',
+  'sep':'Set',
+  'oct':'Ott',
+  'nov':'Nov',
+  'dec':'Dic',
+  'jan_':'Gennaio',
+  'feb_':'Febbraio',
+  'mar_':'Marzo',
+  'apr_':'Aprile',
+  'may_':'Maggio',
+  'jun_':'Giugno',
+  'jul_':'Luglio',
+  'aug_':'Agosto',
+  'sep_':'Settembre',
+  'oct_':'Ottobre',
+  'nov_':'Novembre',
+  'dec_':'Dicembre',
+  'mon':'Lun',
+  'tue':'Mar',
+  'wed':'Mer',
+  'thu':'Gio',
+  'fri':'Ven',
+  'sat':'Sab',
+  'sun':'Dom',
+  'mon_':'Lunedì',
+  'tue_':'Martedì',
+  'wed_':'Mercoledì',
+  'thu_':'Giovedì',
+  'fri_':'Venerdì',
+  'sat_':'Sabato',
+  'sun_':'Domenica',
+};
+
+new DatePicker( 'select_date', {
+    l10n: it,
+  }
+);
+```

@@ -61,10 +61,10 @@ new DateTimePickerComponent.DatePicker( 'select_date', {
 ## Usage
 
 ### How does the component work?
-The HTML of the component is dynamically appended to the `div` element passed as parameter (see param sections below). As the picker **is not tied** to an input text, the selected date is returned to the value attribute of `input.date_output` inside the `div`.
+The HTML of the component is dynamically appended to the `div` element passed as parameter (see param sections below). As the picker **is not tied** to an input text, the selected date is returned to the value attribute of the `input.date_output` appended to the `div`.
 
 ### DatePicker
-This class allows to select a single date.
+This class allows to select a single date, [see the demo](https://www.marcellosurdi.name/date-time-picker-component/date-picker.html).
 
 ```
 import 'date-time-picker-component/dist/css/date-time-picker-component.min.css';
@@ -95,7 +95,7 @@ new DatePicker( 'select_date', {
 | `date_output`  | `{string}`       | `"short_ISO"`                   | Denotes the date format returned to the value attribute of `input.date_output` (accepted values are short_ISO (`"2030-01-05"`), full_ISO and timestamp) |
 
 ### Localization (i10n)
-All classes support property `l10n` to localize the component in your language. You just have to pass an object like the one below to that property.
+All classes support the `l10n` property to localize the component in your language. You just have to pass an object like the one below to that property.
 
 ```
 let it = {

@@ -38,7 +38,6 @@ const config = {
 
   output: {
     path: paths.build,
-    filename: 'js/[name].js',
     publicPath: '/',
 
     environment: {

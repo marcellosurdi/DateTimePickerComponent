@@ -35,6 +35,8 @@ module.exports = ( env, argv ) => {
       },
 
       output: {
+        filename: 'js/[name].min.js',
+
         library: {
           name: 'DateTimePickerComponent',
           type: 'umd',
@@ -43,7 +45,7 @@ module.exports = ( env, argv ) => {
 
       plugins: [
         new MiniCssExtractPlugin({
-          filename: 'css/[name].css',
+          filename: 'css/[name].min.css',
         }),
 
         new HtmlWebpackPlugin({

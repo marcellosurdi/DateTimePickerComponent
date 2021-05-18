@@ -675,7 +675,7 @@ export function PickerBase() {
    * @param {Date} [start_date_setting] Start selected date from settings
    * @param {Date} [first_date_setting] First selectable date from settings
    * @param {Date} [last_date_setting] Last selectable date from settings
-   * @param {number} [first_day_no] Day the week must start with. Accordingly to returned values of `Date.getDate` method, accepted range values are 0-6 where 0 means Sunday, 1 means Monday and so on
+   * @param {number} [first_day_no] Day the week must start with. Accordingly to the returned values of `Date.getDate` method, accepted range values are 0-6 where 0 means Sunday, 1 means Monday and so on
    *
    * @see {@link module:js/picker-base.PickerBase~getDateBetween|getDateBetween}
    * @see {@link module:js/picker-base.PickerBase~roundMinutes|roundMinutes}

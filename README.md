@@ -77,9 +77,9 @@ new DatePicker( 'select_date', {
 );
 ```
 
-| Property       | Type            | Default value                   | Description                                                                                                                                                         |
-| -------------- | --------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `first_date`   | `{Date|string}` | Current date                    | First selectable date. **All date values** must be a date string (in ISO format) or a date object                                                                   |
-| `start_date`   | `{Date|string}` | One day more than current date  | Start selected date                                                                                                                                                 |
-| `last_date`    | `{Date|string}` | One year more than `start_date` | Last selectable date                                                                                                                                                |
-| `first_day_no` | `{number}`      | `1`                             | Day the week must start with. Accordingly to returned values of `Date.getDate` method, accepted range values are 0-6 where 0 means Sunday, 1 means Monday and so on |
+| Property | Type | Default | Description |
+| -------- | ---- | ------- | ----------- |
+| `first_date`   | `{Date\|string}` | Current date                    | First selectable date. **All date values** must be a date string (in ISO format) or a date object |
+| `start_date`   | `{Date\|string}` | One day more than current date  | Start selected date |
+| `last_date`    | `{Date\|string}` | One year more than `start_date` | Last selectable date |
+| `first_day_no` | `{number}`       | `1`                             | Day the week must start with. Accordingly to the returned values of `Date.getDate` method, accepted range values are 0-6 where 0 means Sunday, 1 means Monday and so on |

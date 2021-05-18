@@ -31,12 +31,14 @@ import { DateTimeRangePicker } from "date-time-picker-component";
 ```
 
 ### Non-module environments
+DateTimePickerComponent works as well in non-module environments. You can include the necessary files from local
+
 ```
-<link href="local-path-to/date-time-picker-component.css" rel="stylesheet">
-<script src="local-path-to/date-time-picker-component.js"></script>
+<link href="local-path-to/date-time-picker-component.min.css" rel="stylesheet">
+<script src="local-path-to/date-time-picker-component.min.js"></script>
 ```
 
-or from [jsdeliver](https://www.jsdelivr.com/) (suggested):
+or from [jsdeliver CDN](https://www.jsdelivr.com/) (suggested)
 
 ```
 <link href="https://cdn.jsdelivr.net/npm/date-time-picker-component/dist/date-time-picker-component.min.css" rel="stylesheet">

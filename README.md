@@ -15,7 +15,8 @@ DateTimePickerComponent is delivered via npm:
 `npm install --save date-time-picker-component`
 
 ### Non-module anvironments
-`<link href="local-path-to/date-time-picker-component.css" rel="stylesheet"><script src="local-path-to/date-time-picker-component.js"></script>`
+`<link href="local-path-to/date-time-picker-component.css" rel="stylesheet">
+<script src="local-path-to/date-time-picker-component.js"></script>`
 
 or from [jsdeliver](https://www.jsdelivr.com/) (suggested):
 

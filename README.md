@@ -14,24 +14,34 @@ DateTimePickerComponent is delivered via npm:
 
 `npm install --save date-time-picker-component`
 
-### Non-module anvironments
-`<link href="local-path-to/date-time-picker-component.css" rel="stylesheet">`
-`<script src="local-path-to/date-time-picker-component.js"></script>`
-
-or from [jsdeliver](https://www.jsdelivr.com/) (suggested):
-
-`<link href="https://cdn.jsdelivr.net/npm/date-time-picker-component/dist/date-time-picker-component.min.css" rel="stylesheet">`
-`<script src="https://cdn.jsdelivr.net/npm/date-time-picker-component/dist/date-time-picker-component.min.js"></script>`
-
-## Usage
-DateTimePickerComponent comes in four different flavours:
+DateTimePickerComponent comes in **four different flavours**:
 
 - DatePicker;
 - DateTimePicker;
 - DateRangePicker;
 - DateTimeRangePicker.
 
-If you’re using a bundler (e.g. webpack), you'll need to import one or the ones you need.
+If you're using a bundler (e.g. webpack), you'll need to import one or the ones you need.
+
+```
+import { DatePicker } from "date-time-picker-component";
+import { DateTimePicker } from "date-time-picker-component";
+import { DateRangePicker } from "date-time-picker-component";
+import { DateTimeRangePicker } from "date-time-picker-component";
+```
+
+### Non-module environments
+```
+<link href="local-path-to/date-time-picker-component.css" rel="stylesheet">
+<script src="local-path-to/date-time-picker-component.js"></script>
+```
+
+or from [jsdeliver](https://www.jsdelivr.com/) (suggested):
+
+```
+<link href="https://cdn.jsdelivr.net/npm/date-time-picker-component/dist/date-time-picker-component.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/date-time-picker-component/dist/date-time-picker-component.min.js"></script>
+```
 
 ## Examples
 ...

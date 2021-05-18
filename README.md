@@ -14,7 +14,7 @@ DateTimePickerComponent is usually delivered via npm:
 
 `npm install --save date-time-picker-component`
 
-DateTimePickerComponent comes in **four different flavours**:
+DateTimePickerComponent exposes **four different classes**:
 
 1. DatePicker;
 2. DateTimePicker;
@@ -48,7 +48,7 @@ or from [jsdeliver CDN](https://www.jsdelivr.com/)
 <script src="https://cdn.jsdelivr.net/gh/marcellosurdi/DateTimePickerComponent/dist/js/date-time-picker-component.min.js"></script>
 ```
 
-In this use case you can access component features via `DateTimePickerComponent` object:
+In this use case you can access the classes of component via `DateTimePickerComponent` object:
 
 ```
 new DateTimePickerComponent.DatePicker( 'select_date', {

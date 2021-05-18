@@ -16,18 +16,20 @@ DateTimePickerComponent is delivered via npm:
 
 DateTimePickerComponent comes in **four different flavours**:
 
-- DatePicker;
-- DateTimePicker;
-- DateRangePicker;
-- DateTimeRangePicker.
+1. DatePicker;
+2. DateTimePicker;
+3. DateRangePicker;
+4. DateTimeRangePicker.
 
 If you're using a bundler (e.g. webpack), you'll need to import one or the ones you need.
 
 ```
-import { DatePicker } from "date-time-picker-component";
-import { DateTimePicker } from "date-time-picker-component";
-import { DateRangePicker } from "date-time-picker-component";
-import { DateTimeRangePicker } from "date-time-picker-component";
+import { DatePicker } from "date-time-picker-component/dist/js/date-time-picker-component.min";
+
+new DatePicker( 'select_date', {
+    first_day_no: 0
+  }
+);
 ```
 
 ### Non-module environments
@@ -41,9 +43,15 @@ DateTimePickerComponent works as well in non-module environments. You can includ
 or from [jsdeliver CDN](https://www.jsdelivr.com/) (suggested)
 
 ```
-<link href="https://cdn.jsdelivr.net/npm/date-time-picker-component/dist/date-time-picker-component.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/date-time-picker-component/dist/date-time-picker-component.min.js"></script>
+<link href="https://cdn.jsdelivr.net/gh/marcellosurdi/DateTimePickerComponent/dist/css/date-time-picker-component.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/gh/marcellosurdi/DateTimePickerComponent/dist/js/date-time-picker-component.min.js"></script>
 ```
 
-## Examples
-...
+In this use case you can access component features via `DateTimePickerComponent` object:
+
+```
+new DateTimePickerComponent.DatePicker( 'select_date', {
+    first_day_no: 0
+  }
+);
+```

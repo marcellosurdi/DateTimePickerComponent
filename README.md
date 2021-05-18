@@ -1,10 +1,10 @@
 # DateTimePickerComponent
 
 ## Description
-DateTimePickerComponent is a dependency-free web component written in pure JavaScript. It supports internationalization, date format, range selections and disabled dates.
+DateTimePickerComponent is a very lightweight and dependency-free web component written in pure JavaScript. It supports internationalization, date format, range selections and disabled dates.
 
-## Motivation
-Some time ago, during the development of some booking applications, I needed a very lightweight date time picker that didn't require any heavy dependecies. I didn't find anything that met all my needs, so I developed mine.
+## Why?
+Some time ago, during the development of some booking applications, I needed a date time picker that didn't require any heavy dependecies. I didn't find anything that met all my needs and browser's native implementations are incosistent, so I developed mine.
 
 ## Compatibility
 IE11 and all desktop and mobile recent browsers.

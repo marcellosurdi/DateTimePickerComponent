@@ -1,7 +1,7 @@
 {
   "name": "date-time-picker-component",
-  "description": "DateTimePickerComponent is a dependency-free web component written in pure JavaScript. It supports internationalization, date format, range selections and disabled dates.",
-  "version": "0.0.85",
+  "description": "DateTimePickerComponent is a very lightweight and dependency-free web component written in pure JavaScript. It supports internationalization, date format, range selections and disabled dates.",
+  "version": "0.0.86",
   "keywords": [
     "date",
     "time",

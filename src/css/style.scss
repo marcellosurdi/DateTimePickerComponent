@@ -14,7 +14,7 @@ $arrow_end: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width=
 
 
 // Top level containers
-div.datetime-container, div.datetime-container * { box-sizing: border-box; }
+div.datetime-container, div.datetime-container * { box-sizing: border-box; font-family: arial, sans-serif; }
 .fix-float::after { content: ''; display: table; clear: both; }
 div.datetime-container {
   position: relative;
@@ -51,7 +51,6 @@ div.datetime-container {
     button span.month-day, button span.hours {
       width: 45px;
       text-align: center;
-      font-family: arial, sans-serif;
       font-size: 36px;
     }
     button span.month-year { text-align: left; font-size: 16px; }

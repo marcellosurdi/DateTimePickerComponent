@@ -10,7 +10,7 @@ Some time ago, during the development of some booking applications, I needed a v
 IE11 and all desktop and mobile recent browsers.
 
 ## Getting started
-DateTimePickerComponent is delivered via npm:
+DateTimePickerComponent is usually delivered via npm:
 
 `npm install --save date-time-picker-component`
 
@@ -21,9 +21,10 @@ DateTimePickerComponent comes in **four different flavours**:
 3. DateRangePicker;
 4. DateTimeRangePicker.
 
-If you're using a bundler (e.g. webpack), you'll need to import one or the ones you need.
+If you're using a bundler like Webpack, you'll need to import one or the ones you need.
 
 ```
+import 'date-time-picker-component/dist/css/date-time-picker-component.min.css';
 import { DatePicker } from "date-time-picker-component/dist/js/date-time-picker-component.min";
 
 new DatePicker( 'select_date', {
@@ -40,7 +41,7 @@ DateTimePickerComponent works as well in non-module environments. You can includ
 <script src="local-path-to/date-time-picker-component.min.js"></script>
 ```
 
-or from [jsdeliver CDN](https://www.jsdelivr.com/) (suggested)
+or from [jsdeliver CDN](https://www.jsdelivr.com/)
 
 ```
 <link href="https://cdn.jsdelivr.net/gh/marcellosurdi/DateTimePickerComponent/dist/css/date-time-picker-component.min.css" rel="stylesheet">

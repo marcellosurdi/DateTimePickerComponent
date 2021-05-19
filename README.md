@@ -29,10 +29,7 @@ If you're using a bundler like Webpack, you'll need to import one or the ones yo
 import 'date-time-picker-component/dist/css/date-time-picker-component.min.css';
 import { DatePicker } from "date-time-picker-component/dist/js/date-time-picker-component.min";
 
-new DatePicker( 'select_date', {
-    first_day_no: 0
-  }
-);
+new DatePicker( 'select_date' );
 ```
 
 ### Non-module environments
@@ -53,20 +50,18 @@ or from [jsdeliver CDN](https://www.jsdelivr.com/)
 In this use case you can access the classes of component via `DateTimePickerComponent` object:
 
 ```
-new DateTimePickerComponent.DatePicker( 'select_date', {
-    first_day_no: 0
-  }
-);
+new DateTimePickerComponent.DatePicker( 'select_date' );
 ```
 ## Usage
 
 ### How does the component work?
-The HTML of the component is dynamically appended to the `div` element passed as parameter (see param sections below). As the picker **is not tied** to an input text, the selected date is returned to the value attribute of the `input.date_output` appended to the `div`.
+The HTML of the component is dynamically appended to the `div` element passed as parameter. As the picker **is not tied** to an input text, the selected date is returned to the value attribute of the `input.date_output` appended to the `div`.
 
 ### DatePicker
 This class allows to select a single date, [see the demo](https://www.marcellosurdi.name/date-time-picker-component/date-picker.html).
 
 ```
+// JavaScript
 import 'date-time-picker-component/dist/css/date-time-picker-component.min.css';
 import { DatePicker } from "date-time-picker-component/dist/js/date-time-picker-component.min";
 
@@ -79,20 +74,37 @@ new DatePicker( 'select_date', {
   }
 );
 ```
+
+```
+// HTML
+<body>
+  <div id="select_date"></div>
+</body>
+```
+
 #### Params
 | Property | Type | Default | Description |
 | -------- | ---- | ------- | ----------- |
 | `id`         | `{string}` | None        | Id of the `div` element where to append the component. **An error is thrown** if no value or invalid value is passed |
 | [`settings`] | `{object}` | `undefined` | Object with user defined values |
 
-#### Settings
+### Settings
+All classes support these properties:
+
 | Property | Type | Default | Description |
 | -------- | ---- | ------- | ----------- |
 | `first_date`   | `{Date\|string}` | Current date                    | First selectable date. **All date values** must be a date string (in ISO format) or a date object |
 | `start_date`   | `{Date\|string}` | One day more than current date  | Start selected date |
 | `last_date`    | `{Date\|string}` | One year more than `start_date` | Last selectable date |
-| `first_day_no` | `{number}`       | `1`                             | Day the week must start with. Accordingly to the returned values of `Date.getDate` method, accepted range values are 0-6 where 0 means Sunday, 1 means Monday and so on |
+| `first_day_no` | `{number}`       | `1` (Monday)                    | Day the week must start with. Accordingly to the returned values of `Date.getDate` method, accepted range values are 0-6 where 0 means Sunday, 1 means Monday and so on |
 | `date_output`  | `{string}`       | `"short_ISO"`                   | Denotes the date format returned to the value attribute of `input.date_output` (accepted values are short_ISO (`"2030-01-05"`), full_ISO and timestamp) |
+| `l10n`         | `{object}`       | Object with English strings     | Object that contains the strings for translation |
+
+Only the **DateRangePicker** and **DateTimeRangePicker** classes also support these properties:
+
+| Property | Type | Default | Description |
+| -------- | ---- | ------- | ----------- |
+| `end_date`     | `{Date\|string}` | One day more than `start_date`  | End selected date |
 
 ### Localization (i10n)
 All classes support the `l10n` property to localize the component in your language. You just have to pass an object like the one below to that property.

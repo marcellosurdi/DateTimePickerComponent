@@ -23,7 +23,7 @@ DateTimePicker.prototype.constructor = DateTimePicker;
  * Creates a date time picker inside the `div` passed as parameter
  *
  * @param {string} id Id of the `div` element where to append the component
- * @param {object} [settings] Object with user defined values
+ * @param {object} [settings={}] Object with user defined settings
  *
  * @example
  * // In settings object you can use either a date string (in ISO format) or a date object
@@ -33,7 +33,7 @@ DateTimePicker.prototype.constructor = DateTimePicker;
  *  last_date: new Date( 2021, 0, 29 )
  * } );
  */
-export function DateTimePicker( id, settings ) {
+export function DateTimePicker( id, settings = {} ) {
   PickerBase.call( this );
 
 

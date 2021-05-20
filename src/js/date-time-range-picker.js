@@ -22,9 +22,9 @@ DateTimeRangePicker.prototype.constructor = DateTimeRangePicker;
  * @classdesc
  * Creates a date time range picker inside the `div` elements passed as parameters
  *
- * @param {string} start_id Id of the `div` element that will contain the start date button
- * @param {string} end_id Id of the `div` element that will contain the end date button
- * @param {object} [settings] Object with user defined values
+ * @param {string} start_id Id of the `div` element that will contain the start date/time buttons
+ * @param {string} end_id Id of the `div` element that will contain the end date/time buttons
+ * @param {object} [settings={}] Object with user defined settings
  *
  * @example
  * // In settings object you can use either a date string (in ISO format) or a date object
@@ -35,7 +35,7 @@ DateTimeRangePicker.prototype.constructor = DateTimeRangePicker;
  *  end_date: "2021-01-07"
  * } );
  */
-export function DateTimeRangePicker( start_id, end_id, settings ) {
+export function DateTimeRangePicker( start_id, end_id, settings = {} ) {
   PickerBase.call( this );
 
 

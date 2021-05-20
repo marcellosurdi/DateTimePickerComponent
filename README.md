@@ -1,5 +1,4 @@
 # DateTimePickerComponent
-
 ## Description
 DateTimePickerComponent is a very lightweight and dependency-free web component written in pure JavaScript. It supports localization, date format, range selections and disabled dates.
 
@@ -10,7 +9,6 @@ Some time ago, during the development of some booking applications, I needed a d
 IE11 and all desktop and mobile recent browsers.
 
 ## Getting started
-
 ### Module environments
 DateTimePickerComponent is usually delivered via npm:
 
@@ -52,16 +50,58 @@ In this use case you can access the classes of component via `DateTimePickerComp
 ```
 new DateTimePickerComponent.DatePicker( 'select_date' );
 ```
+
 ## Usage
-
 ### How does the component work?
-The HTML of the component is dynamically appended to the `div` element passed as parameter. As the picker **is not tied** to an input text, the selected date is returned to the value attribute of the `input.date_output` appended to the `div`.
-
-### DatePicker
-This class allows to select a single date, [see the demo](https://www.marcellosurdi.name/date-time-picker-component/date-picker.html).
+When one of the classes of the component is called with `new` operator, like above example `new DatePicker( 'select_date' );`, the necessary HTML is dynamically appended to the `div#select_date`. For **Date*Picker** classes the HTML will look similar to these lines of code:
 
 ```
-// JavaScript
+<div class="buttons-container">
+  <button type="button" class="date start">
+    <span class="week-day">mon</span>
+    <span class="month-day">00</span>
+    <span class="month-year"><span>jan</span><br>2000</span>
+  </button>
+</div>
+<div class="picker"></div>
+<input type="hidden" class="date_output" value="">
+```
+
+For **DateTime*Picker** classes will look like below instead:
+
+```
+<div class="buttons-container fix-float">
+  <button type="button" class="date start w-50">
+    <span class="week-day">mon</span>
+    <span class="month-day">00</span>
+    <span class="month-year"><span>jan</span><br>2000</span>
+  </button>
+  <button type="button" class="time start w-50">
+    <span class="hours">00</span>
+    <span class="minutes">:00</span>
+  </button>
+</div>
+<div class="picker"></div>
+<input type="hidden" class="date_output" value="">
+```
+
+As you can see, the picker **is not tied** to an input text, so the selected date is always returned to the value attribute of the `input.date_output` appended to the `div`.
+
+### DatePicker
+This class allows to select a single date, [see the demo](https://www.marcellosurdi.name/demo/date-time-picker-component/date-picker.html).
+
+#### Params
+| Property | Type | Default | Description |
+| -------- | ---- | ------- | ----------- |
+| `id`         | `{string}` | None        | Id of the `div` element where to append the component. **An error is thrown** if no value or invalid value is passed |
+| [`settings`] | `{object}` | `undefined` | Object with user defined values |
+
+See the [settings section](https://github.com/marcellosurdi/DateTimePickerComponent#settings) to read supported properties details.
+
+#### Example
+Here a JavaScript example:
+
+```
 import 'date-time-picker-component/dist/css/date-time-picker-component.min.css';
 import { DatePicker } from "date-time-picker-component/dist/js/date-time-picker-component.min";
 
@@ -75,6 +115,8 @@ new DatePicker( 'select_date', {
 );
 ```
 
+And here the corresponding HTML:
+
 ```
 // HTML
 <body>
@@ -82,14 +124,8 @@ new DatePicker( 'select_date', {
 </body>
 ```
 
-#### Params
-| Property | Type | Default | Description |
-| -------- | ---- | ------- | ----------- |
-| `id`         | `{string}` | None        | Id of the `div` element where to append the component. **An error is thrown** if no value or invalid value is passed |
-| [`settings`] | `{object}` | `undefined` | Object with user defined values |
-
 ### Settings
-All classes support these properties:
+**All classes** support these properties:
 
 | Property | Type | Default | Description |
 | -------- | ---- | ------- | ----------- |
@@ -100,7 +136,7 @@ All classes support these properties:
 | `date_output`  | `{string}`       | `"short_ISO"`                   | Denotes the date format returned to the value attribute of `input.date_output` (accepted values are short_ISO (`"2030-01-05"`), full_ISO and timestamp) |
 | `l10n`         | `{object}`       | Object with English strings     | Object that contains the strings for translation |
 
-Only the **DateRangePicker** and **DateTimeRangePicker** classes also support these properties:
+Only the **Date*RangePicker** classes also support these properties:
 
 | Property | Type | Default | Description |
 | -------- | ---- | ------- | ----------- |

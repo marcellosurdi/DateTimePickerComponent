@@ -98,7 +98,7 @@ DatePicker and DateTimePicker classes allow to select a date or a date/time resp
 | Property | Type | Default | Description |
 | -------- | ---- | ------- | ----------- |
 | `id`              | `{string}` | None        | Id of the `div` element where to append the component. **An error is thrown** if no value or invalid value is passed |
-| [`settings`]      | `{object}` | `undefined` | Object with user defined settings |
+| [`settings`]      | `{object}` | `{}`        | Object with user defined settings |
 
 See the settings section below for more details.
 
@@ -136,7 +136,7 @@ DateRangePicker and DateTimeRangePicker classes allow to select a date range or 
 | -------- | ---- | ------- | ----------- |
 | `start_id`        | `{string}` | None        | Id of the `div` element where to append the component for start date. **An error is thrown** if no value or invalid value is passed |
 | `end_id`          | `{string}` | None        | Id of the `div` element where to append the component for end date. **An error is thrown** if no value or invalid value is passed |
-| [`settings`]      | `{object}` | `undefined` | Object with user defined settings |
+| [`settings`]      | `{object}` | `{}`        | Object with user defined settings |
 
 See the settings section below for more details.
 

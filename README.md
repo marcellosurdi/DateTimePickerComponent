@@ -2,11 +2,11 @@
 ## Description
 DateTimePickerComponent is a very lightweight and dependency-free web component written in pure JavaScript. It supports localization, date format, range selections and disabled dates.
 
-## Why?
-Some time ago, during the development of some booking applications, I needed a date time picker that didn't require any heavy dependencies. I didn't find anything that met all my needs and browser's native implementations are inconsistent, so I developed mine.
+## Motivation
+Some time ago, during the development of some booking applications, I needed a date time picker that didn't require any heavy dependencies. I didn't find anything that met all my needs and browser's native implementations are currently inconsistent, so I developed mine.
 
 ## Compatibility
-IE11 and all desktop and mobile recent browsers.
+All desktop and mobile recent browsers and IE11.
 
 ## Getting started
 ### Module environments
@@ -38,14 +38,14 @@ DateTimePickerComponent works as well in non-module environments. You can includ
 <script src="local-path-to/date-time-picker-component.min.js"></script>
 ```
 
-or from [jsdeliver CDN](https://www.jsdelivr.com/)
+or from [jsDelivr CDN](https://www.jsdelivr.com/)
 
 ```
 <link href="https://cdn.jsdelivr.net/gh/marcellosurdi/DateTimePickerComponent/dist/css/date-time-picker-component.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/gh/marcellosurdi/DateTimePickerComponent/dist/js/date-time-picker-component.min.js"></script>
 ```
 
-In this use case you can access the classes of component via `DateTimePickerComponent` object:
+In non-module environments you can access the classes of component via `DateTimePickerComponent` object:
 
 ```
 new DateTimePickerComponent.DatePicker( 'select_date' );
@@ -53,7 +53,9 @@ new DateTimePickerComponent.DatePicker( 'select_date' );
 
 ## Usage
 ### How does the component work?
-When one of the classes of the component is called with `new` operator, like above example `new DatePicker( 'select_date' );`, the necessary HTML is dynamically appended to the `div#select_date`. For **Date*Picker** classes the HTML will look similar to these lines of code:
+When one of the classes of the component is called with `new` operator, like above example `new DatePicker( 'select_date' );`, the necessary HTML is dynamically appended to the `div#select_date`.
+
+For **Date*Picker** classes the HTML will look similar to these lines of code:
 
 ```
 <div class="buttons-container">
@@ -85,7 +87,7 @@ For **DateTime*Picker** classes will look like below instead:
 <input type="hidden" class="date_output" value="">
 ```
 
-As you can see, the picker **is not tied** to an input text, so the selected date is always returned to the value attribute of the `input.date_output` appended to the `div`.
+As you can see, the picker **is not tied** to an input text, so the selected date is always returned to the value attribute of the `input.date_output` according to `settings.date_output` property, see the [settings section](https://github.com/marcellosurdi/DateTimePickerComponent#settings).
 
 ### DatePicker
 This class allows to select a single date, [see the demo](https://www.marcellosurdi.name/demo/date-time-picker-component/date-picker.html).
@@ -93,8 +95,8 @@ This class allows to select a single date, [see the demo](https://www.marcellosu
 #### Params
 | Property | Type | Default | Description |
 | -------- | ---- | ------- | ----------- |
-| `id`         | `{string}` | None        | Id of the `div` element where to append the component. **An error is thrown** if no value or invalid value is passed |
-| [`settings`] | `{object}` | `undefined` | Object with user defined values |
+| `id`              | `{string}` | None        | Id of the `div` element where to append the component. **An error is thrown** if no value or invalid value is passed |
+| [`settings`]      | `{object}` | `undefined` | Object with user defined values |
 
 See the [settings section](https://github.com/marcellosurdi/DateTimePickerComponent#settings) to read supported properties details.
 
@@ -115,7 +117,7 @@ new DatePicker( 'select_date', {
 );
 ```
 
-And here the corresponding HTML:
+And the corresponding HTML:
 
 ```
 // HTML
@@ -129,18 +131,19 @@ And here the corresponding HTML:
 
 | Property | Type | Default | Description |
 | -------- | ---- | ------- | ----------- |
-| `first_date`   | `{Date\|string}` | Current date                    | First selectable date. **All date values** must be a date string (in ISO format) or a date object |
-| `start_date`   | `{Date\|string}` | One day more than current date  | Start selected date |
-| `last_date`    | `{Date\|string}` | One year more than `start_date` | Last selectable date |
-| `first_day_no` | `{number}`       | `1` (Monday)                    | Day the week must start with. Accordingly to the returned values of `Date.getDate` method, accepted range values are 0-6 where 0 means Sunday, 1 means Monday and so on |
-| `date_output`  | `{string}`       | `"short_ISO"`                   | Denotes the date format returned to the value attribute of `input.date_output` (accepted values are short_ISO (`"2030-01-05"`), full_ISO and timestamp) |
-| `l10n`         | `{object}`       | Object with English strings     | Object that contains the strings for translation |
+| `first_date`      | `{Date\|string}` | Current date                    | First selectable date. **All date values** must be a date string (in ISO format) or a date object |
+| `start_date`      | `{Date\|string}` | One day more than current date  | Start selected date |
+| `last_date`       | `{Date\|string}` | One year more than `start_date` | Last selectable date |
+| `first_day_no`    | `{number}`       | `1` (Monday)                    | Day the week must start with. Accordingly to the returned values of `Date.getDate` method, accepted range values are 0-6 where 0 means Sunday, 1 means Monday and so on |
+| `date_output`     | `{string}`       | `"short_ISO"`                   | Denotes the date format returned to the value attribute of `input.date_output` (accepted values are short_ISO (`"2030-01-05"`), full_ISO and timestamp) |
+| `l10n`            | `{object}`       | Object with English strings     | Object that contains the strings for translation |
 
 Only the **Date*RangePicker** classes also support these properties:
 
 | Property | Type | Default | Description |
 | -------- | ---- | ------- | ----------- |
-| `end_date`     | `{Date\|string}` | One day more than `start_date`  | End selected date |
+| `end_date`        | `{Date\|string}` | One day more than `start_date`  | End selected date |
+| `min_range_hours` | `{number}`       | `1`                             | Denotes the minimum range expressed in hours that must elapse between `start_date` and `end_date` |
 
 ### Localization (i10n)
 All classes support the `l10n` property to localize the component in your language. You just have to pass an object like the one below to that property.

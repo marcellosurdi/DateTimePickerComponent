@@ -21,6 +21,8 @@ DateTimePickerComponent exposes **four different classes**:
 3. DateRangePicker;
 4. DateTimeRangePicker.
 
+Starting from now we'll refer to DatePicker and DateTimePicker as Date*Picker classes and we'll refer to DateRangePicker and DateTimeRangePicker as Date\*RangePicker classes instead.
+
 If you're using a bundler like Webpack, you'll need to import one or the ones you need.
 
 ```
@@ -55,7 +57,7 @@ new DateTimePickerComponent.DatePicker( 'select_date' );
 ### How does the component work?
 When one of the classes of the component is called with `new` operator, like above example `new DatePicker( 'select_date' );`, the necessary HTML is dynamically appended to the `div#select_date`.
 
-For [**Date*Picker** classes](https://github.com/marcellosurdi/DateTimePickerComponent#date*picker-classes) the HTML will look similar to these lines of code:
+For [**Date*Picker** classes](https://github.com/marcellosurdi/DateTimePickerComponent#datepicker-classes) the HTML will look similar to these lines of code:
 
 ```
 <div class="buttons-container">
@@ -69,7 +71,7 @@ For [**Date*Picker** classes](https://github.com/marcellosurdi/DateTimePickerCom
 <input type="hidden" class="date_output" value="">
 ```
 
-For **Date*RangePicker** classes will look like below instead:
+For [**Date*RangePicker** classes](https://github.com/marcellosurdi/DateTimePickerComponent#daterangepicker-classes) will look like below instead:
 
 ```
 <div class="buttons-container fix-float">
@@ -125,6 +127,10 @@ And the corresponding HTML:
   <div id="select_date"></div>
 </body>
 ```
+
+### Date*RangePicker classes
+#### Params
+#### Example
 
 ### Settings
 **All classes** support these properties:

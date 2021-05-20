@@ -23,7 +23,7 @@ DateTimePickerComponent exposes **four different classes**:
 3. DateRangePicker;
 4. DateTimeRangePicker.
 
-Starting from now we'll refer to DatePicker and DateTimePicker as **Date*Picker** classes and we'll refer to DateRangePicker and DateTimeRangePicker as **Date*RangePicker** classes instead.
+From now on we'll refer to DatePicker and DateTimePicker as **Date*Picker** classes and we'll refer to DateRangePicker and DateTimeRangePicker as **Date*RangePicker** classes instead.
 
 If you're using a bundler like Webpack, you'll need to import one class or the ones you need.
 
@@ -56,7 +56,7 @@ new DateTimePickerComponent.DatePicker( 'select_date' );
 ```
 
 ## Usage
-### How does the component work?
+### How does this component work?
 When one of the classes is called with `new` operator, like above example `new DatePicker( 'select_date' );`, the necessary HTML is dynamically appended to the `div#select_date`.
 
 For **Date*Picker** classes the resulting HTML will look similar to these lines of code:

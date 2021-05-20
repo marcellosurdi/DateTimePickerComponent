@@ -55,7 +55,7 @@ new DateTimePickerComponent.DatePicker( 'select_date' );
 ### How does the component work?
 When one of the classes of the component is called with `new` operator, like above example `new DatePicker( 'select_date' );`, the necessary HTML is dynamically appended to the `div#select_date`.
 
-For **Date*Picker** classes the HTML will look similar to these lines of code:
+For [**Date*Picker** classes](https://github.com/marcellosurdi/DateTimePickerComponent#date*picker-classes) the HTML will look similar to these lines of code:
 
 ```
 <div class="buttons-container">
@@ -69,7 +69,7 @@ For **Date*Picker** classes the HTML will look similar to these lines of code:
 <input type="hidden" class="date_output" value="">
 ```
 
-For **DateTime*Picker** classes will look like below instead:
+For **Date*RangePicker** classes will look like below instead:
 
 ```
 <div class="buttons-container fix-float">
@@ -89,8 +89,8 @@ For **DateTime*Picker** classes will look like below instead:
 
 As you can see, the picker **is not tied** to an input text, so the selected date is always returned to the value attribute of the `input.date_output` according to `settings.date_output` property, see the [settings section](https://github.com/marcellosurdi/DateTimePickerComponent#settings).
 
-### DatePicker
-This class allows to select a single date, [see the demo](https://www.marcellosurdi.name/demo/date-time-picker-component/date-picker.html).
+### Date*Picker classes
+DatePicker and DateTimePicker classes allow to select a date or a date/time respectively, [see the demo](https://www.marcellosurdi.name/demo/date-time-picker-component/date-picker.html).
 
 #### Params
 | Property | Type | Default | Description |

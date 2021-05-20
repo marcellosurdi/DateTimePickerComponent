@@ -6,7 +6,7 @@ DateTimePickerComponent is a very lightweight and dependency-free web component 
 Some time ago, during the development of some booking applications, I needed a date time picker that didn't require any heavy dependencies. I didn't find anything that met all my needs and browser's native implementations are currently inconsistent, so I developed mine.
 
 ## Compatibility
-All desktop and mobile recent browsers and IE11.
+All desktop/mobile recent browsers and IE11.
 
 ## Getting started
 ### Module environments
@@ -264,6 +264,6 @@ To maintaining state, that is to retain the user selected dates after a page rel
 
 The component will detect hidden input fields and read the content of the value attribute.
 
-### Links
+## Links
 1. [Online demo](https://www.marcellosurdi.name/demo/date-time-picker-component/)
 2. [JSDoc documentation](https://www.marcellosurdi.name/jsdoc/date-time-picker-component/) (if you are a developer probably you can find here other useful information).

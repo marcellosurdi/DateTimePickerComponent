@@ -1,7 +1,7 @@
 {
   "name": "date-time-picker-component",
   "description": "DateTimePickerComponent is a very lightweight and dependency-free web component written in pure JavaScript. It supports localization, date format, range selections and disabled dates.",
-  "version": "0.0.100",
+  "version": "0.0.101",
   "keywords": [
     "date",
     "time",
@@ -25,7 +25,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "webpack serve --config config/webpack.dev.js --open chrome",
-    "build": "webpack --config config/webpack.prod.js --env BUILD"
+    "build": "webpack --config config/webpack.prod.js"
   },
   "devDependencies": {
     "@babel/core": "^7.13.15",

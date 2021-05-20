@@ -55,7 +55,7 @@ export function DateRangePicker( start_id, end_id, settings = {} ) {
 
 
   // Start date
-  this.start_container.classList.add( 'datetime-container', 'fix-float' );
+  this.start_container.classList.add( 'datetime-container' );
   this.start_container.insertAdjacentHTML( 'afterbegin', this.getHTMLButton() );
   this.showDateAndTime( this.start_container, this.start_date );
 

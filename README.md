@@ -12,7 +12,9 @@ All desktop and mobile recent browsers and IE11.
 ### Module environments
 DateTimePickerComponent is usually delivered via npm:
 
-`npm install --save date-time-picker-component`
+```
+npm install --save date-time-picker-component
+```
 
 DateTimePickerComponent exposes **four different classes**:
 
@@ -23,9 +25,9 @@ DateTimePickerComponent exposes **four different classes**:
 
 Starting from now we'll refer to DatePicker and DateTimePicker as **Date*Picker** classes and we'll refer to DateRangePicker and DateTimeRangePicker as **Date*RangePicker** classes instead.
 
-If you're using a bundler like Webpack, you'll need to import one or the ones you need.
+If you're using a bundler like Webpack, you'll need to import one class or the ones you need.
 
-```
+``` javascript
 import 'date-time-picker-component/dist/css/date-time-picker-component.min.css';
 import { DatePicker } from "date-time-picker-component/dist/js/date-time-picker-component.min";
 
@@ -35,61 +37,65 @@ new DatePicker( 'select_date' );
 ### Non-module environments
 DateTimePickerComponent works as well in non-module environments. You can include the necessary files from local
 
-```
+``` html
 <link href="local-path-to/date-time-picker-component.min.css" rel="stylesheet">
 <script src="local-path-to/date-time-picker-component.min.js"></script>
 ```
 
 or from [jsDelivr CDN](https://www.jsdelivr.com/)
 
-```
+``` html
 <link href="https://cdn.jsdelivr.net/gh/marcellosurdi/DateTimePickerComponent/dist/css/date-time-picker-component.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/gh/marcellosurdi/DateTimePickerComponent/dist/js/date-time-picker-component.min.js"></script>
 ```
 
-In non-module environments you must access the classes of component via `DateTimePickerComponent` object:
+In non-module environments you must access the classes via `DateTimePickerComponent` object:
 
-```
+``` javascript
 new DateTimePickerComponent.DatePicker( 'select_date' );
 ```
 
 ## Usage
 ### How does the component work?
-When one of the classes of the component is called with `new` operator, like above example `new DatePicker( 'select_date' );`, the necessary HTML is dynamically appended to the `div#select_date`.
+When one of the classes is called with `new` operator, like above example `new DatePicker( 'select_date' );`, the necessary HTML is dynamically appended to the `div#select_date`.
 
-For **Date*Picker** classes the HTML will look similar to these lines of code:
+For **Date*Picker** classes the resulting HTML will look similar to these lines of code:
 
-```
-<div class="buttons-container">
-  <button type="button" class="date start">
-    <span class="week-day">mon</span>
-    <span class="month-day">00</span>
-    <span class="month-year"><span>jan</span><br>2000</span>
-  </button>
+``` html
+<div id="select_date" class="datetime-container">
+  <div class="buttons-container">
+    <button type="button" class="date start">
+      <span class="week-day">mon</span>
+      <span class="month-day">00</span>
+      <span class="month-year"><span>jan</span><br>2000</span>
+    </button>
+  </div>
+  <div class="picker"></div>
+  <input type="hidden" class="date_output" value="">
 </div>
-<div class="picker"></div>
-<input type="hidden" class="date_output" value="">
 ```
 
-For **Date*RangePicker** classes will look like below instead:
+For **Date*RangePicker** classes instead:
 
-```
-<div class="buttons-container fix-float">
-  <button type="button" class="date start w-50">
-    <span class="week-day">mon</span>
-    <span class="month-day">00</span>
-    <span class="month-year"><span>jan</span><br>2000</span>
-  </button>
-  <button type="button" class="time start w-50">
-    <span class="hours">00</span>
-    <span class="minutes">:00</span>
-  </button>
+``` html
+<div id="select_date" class="datetime-container fix-float">
+  <div class="buttons-container fix-float">
+    <button type="button" class="date start w-50">
+      <span class="week-day">mon</span>
+      <span class="month-day">00</span>
+      <span class="month-year"><span>jan</span><br>2000</span>
+    </button>
+    <button type="button" class="time start w-50">
+      <span class="hours">00</span>
+      <span class="minutes">:00</span>
+    </button>
+  </div>
+  <div class="picker"></div>
+  <input type="hidden" class="date_output" value="">
 </div>
-<div class="picker"></div>
-<input type="hidden" class="date_output" value="">
 ```
 
-As you can see, the picker **is not tied** to an input text, so the selected date is always returned to the value attribute of the `input.date_output` according to `settings.date_output` property, see the settings section.
+As you can see, the picker **is not tied** to an input text, so the selected date is always returned to the value attribute of the `input.date_output` according to `settings.date_output` property, see the settings section below.
 
 ### Date*Picker classes
 DatePicker and DateTimePicker classes allow to select a date or a date/time respectively, [see the online demo](https://www.marcellosurdi.name/demo/date-time-picker-component/).
@@ -100,12 +106,12 @@ DatePicker and DateTimePicker classes allow to select a date or a date/time resp
 | `id`              | `{string}` | None        | Id of the `div` element where to append the component. **An error is thrown** if no value or invalid value is passed |
 | [`settings`]      | `{object}` | `{}`        | Object with user defined settings |
 
-See the settings section below for more details.
+See the settings section for more details.
 
 #### Example
 Here a JavaScript example:
 
-```
+``` javascript
 import 'date-time-picker-component/dist/css/date-time-picker-component.min.css';
 import { DatePicker } from "date-time-picker-component/dist/js/date-time-picker-component.min";
 
@@ -121,8 +127,7 @@ new DatePicker( 'select_date', {
 
 And the corresponding HTML:
 
-```
-// HTML
+``` html
 <body>
   <div id="select_date"></div>
 </body>
@@ -134,16 +139,16 @@ DateRangePicker and DateTimeRangePicker classes allow to select a date range or 
 #### Params
 | Property | Type | Default | Description |
 | -------- | ---- | ------- | ----------- |
-| `start_id`        | `{string}` | None        | Id of the `div` element where to append the component for start date. **An error is thrown** if no value or invalid value is passed |
-| `end_id`          | `{string}` | None        | Id of the `div` element where to append the component for end date. **An error is thrown** if no value or invalid value is passed |
+| `start_id`        | `{string}` | None        | Id of the `div` element where to append the component for the start date. **An error is thrown** if no value or invalid value is passed |
+| `end_id`          | `{string}` | None        | Id of the `div` element where to append the component for the end date. **An error is thrown** if no value or invalid value is passed |
 | [`settings`]      | `{object}` | `{}`        | Object with user defined settings |
 
-See the settings section below for more details.
+See the settings section for more details.
 
 #### Example
 Here a JavaScript example:
 
-```
+``` javascript
 import 'date-time-picker-component/dist/css/date-time-picker-component.min.css';
 import { DateRangePicker } from "date-time-picker-component/dist/js/date-time-picker-component.min";
 
@@ -160,8 +165,7 @@ new DateRangePicker( 'start_date', 'end_date', {
 
 And the corresponding HTML:
 
-```
-// HTML
+``` html
 <body>
   <div id="start_date"></div>
   <div id="end_date"></div>
@@ -190,7 +194,7 @@ Only the **Date*RangePicker** classes also support these properties:
 ### Localization (i10n)
 All classes support the `l10n` property to localize the component in your language. You just have to pass an object like the one below to that property.
 
-```
+``` javascript
 let it = {
   'jan':'Gen',
   'feb':'Feb',
@@ -238,21 +242,28 @@ new DatePicker( 'select_date', {
 );
 ```
 
-### Overwriting settings.start_date and settings.end_date from HTML
-After a page reload due, for istance, to a failed validation, you may need to overwrite `settings.start_date` and `settings.end_date` with user selected dates. It may be inconvenient to edit a separate js file on reload if the class instantiation is there. It can be useful overwriting those properties via an input hidden element instead, in this way:
+### Maintaining state
+To maintaining state, that is to retain the user selected dates after a page reload due, for instance, to a failed validation, you have to manually add the `input.date_output` inside the `div` in this way:
 
-```
+``` html
 <body>
   <!-- Date*Picker classes -->
   <div id="select_date">
-    <input type="hidden" class="start_date" value="2030-05-22">
+    <input type="hidden" class="date_output" value="2030-05-22">
   </div>
 
   <!-- Date*RangePicker classes -->
   <div id="start_date">
-    <input type="hidden" class="start_date" value="2030-05-22">
-    <input type="hidden" class="end_date" value="2030-05-22T10:00:00">
+    <input type="hidden" class="date_output" value="2030-05-22">
   </div>
-  <div id="end_date"></div>
+  <div id="end_date">
+    <input type="hidden" class="date_output" value="2030-05-22T10:00:00">
+  </div>
 </body>
 ```
+
+The component will detect hidden input fields and read the content of the value attribute.
+
+### Links
+1. [Online demo](https://www.marcellosurdi.name/demo/date-time-picker-component/)
+2. [JSDoc documentation](https://www.marcellosurdi.name/jsdoc/date-time-picker-component/) (if you are a developer probably you can find here other useful information).

@@ -40,7 +40,7 @@ export function DateRangePicker( start_id, end_id, settings = {} ) {
 
 
   // Settings
-  this.i18n = ( settings?.i18n ) ? settings.i18n : this.i18n;
+  this.i18n = ( settings?.l10n ) ? settings.l10n : this.i18n;
   this.date_output = ( settings?.date_output ) ? settings.date_output : 'short_ISO';
   this.min_range = ( settings?.min_range_hours ) ? ( settings.min_range_hours * 60 * 60 * 1000 ) : ( 1 * 60 * 60 * 1000 );
 

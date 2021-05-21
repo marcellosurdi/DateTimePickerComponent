@@ -6,9 +6,9 @@
  * @desc
  * This module contains the PickerBase class that serves as a base for Date*Picker classes.
  *
- * @todo Provide support to disable days and hours even if these are between `first_date` and `last_date`
- * @todo Provide support for touch events
  * @todo Provide a year/month picker
+ * @todo Provide support for disabling arbitrary days and hours between `first_date` and `last_date`
+ * @todo Provide support for touch events
  */
 
 // IE11 backcompatibility notes

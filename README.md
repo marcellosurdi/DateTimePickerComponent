@@ -243,7 +243,7 @@ new DatePicker( 'select_date', {
 ```
 
 ### Maintaining state
-To maintaining state, that is to retain the user selected dates after a page reload due, for instance, to a failed validation, you have to manually add the `input.date_output` inside the `div` in this way:
+To retain the user selected dates after a page reload due, for instance, to a failed validation, you have to manually add the `input.date_output` inside the `div` in this way:
 
 ``` html
 <body>
@@ -262,7 +262,12 @@ To maintaining state, that is to retain the user selected dates after a page rel
 </body>
 ```
 
-The component will detect hidden input fields and read the content of the value attribute.
+The component will detect hidden input fields and print the content of the value attribute as default value.
+
+## `@todo` list
+1. Provide a year/month picker
+2. Provide support for disabling arbitrary days and hours between `first_date` and `last_date`
+3. Provide support for swiping months
 
 ## Links
 1. [Online demo](https://www.marcellosurdi.name/demo/date-time-picker-component/)

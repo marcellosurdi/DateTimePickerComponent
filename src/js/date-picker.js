@@ -38,7 +38,7 @@ export function DatePicker( id, settings = {} ) {
 
 
   // Settings
-  this.i18n = ( settings?.i18n ) ? settings.i18n : this.i18n;
+  this.i18n = ( settings?.l10n ) ? settings.l10n : this.i18n;
   this.date_output = ( settings?.date_output ) ? settings.date_output : 'short_ISO';
 
   const start_date = ( settings?.start_date ) ? settings.start_date : null;

@@ -149,16 +149,17 @@ Here a JavaScript example:
 
 ``` javascript
 import 'date-time-picker-component/dist/css/date-time-picker-component.min.css';
-import { DateRangePicker } from "date-time-picker-component/dist/js/date-time-picker-component.min";
+import { DateTimeRangePicker } from "date-time-picker-component/dist/js/date-time-picker-component.min";
 
-new DateRangePicker( 'start_date', 'end_date', {
+new DateTimeRangePicker( 'start_date_time', 'end_date_time', {
   first_date: "2030-01-02",
-  start_date: "2030-01-05",
-  end_date: "2030-01-07",
+  start_date: "2030-01-05T16:00:00",
+  end_date: "2030-01-06T18:00:00",
   last_date: new Date( 2030, 0, 29 ),
-  first_day_no: 0,
-  date_output: "short_ISO",
-  min_range_hours: 3,
+  first_day_no: 1,
+  date_output: "timestamp",
+  min_range_hours: 18,
+  l10n: it
 } );
 ```
 

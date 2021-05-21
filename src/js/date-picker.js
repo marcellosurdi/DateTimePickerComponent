@@ -28,9 +28,11 @@ DatePicker.prototype.constructor = DatePicker;
  * @example
  * // In settings object you can use either a date string (in ISO format) or a date object
  * new DatePicker( 'id', {
- *  first_date: "2021-01-02",
- *  start_date: "2021-01-05",
- *  last_date: new Date( 2021, 0, 29 )
+ * first_date: "2030-01-02",
+ * start_date: "2030-01-05",
+ * last_date: new Date( 2030, 0, 29 ),
+ * first_day_no: 0,
+ * date_output: "timestamp",
  * } );
  */
 export function DatePicker( id, settings = {} ) {
@@ -44,13 +46,13 @@ export function DatePicker( id, settings = {} ) {
   const start_date = ( settings?.start_date ) ? settings.start_date : null;
   const first_date = ( settings?.first_date ) ? settings.first_date : null;
   const last_date = ( settings?.last_date ) ? settings.last_date : null;
-  const first_day_no = ( typeof settings?.first_day_no !== 'undefined' ) ? settings.first_day_no : 1;
+  const first_day_no = ( typeof settings?.first_day_no !== 'undefined' ) ? settings.first_day_no : 0;
   this.setStartPickerProps( id, start_date, first_date, last_date, first_day_no );
 
 
   // Start date
   this.start_container.classList.add( 'datetime-container' );
-  this.start_container.insertAdjacentHTML( 'afterbegin', this.getHTMLButton() );
+  this.start_container.insertAdjacentHTML( 'afterbegin', this.getHTMLButton( 'start' ) );
   this.showDateAndTime( this.start_container, this.start_date );
 
   this.start_date_btn = this.start_container.querySelector( 'button.date.start' );

@@ -25,7 +25,7 @@ DateTimePickerComponent exposes **four different classes**:
 
 From now on we'll refer to DatePicker and DateTimePicker as **Date*Picker** classes and we'll refer to DateRangePicker and DateTimeRangePicker as **Date*RangePicker** classes instead.
 
-If you're using a bundler like Webpack, you'll need to import one class or the ones you need.
+If you're using a bundler like Webpack, you'll need to import the class you need.
 
 ``` javascript
 import 'date-time-picker-component/dist/css/date-time-picker-component.min.css';
@@ -116,13 +116,12 @@ import 'date-time-picker-component/dist/css/date-time-picker-component.min.css';
 import { DatePicker } from "date-time-picker-component/dist/js/date-time-picker-component.min";
 
 new DatePicker( 'select_date', {
-    first_date: "2030-01-02",
-    start_date: "2030-01-05",
-    last_date: new Date( 2030, 0, 29 ),
-    first_day_no: 0,
-    date_output: "short_ISO",
-  }
-);
+  first_date: "2030-01-02",
+  start_date: "2030-01-05",
+  last_date: new Date( 2030, 0, 29 ),
+  first_day_no: 0,
+  date_output: "timestamp",
+} );
 ```
 
 And the corresponding HTML:
@@ -180,8 +179,8 @@ And the corresponding HTML:
 | `first_date`      | `{Date\|string}` | Current date                    | First selectable date. **All date values** must be a date string (in ISO format) or a date object |
 | `start_date`      | `{Date\|string}` | One day more than current date  | Start selected date |
 | `last_date`       | `{Date\|string}` | One year more than `start_date` | Last selectable date |
-| `first_day_no`    | `{number}`       | `1` (Monday)                    | Day the week must start with. Accordingly to the returned values of `Date.getDate` method, accepted range values are 0-6 where 0 means Sunday, 1 means Monday and so on |
-| `date_output`     | `{string}`       | `"short_ISO"`                   | Denotes the date format returned to the value attribute of `input.date_output` (accepted values are short_ISO (`"2030-01-05"`), full_ISO and timestamp) |
+| `first_day_no`    | `{number}`       | `0` (Sunday)                    | Day the week must start with. Similarly to the returned values of `Date.getDate` method, accepted range values are 0-6 where 0 means Sunday, 1 means Monday and so on |
+| `date_output`     | `{string}`       | `"short_ISO"`                   | Denotes the date format returned to the value attribute of `input.date_output` (accepted values are short_ISO (`"2030-01-05"`), full_ISO (`"2021-07-16T09:30:00"`) and timestamp (without milliseconds)) |
 | `l10n`            | `{object}`       | Object with English strings     | Object that contains the strings for translation |
 
 Only the **Date*RangePicker** classes also support these properties:
@@ -189,10 +188,10 @@ Only the **Date*RangePicker** classes also support these properties:
 | Property | Type | Default | Description |
 | -------- | ---- | ------- | ----------- |
 | `end_date`        | `{Date\|string}` | One day more than `start_date`  | End selected date |
-| `min_range_hours` | `{number}`       | `1`                             | Denotes the minimum range expressed in hours that must elapse between `start_date` and `end_date` |
+| `min_range_hours` | `{number}`       | `1`                             | The minimum range expressed in hours that must elapse between `start_date` and `end_date` |
 
 ### Localization (i10n)
-All classes support the `l10n` property to localize the component in your language. You just have to pass an object like the one below to that property.
+All classes support the `settings.l10n` property to localize the component in your language. You just have to pass an object like the one below to that property.
 
 ``` javascript
 let it = {
@@ -242,6 +241,9 @@ new DatePicker( 'select_date', {
 );
 ```
 
+### Styles customization
+All classes support the `settings.styles` property for styles customizing. All you need to do is...
+
 ### Maintaining state
 To retain the user selected dates after a page reload due, for instance, to a failed validation, you have to manually add the `input.date_output` inside the `div` in this way:
 
@@ -262,12 +264,12 @@ To retain the user selected dates after a page reload due, for instance, to a fa
 </body>
 ```
 
-The component will detect hidden input fields and print the content of the value attribute as default value.
+The component will detect hidden input fields and print the content of the value attribute as default.
 
-## `@todo` list
-1. Provide a year/month picker
-2. Provide support for disabling arbitrary days and hours between `first_date` and `last_date`
-3. Provide support for swiping months
+## To do list
+1. Provide a year/month picker.
+2. Provide support for disabling arbitrary days/hours between `first_date` and `last_date`.
+3. Provide support for swiping months.
 
 ## Links
 1. [Online demo](https://www.marcellosurdi.name/demo/date-time-picker-component/)

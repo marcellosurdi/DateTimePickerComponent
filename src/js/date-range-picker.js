@@ -47,7 +47,7 @@ export function DateRangePicker( start_id, end_id, settings = {} ) {
   const start_date = ( settings?.start_date ) ? settings.start_date : null;
   const first_date = ( settings?.first_date ) ? settings.first_date : null;
   const last_date = ( settings?.last_date ) ? settings.last_date : null;
-  const first_day_no = ( typeof settings?.first_day_no !== 'undefined' ) ? settings.first_day_no : 1;
+  const first_day_no = ( typeof settings?.first_day_no !== 'undefined' ) ? settings.first_day_no : 0;
   this.setStartPickerProps( start_id, start_date, first_date, last_date, first_day_no );
 
   const end_date = ( settings?.end_date ) ? settings.end_date : null;
@@ -56,7 +56,7 @@ export function DateRangePicker( start_id, end_id, settings = {} ) {
 
   // Start date
   this.start_container.classList.add( 'datetime-container' );
-  this.start_container.insertAdjacentHTML( 'afterbegin', this.getHTMLButton() );
+  this.start_container.insertAdjacentHTML( 'afterbegin', this.getHTMLButton( 'start' ) );
   this.showDateAndTime( this.start_container, this.start_date );
 
   this.start_date_btn = this.start_container.querySelector( 'button.date.start' );
@@ -66,8 +66,8 @@ export function DateRangePicker( start_id, end_id, settings = {} ) {
 
 
   // End date
-  this.end_container.classList.add( 'datetime-container', 'fix-float' );
-  this.end_container.insertAdjacentHTML( 'afterbegin', this.getHTMLButton( 'date', 'end' ) );
+  this.end_container.classList.add( 'datetime-container' );
+  this.end_container.insertAdjacentHTML( 'afterbegin', this.getHTMLButton( 'end' ) );
   this.showDateAndTime( this.end_container, this.end_date );
 
   this.end_date_btn = this.end_container.querySelector( 'button.date.end' );

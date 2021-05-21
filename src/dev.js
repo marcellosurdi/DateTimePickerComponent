@@ -47,28 +47,37 @@ let it = {
 };
 
 
-new DateTimeRangePicker( 'start_date_time', 'end_date_time', {
-  last_date: '2021-05-30T20:00:00',
-  min_range_hours: 18
+new DatePicker( 'select_date' );
+
+new DatePicker( 'select_date_2', {
+  first_date: "2030-01-02",
+  start_date: "2030-01-05",
+  last_date: new Date( 2030, 0, 29 ),
+  first_day_no: 0,
+  date_output: "timestamp",
+} );
+
+new DatePicker( 'select_date_3', { first_day_no: 0 } );
+
+
+new DateTimePicker( 'select_datetime', {
+  first_day_no: 1,
+  l10n: it
 } );
 
 
 new DateRangePicker( 'start_date', 'end_date', {
-  min_range_hours: 3,
-  l10n: it
+  min_range_hours: 48,
 } );
 
 
-new DateTimePicker( 'select_datetime', { l10n: it } );
-
-
-new DatePicker( 'select_date', { first_day_no: 0 } );
-
-new DatePicker( 'select_date_2', {
-  first_date: "2020-12-01",
-  start_date: "2021-01-05",
-  last_date: new Date( 2021, 0, 29 ),
+new DateTimeRangePicker( 'start_date_time', 'end_date_time', {
+  first_date: "2030-01-02",
+  start_date: "2030-01-05T16:00:00",
+  end_date: "2030-01-06T18:00:00",
+  last_date: new Date( 2030, 0, 29 ),
+  first_day_no: 1,
+  date_output: "timestamp",
+  min_range_hours: 18,
   l10n: it
 } );
-
-new DatePicker( 'select_date_3', { first_day_no: 0 } );

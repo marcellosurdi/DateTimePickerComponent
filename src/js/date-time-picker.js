@@ -44,13 +44,13 @@ export function DateTimePicker( id, settings = {} ) {
   const start_date = ( settings?.start_date ) ? settings.start_date : null;
   const first_date = ( settings?.first_date ) ? settings.first_date : null;
   const last_date = ( settings?.last_date ) ? settings.last_date : null;
-  const first_day_no = ( typeof settings?.first_day_no !== 'undefined' ) ? settings.first_day_no : 1;
+  const first_day_no = ( typeof settings?.first_day_no !== 'undefined' ) ? settings.first_day_no : 0;
   this.setStartPickerProps( id, start_date, first_date, last_date, first_day_no );
 
 
   // Start date
   this.start_container.classList.add( 'datetime-container', 'fix-float' );
-  this.start_container.insertAdjacentHTML( 'afterbegin', this.getHTMLButton( 'datetime' ) );
+  this.start_container.insertAdjacentHTML( 'afterbegin', this.getHTMLButton( 'start', 'datetime' ) );
   this.showDateAndTime( this.start_container, this.start_date );
 
   this.start_date_btn = this.start_container.querySelector( 'button.date.start' );

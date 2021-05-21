@@ -4,11 +4,11 @@
  * @version 1.0.0
  *
  * @desc
- * This module contains the PickerBase class that serves as a base for Date*Picker classes.
+ * This module contains the PickerBase class that serves as a base for all classes.
  *
  * @todo Provide a year/month picker
  * @todo Provide support for disabling arbitrary days and hours between `first_date` and `last_date`
- * @todo Provide support for touch events
+ * @todo Provide support for swiping months
  */
 
 // IE11 backcompatibility notes
@@ -77,7 +77,7 @@
  * @property {Date} prev_month Information about previous year/month relative to the picker just opened
  * @property {Date} next_month Information about next year/month relative to the picker just opened
  * @property {string} date_output Denotes the date format returned to the value attribute of `input.date_output` (accepted values are short_ISO, full_ISO and timestamp)
- * @property {number} min_range Denotes the minimum range in milliseconds that must elapse between `start_date` and `end_date`
+ * @property {number} min_range The minimum range in milliseconds that must elapse between `start_date` and `end_date`
  */
 export function PickerBase() {
   this.i18n = {
@@ -347,12 +347,15 @@ export function PickerBase() {
    * @desc
    * Returns HTML for buttons. It's used to populate `start_container` and `end_container`.
    *
+   * @param {string} mode 'start' or 'end'
    * @param {string} type 'date' or 'datetime'
-   * @param {string} mode='start' 'start' or 'end'
    * @return {string} HTML for requested button
    */
-  this.getHTMLButton = function( type, mode = 'start' ) {
+  this.getHTMLButton = function( mode, type ) {
     let html;
+    const input = ( !this[ mode + '_container' ].querySelector( 'input.date_output' ) )
+      ? '<input type="hidden" class="date_output" value="">'
+      : '';
 
     switch( type ) {
       case 'datetime':
@@ -369,7 +372,7 @@ export function PickerBase() {
           </button>
         </div>
         <div class="picker"></div>
-        <input type="hidden" class="date_output" value="">`;
+        ${ input }`;
       break;
       default:
         html =
@@ -381,7 +384,7 @@ export function PickerBase() {
           </button>
         </div>
         <div class="picker"></div>
-        <input type="hidden" class="date_output" value="">`;
+        ${ input }`;
     }
 
     return html;
@@ -646,7 +649,7 @@ export function PickerBase() {
 
     // Default end selected date is one day more than start selected date
     const end_date_default = new Date( this.start_date.getTime() + this.min_range );
-    let end_date = getDateBetween( end_date_default, end_date_setting, this.start_container.querySelector( 'input.end_date' ) );
+    let end_date = getDateBetween( end_date_default, end_date_setting, el.querySelector( 'input.date_output' ) );
     // End selected date must be greater than start selected date
     if( end_date < this.start_date) {
       end_date = end_date_default;
@@ -675,7 +678,7 @@ export function PickerBase() {
    * @param {Date} [start_date_setting] Start selected date from settings
    * @param {Date} [first_date_setting] First selectable date from settings
    * @param {Date} [last_date_setting] Last selectable date from settings
-   * @param {number} [first_day_no] Day the week must start with. Accordingly to the returned values of `Date.getDate` method, accepted range values are 0-6 where 0 means Sunday, 1 means Monday and so on
+   * @param {number} [first_day_no] Day the week must start with. Similarly to the returned values of `Date.getDate` method, accepted range values are 0-6 where 0 means Sunday, 1 means Monday and so on
    *
    * @see {@link module:js/picker-base.PickerBase~getDateBetween|getDateBetween}
    * @see {@link module:js/picker-base.PickerBase~roundMinutes|roundMinutes}
@@ -689,7 +692,7 @@ export function PickerBase() {
 
     // Default start selected date is one day more than current date
     const start_date_default = new Date( Date.now() + ms_per_day );
-    let start_date = getDateBetween( start_date_default, start_date_setting, el.querySelector( 'input.start_date' ) );
+    let start_date = getDateBetween( start_date_default, start_date_setting, el.querySelector( 'input.date_output' ) );
 
     // Default first selectable date is the current date
     const first_date_default = new Date;
@@ -959,7 +962,7 @@ export function PickerBase() {
   /**
    * @desc
    * Returns a date depending on these precedence criteria:
-   * - the date provided in a hidden input field (if any) takes priority over other dates;
+   * - the date provided in a hidden input field takes priority over other dates;
    * - then follows the date provided by the settings object;
    * - default date provided by the {@link module:js/picker-base.PickerBase#setStartPickerProps|setStartPickerProps} method comes last.
    *

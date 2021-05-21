@@ -2,34 +2,59 @@
 <html lang='it'>
 
 <head>
-<title><%= htmlWebpackPlugin.options.title %></title>
-<meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'>
-<meta name="format-detection" content="telephone=no">
-<style>
-  html, body { margin: 0; padding: 0; background: #eee; height: 100%; font: 100% arial, sans-serif; color: #444; }
-  div#container { margin: 10px auto; background: #fff; max-width: 640px; padding: 10px; }
-  h2:not(:first-child) { margin-top: 75px; }
-  span.label { text-transform: uppercase; font-size: 14px; }
-
-  /* Available classes: prev-month, next-month, today, start-day, range, end-day, time-selected */
-  div#select_date td.today {
-    /* background-color: #f9f9ce; */
-  }
-</style>
+  <title><%= htmlWebpackPlugin.options.title %></title>
+  <meta charset='utf-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <meta name="format-detection" content="telephone=no">
+  <style>
+    html, body { margin: 0; padding: 0; height: 100%; font: 100% arial, sans-serif; color: #24292e; }
+    div#container { border-radius: 5px; border: 1px solid #eaecef; margin: 25px auto; max-width: 900px; padding: 10px; }
+    div#footer { background-color: #eee; padding: 10px; text-align: center; font-size: 14px; }
+    h1, h2 { border-bottom: 1px solid #eaecef; padding-bottom: 5px; word-break: break-all; }
+    div ~ h2 { margin-top: 75px; }
+    span.label { display: block; padding: 5px 0; }
+    code { background: rgba(27, 31, 35, 0.05); font-size: 16px; }
+    a { text-decoration: none; color: #5466d9; }
+    a:hover { text-decoration: underline; }
+  </style>
 </head>
 
 <body>
   <div id="container">
-    <h2>DateTimeRangePicker</h2>
-    <span class="label">div#start_date_time</span>
-    <div id="start_date_time">
+    <h1>DateTimePickerComponent</h1>
+    <p>
+      DateTimePickerComponent is a very lightweight and dependency-free web component written in pure JavaScript. It supports localization, date format, range selections and disabled dates.
+    </p>
+
+    <h2>DatePicker</h2>
+    <p>
+      DatePicker class allows you to select a <strong>single date</strong>. See the <a href="https://github.com/marcellosurdi/DateTimePickerComponent#datepicker-classes">corresponding documentation</a> on GitHub.
+    </p>
+    <span class="label"><strong>Example 1</strong> - Default values (<code>div#select_date</code>)</span>
+    <div id="select_date"></div>
+
+    <span class="label"><strong>Example 2</strong> - Settings values (<code>div#select_date_2</code>)</span>
+    <div id="select_date_2"></div>
+
+    <span class="label"><strong>Example 3</strong> - <code>input.date_output</code> manually added (<code>div#select_date_3</code>)</span>
+    <div id="select_date_3">
+      <input type="hidden" class="date_output" value="2021-05-23">
     </div>
-    <span class="label">div#end_date_time</span>
-    <div id="end_date_time"></div>
+
+
+    <h2>DateTimePicker</h2>
+    <p>
+      DateTimePicker class allows you to select a <strong>single date/time</strong>. See the <a href="https://github.com/marcellosurdi/DateTimePickerComponent#datepicker-classes">corresponding documentation</a> on GitHub.
+    </p>
+    <span class="label"><strong>Example 4</strong> - Italian localization (<code>div#select_datetime</code>)</span>
+    <div id="select_datetime"></div>
 
 
     <h2>DateRangePicker</h2>
+    <p>
+      DateRangePicker class allows you to select a <strong>date range</strong>. See the <a href="https://github.com/marcellosurdi/DateTimePickerComponent#daterangepicker-classes">corresponding documentation</a> on GitHub.
+    </p>
+    <span class="label"><strong>Example 5</strong> - <code>min_range_hours</code> set to <code>48</code> (<code>div#start_date</code> and <code>div#end_date</code>)</span>
     <span class="label">div#start_date</span>
     <div id="start_date">
     </div>
@@ -37,22 +62,21 @@
     <div id="end_date"></div>
 
 
-    <h2>DateTimePicker</h2>
-    <span class="label">div#select_datetime</span>
-    <div id="select_datetime"></div>
-
-
-    <h2>DatePicker</h2>
-    <span class="label">div#select_date</span>
-    <div id="select_date"></div>
-
-    <span class="label">div#select_date_2</span>
-    <div id="select_date_2"></div>
-
-    <span class="label">div#select_date_3</span>
-    <div id="select_date_3">
-      <input type="hidden" class="start_date" value="2022-08-23">
+    <h2>DateTimeRangePicker</h2>
+    <p>
+      DateTimeRangePicker class allows you to select a <strong>date/time range</strong>. See the <a href="https://github.com/marcellosurdi/DateTimePickerComponent#daterangepicker-classes">corresponding documentation</a> on GitHub.
+    </p>
+    <span class="label">div#start_date_time</span>
+    <div id="start_date_time">
     </div>
+    <span class="label">div#end_date_time</span>
+    <div id="end_date_time">
+      <input type="hidden" class="date_output" value="2030-01-07T16:00:00">
+    </div>
+  </div>
+
+  <div id="footer">
+    &copy 2021 Marcello Surdi
   </div>
 </body>
 

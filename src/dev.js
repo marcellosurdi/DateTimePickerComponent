@@ -5,7 +5,26 @@ import { DateRangePicker } from './js/date-range-picker';
 import { DateTimeRangePicker } from './js/date-time-range-picker';
 
 
-let it = {
+new DatePicker( 'select_date' );
+
+new DatePicker( 'select_date_2', {
+  first_date: "2030-01-02",
+  start_date: "2030-01-05",
+  last_date: new Date( 2030, 0, 29 ),
+  first_day_no: 0,
+  date_output: "timestamp",
+} );
+
+new DatePicker( 'select_date_3', {
+  first_date: "2030-01-02",
+  start_date: "2030-01-05",
+} );
+
+
+
+
+
+const it = {
   'jan':'Gen',
   'feb':'Feb',
   'mar':'Mar',
@@ -46,24 +65,14 @@ let it = {
   'sun_':'Domenica',
 };
 
-
-new DatePicker( 'select_date' );
-
-new DatePicker( 'select_date_2', {
-  first_date: "2030-01-02",
-  start_date: "2030-01-05",
-  last_date: new Date( 2030, 0, 29 ),
-  first_day_no: 0,
-  date_output: "timestamp",
-} );
-
-new DatePicker( 'select_date_3', { first_day_no: 0 } );
-
-
 new DateTimePicker( 'select_datetime', {
+  start_date: "2030-03-22T14:30:00",
   first_day_no: 1,
-  l10n: it
+  l10n: it,
 } );
+
+
+
 
 
 new DateRangePicker( 'start_date', 'end_date', {
@@ -71,13 +80,15 @@ new DateRangePicker( 'start_date', 'end_date', {
 } );
 
 
+
+
+
 new DateTimeRangePicker( 'start_date_time', 'end_date_time', {
-  first_date: "2030-01-02",
+  first_date: "2030-01-02T10:30:00",
   start_date: "2030-01-05T16:00:00",
   end_date: "2030-01-06T18:00:00",
   last_date: new Date( 2030, 0, 29 ),
   first_day_no: 1,
   date_output: "timestamp",
-  min_range_hours: 18,
-  l10n: it
+  min_range_hours: 18
 } );

@@ -223,7 +223,7 @@ export function PickerBase() {
     setTimeout( () => {
       btn.classList.remove( 'active' );
       picker.style.display = 'none';
-      document.body.removeEventListener( click, this.onClickOutside );
+      document.removeEventListener( click, this.onClickOutside );
     }, ms );
   }
 
@@ -349,10 +349,28 @@ export function PickerBase() {
    *
    * @param {string} mode 'start' or 'end'
    * @param {string} type 'date' or 'datetime'
+   * @param {object|null} styles User defined styles object
    * @return {string} HTML for requested button
    */
-  this.getHTMLButton = function( mode, type ) {
-    let html;
+  this.getHTML = function( mode, type, styles ) {
+    let html, css = '';
+
+    if( styles ) {
+      const id = this[ mode + '_container' ].id;
+
+      if( styles.active_background && styles.active_color ) {
+        css +=
+        `div#${ id } button.active, div#${ id } table td.start-day, div#${ id } table td.time-selected {
+          background-color: ${ styles.active_background }; color: ${ styles.active_color };
+        }`;
+      }
+      if( styles.end_background && styles.end_color ) {
+        css += `div#${ id } table td.end-day { background-color: ${ styles.end_background }; color: ${ styles.end_color }; }`;
+      }
+
+      if( css ) { css = `<style>${ css }</style>`; }
+    }
+
     const input = ( !this[ mode + '_container' ].querySelector( 'input.date_output' ) )
       ? '<input type="hidden" class="date_output" value="">'
       : '';
@@ -374,6 +392,7 @@ export function PickerBase() {
         <div class="picker"></div>
         ${ input }`;
       break;
+      case 'date':
       default:
         html =
         `<div class="buttons-container">
@@ -387,7 +406,7 @@ export function PickerBase() {
         ${ input }`;
     }
 
-    return html;
+    return css + html;
   }
 
 
@@ -474,7 +493,7 @@ export function PickerBase() {
         close.style.display = 'none';
       }
 
-      document.body.addEventListener( click, this.onClickOutside );
+      document.addEventListener( click, this.onClickOutside );
 
       let suffix = ( btn.classList.contains( 'date' ) )? 'Calendar' : 'TimeTable';
       let method = 'show' + suffix;
@@ -487,7 +506,7 @@ export function PickerBase() {
     else {
       // The picker was already open, so we close it
       picker.style.display = 'none';
-      document.body.removeEventListener( click, this.onClickOutside );
+      document.removeEventListener( click, this.onClickOutside );
     }
   }
 

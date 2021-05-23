@@ -11,8 +11,9 @@ new DatePicker( 'select_date_2', {
   first_date: "2030-01-02",
   start_date: "2030-01-05",
   last_date: new Date( 2030, 0, 29 ),
-  first_day_no: 0,
+  first_day_no: 1,
   date_output: "timestamp",
+  styles: { active_background: '#e34c26', active_color: '#fff' }
 } );
 
 new DatePicker( 'select_date_3', {
@@ -67,6 +68,7 @@ const it = {
 
 new DateTimePicker( 'select_datetime', {
   start_date: "2030-03-22T14:30:00",
+  last_date: new Date( 2030, 2, 29, 22, 30 ),
   first_day_no: 1,
   l10n: it,
 } );
@@ -87,8 +89,13 @@ new DateTimeRangePicker( 'start_date_time', 'end_date_time', {
   first_date: "2030-01-02T10:30:00",
   start_date: "2030-01-05T16:00:00",
   end_date: "2030-01-06T18:00:00",
-  last_date: new Date( 2030, 0, 29 ),
+  last_date: new Date( 2030, 0, 29, 14, 0 ),
   first_day_no: 1,
   date_output: "timestamp",
+  styles: {
+    active_background: '#e34c26',
+    active_color: '#fff',
+    end_background: '#0366d9',
+    end_color: '#fff' },
   min_range_hours: 18
 } );

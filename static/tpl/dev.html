@@ -7,7 +7,7 @@
   <meta name='viewport' content='width=device-width, initial-scale=1'>
   <meta name="format-detection" content="telephone=no">
   <style>
-    html, body { margin: 0; padding: 0; font: 100% arial, sans-serif; color: #24292e; }
+    html, body { margin: 0; padding: 0; font: 100%/1.4 arial, sans-serif; color: #24292e; }
     div#container { margin: 25px auto; max-width: 900px; }
     div#container > div { border-radius: 5px; border: 1px solid #eaecef; margin: 0 10px; padding: 10px; }
     div#footer { margin: 25px 0 0 0; padding: 10px; text-align: center; font-size: 14px; }
@@ -50,7 +50,7 @@
       <!-- EXAMPLE 1 -->
       <h3>Example 1</h3>
       <p>
-        With default values
+        With default values the first selectable date, <code>settings.first_date</code>, is the current date. <code>settings.start_date</code> is one day more than current date, <code>settings.last_date</code> is one year more than <code>settings.start_date</code>. The first week day is Sunday.
       </p>
       <div class="collapsible-element">
         <code class="code-block js">
@@ -70,7 +70,7 @@
       <!-- EXAMPLE 2 -->
       <h3>Example 2</h3>
       <p>
-        With user defined settings
+        When the user defines settings <strong>all date values</strong> can be a date string (in ISO format) or a date object. Remember: if you're creating date with <code>new</code> operator months are <strong>zero-indexed</strong>.
       </p>
       <div class="collapsible-element">
         <code class="code-block js">
@@ -78,7 +78,7 @@
   first_date: "2030-01-02",
   start_date: "2030-01-05",
   last_date: new Date( 2030, 0, 29 ),
-  first_day_no: 0,
+  first_day_no: 1,
   date_output: "timestamp",
 } );</pre>
         </code>
@@ -96,7 +96,7 @@
       <!-- EXAMPLE 3 -->
       <h3>Example 3</h3>
       <p>
-        <code>input.date_output</code> overwrites <code>settings.start_date</code>
+        In this example <code>input.date_output</code> overwrites <code>settings.start_date</code>
       </p>
       <div class="collapsible-element">
         <code class="code-block js">
@@ -131,7 +131,7 @@
       <!-- EXAMPLE 4 -->
       <h3>Example 4</h3>
       <p>
-        Italian localization
+        If we localize this component in Italian, Monday usually is the first week day (<code>first_day_no: 1</code>). Note that, with DateTime*Picker classes, it make sense to have the date format with hours information like below. Remember: if you're creating date with <code>new</code> operator months are <strong>zero-indexed</strong>.
       </p>
       <div class="collapsible-element">
         <code class="code-block js">
@@ -178,6 +178,7 @@
 
 new DateTimePicker( 'select_datetime', {
   start_date: '2030-03-22T14:30:00',
+  last_date: new Date( 2030, 2, 29, 22, 30 ),
   first_day_no: 1,
   l10n: it
 } );</pre>
@@ -202,7 +203,7 @@ new DateTimePicker( 'select_datetime', {
       <!-- EXAMPLE 5 -->
       <h3>Example 5</h3>
       <p>
-        <code>min_range_hours</code> set to <code>48</code>
+        Here we've set 2 days of minimum range (<code>min_range_hours: 48</code>)
       </p>
       <div class="collapsible-element">
         <code class="code-block js">
@@ -233,7 +234,7 @@ new DateTimePicker( 'select_datetime', {
       <!-- EXAMPLE 6 -->
       <h3>Example 6</h3>
       <p>
-        With user defined settings (<code>input.date_output</code> elements overwrite <code>settings.start</code> and <code>settings.end_date</code>)
+        In this example with user defined settings, <code>input.date_output</code> elements overwrite <code>settings.start</code> and <code>settings.end_date</code>.
       </p>
       <div class="collapsible-element">
         <code class="code-block js">
@@ -241,7 +242,7 @@ new DateTimePicker( 'select_datetime', {
   first_date: "2030-01-02T10:30:00",
   start_date: "2030-01-05T16:00:00",
   end_date: "2030-01-06T18:00:00",
-  last_date: new Date( 2030, 0, 29 ),
+  last_date: new Date( 2030, 0, 29, 14, 0 ),
   first_day_no: 1,
   date_output: "timestamp",
   min_range_hours: 18

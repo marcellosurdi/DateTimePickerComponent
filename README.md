@@ -119,7 +119,7 @@ new DatePicker( 'select_date', {
   first_date: "2030-01-02",
   start_date: "2030-01-05",
   last_date: new Date( 2030, 0, 29 ),
-  first_day_no: 0,
+  first_day_no: 1,
   date_output: "timestamp",
 } );
 ```
@@ -155,7 +155,7 @@ new DateTimeRangePicker( 'start_date_time', 'end_date_time', {
   first_date: "2030-01-02",
   start_date: "2030-01-05T16:00:00",
   end_date: "2030-01-06T18:00:00",
-  last_date: new Date( 2030, 0, 29 ),
+  last_date: new Date( 2030, 0, 29, 14, 0 ),
   first_day_no: 1,
   date_output: "timestamp",
   min_range_hours: 18,
@@ -177,7 +177,7 @@ And the corresponding HTML:
 
 | Property | Type | Default | Description |
 | -------- | ---- | ------- | ----------- |
-| `first_date`      | `{Date\|string}` | Current date                    | First selectable date. **All date values** must be a date string (in ISO format) or a date object |
+| `first_date`      | `{Date\|string}` | Current date                    | First selectable date. **All date values** can be a date string (in ISO format) or a date object |
 | `start_date`      | `{Date\|string}` | One day more than current date  | Start selected date |
 | `last_date`       | `{Date\|string}` | One year more than `start_date` | Last selectable date |
 | `first_day_no`    | `{number}`       | `0` (Sunday)                    | Day the week must start with. Similarly to the returned values of `Date.getDate` method, accepted range values are 0-6 where 0 means Sunday, 1 means Monday and so on |

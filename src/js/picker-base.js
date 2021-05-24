@@ -289,6 +289,7 @@ export function PickerBase() {
 
     if( _curr_day == _dates._start_date ) {
       class_name += 'start-day ';
+      class_name += ( mode == 'start' ) ? 'active ' : 'inactive ';
     }
 
     if( this.end_date ) {
@@ -298,6 +299,7 @@ export function PickerBase() {
 
     	if( _curr_day == _dates._end_date ) {
     		class_name += ' end-day ';
+        class_name += ( mode == 'end' ) ? 'active ' : 'inactive ';
     	}
     }
 
@@ -360,12 +362,12 @@ export function PickerBase() {
 
       if( styles.active_background && styles.active_color ) {
         css +=
-        `div#${ id } button.active, div#${ id } table td.start-day, div#${ id } table td.time-selected {
+        `div#${ id } button.active, div#${ id } table td.active, div#${ id } table td.time-selected {
           background-color: ${ styles.active_background }; color: ${ styles.active_color };
         }`;
       }
-      if( styles.end_background && styles.end_color ) {
-        css += `div#${ id } table td.end-day { background-color: ${ styles.end_background }; color: ${ styles.end_color }; }`;
+      if( styles.inactive_background && styles.inactive_color ) {
+        css += `div#${ id } table td.inactive { background-color: ${ styles.inactive_background }; color: ${ styles.inactive_color }; }`;
       }
 
       if( css ) { css = `<style>${ css }</style>`; }
@@ -423,11 +425,7 @@ export function PickerBase() {
   this.onClickOutside = ( e ) => {
     let div = ( mode == 'start' ) ? this.start_picker : this.end_picker;
 
-    if( e.type == 'touchstart' ) {
-      e.clientX = e.touches[0].clientX;
-      e.clientY = e.touches[0].clientY;
-    }
-    let el = document.elementFromPoint( e.clientX, e.clientY );
+    let el = e.target;
     let inside = false;
 
     do {

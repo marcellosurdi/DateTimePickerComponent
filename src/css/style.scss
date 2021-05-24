@@ -1,8 +1,8 @@
 $active_background: #fec601;
 $active_color: #000;
 $range_background: #eee;
-$end_background: #0b6e38;
-$end_color: #fff;
+$inactive_background: #0b6e38;
+$inactive_color: #fff;
 $disabled_color: #ccc;
 $light_grey_color: #f4f4f4;
 $white_color: #fff;
@@ -115,23 +115,28 @@ div.datetime-container {
           font-weight: bold;
         }
 
-        table td.end-day {
-          background-color: $end_background; color: $end_color;
-          background-image: url($arrow_end);
-          background-position: right center;
-        }
-
-        table td.start-day, table td.time-selected {
-          background-color: $active_background; color: $active_color;
+        table td.start-day {
           background-image: url($arrow_start);
           background-position: left center;
         }
 
-        table td.range { background-color: $range_background; }
-
+        table td.end-day {
+          background-image: url($arrow_end);
+          background-position: right center;
+        }
 
         table td.start-day.end-day {
           background-image: url($arrow_start), url($arrow_end);
           background-position: left center, right center;
         }
+
+        table td.active, table td.time-selected {
+          background-color: $active_background; color: $active_color;
+        }
+
+        table td.inactive {
+          background-color: $inactive_background; color: $inactive_color;
+        }
+
+        table td.range { background-color: $range_background; }
     }

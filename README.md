@@ -121,6 +121,10 @@ new DatePicker( 'select_date', {
   last_date: new Date( 2030, 0, 29 ),
   first_day_no: 1,
   date_output: "timestamp",
+  styles: {
+    active_background: '#e34c26',
+    active_color: '#fff'
+  }
 } );
 ```
 
@@ -152,14 +156,19 @@ import 'date-time-picker-component/dist/css/date-time-picker-component.min.css';
 import { DateTimeRangePicker } from "date-time-picker-component/dist/js/date-time-picker-component.min";
 
 new DateTimeRangePicker( 'start_date_time', 'end_date_time', {
-  first_date: "2030-01-02",
+  first_date: "2030-01-02T10:30:00",
   start_date: "2030-01-05T16:00:00",
   end_date: "2030-01-06T18:00:00",
   last_date: new Date( 2030, 0, 29, 14, 0 ),
   first_day_no: 1,
   date_output: "timestamp",
-  min_range_hours: 18,
-  l10n: it
+  styles: {
+    active_background: '#e34c26',
+    active_color: '#fff',
+    inactive_background: '#0366d9',
+    inactive_color: '#fff'
+  },
+    min_range_hours: 18
 } );
 ```
 
@@ -182,7 +191,8 @@ And the corresponding HTML:
 | `last_date`       | `{Date\|string}` | One year more than `start_date` | Last selectable date |
 | `first_day_no`    | `{number}`       | `0` (Sunday)                    | Day the week must start with. Similarly to the returned values of `Date.getDate` method, accepted range values are 0-6 where 0 means Sunday, 1 means Monday and so on |
 | `date_output`     | `{string}`       | `"short_ISO"`                   | Denotes the date format returned to the value attribute of `input.date_output` (accepted values are short_ISO (`"2030-01-05"`), full_ISO (`"2021-07-16T09:30:00"`) and timestamp (without milliseconds)) |
-| `l10n`            | `{object}`       | Object with English strings     | Object that contains the strings for translation |
+| `l10n`            | `{object}`       | Object with English strings     | Object with strings for translation |
+| `styles`          | `{object}`       | Empty object `{}`               | Object with custom styles |
 
 Only the **Date*RangePicker** classes also support these properties:
 
@@ -243,7 +253,29 @@ new DatePicker( 'select_date', {
 ```
 
 ### Styles customization
-All classes support the `settings.styles` property for styles customizing. All you need to do is...
+All classes support the `settings.styles` property for styles customizing.
+
+``` javascript
+// Date*Picker classes
+new DatePicker( 'select_date', {
+  styles: {
+    active_background: '#e34c26',
+    active_color: '#fff'
+  }
+} );
+
+// Date*RangePicker classes
+new DateTimeRangePicker( 'start_date_time', 'end_date_time', {
+  styles: {
+    active_background: '#e34c26',
+    active_color: '#fff',
+    inactive_background: '#0366d9',
+    inactive_color: '#fff'
+  },
+} );
+```
+
+All you need to do is to use `active_background`, `active_color`, `inactive_background` and `inactive_color` properties like above. As you can see, Date*Picker classes don't support `inactive_\*` properties.
 
 ### Maintaining state
 To retain the user selected dates after a page reload due, for instance, to a failed validation, you have to manually add the `input.date_output` inside the `div` in this way:
@@ -257,9 +289,11 @@ To retain the user selected dates after a page reload due, for instance, to a fa
 
   <!-- Date*RangePicker classes -->
   <div id="start_date">
+    <!-- Overwrites start_date -->
     <input type="hidden" class="date_output" value="2030-05-22">
   </div>
   <div id="end_date">
+    <!-- Overwrites end_date -->
     <input type="hidden" class="date_output" value="2030-05-22T10:00:00">
   </div>
 </body>

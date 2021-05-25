@@ -56,7 +56,7 @@ export function DateTimeRangePicker( start_id, end_id, settings = {} ) {
   const first_date = ( settings.first_date ) ? settings.first_date : null;
   const last_date = ( settings.last_date ) ? settings.last_date : null;
   const first_day_no = ( typeof settings.first_day_no !== 'undefined' ) ? settings.first_day_no : 0;
-  const styles = ( settings.styles ) ? settings.styles : null;
+  const styles = ( settings.styles ) ? settings.styles : {};
   this.setStartPickerProps( start_id, start_date, first_date, last_date, first_day_no );
 
   const end_date = ( settings.end_date ) ? settings.end_date : null;

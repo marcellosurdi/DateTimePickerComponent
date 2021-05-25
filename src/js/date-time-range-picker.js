@@ -28,11 +28,19 @@ DateTimeRangePicker.prototype.constructor = DateTimeRangePicker;
  *
  * @example
  * // In settings object you can use either a date string (in ISO format) or a date object
- * new DatePicker( 'start_id', 'end_id' {
- *  first_date: "2021-01-02",
- *  start_date: "2021-01-05",
- *  last_date: new Date( 2021, 0, 29 ),
- *  end_date: "2021-01-07"
+ * new DateTimeRangePicker( 'start_id', 'end_id' {
+ *  first_date: "2030-01-02T10:30:00",
+ *  start_date: "2030-01-05T16:00:00",
+ *  end_date: "2030-01-06T18:00:00",
+ *  last_date: new Date( 2030, 0, 29, 14, 0 ),
+ *  first_day_no: 1,
+ *  date_output: "timestamp",
+ *  styles: {
+ *    active_background: '#e34c26',
+ *    active_color: '#fff',
+ *    inactive_background: '#0366d9',
+ *    inactive_color: '#fff' },
+ *  min_range_hours: 18
  * } );
  */
 export function DateTimeRangePicker( start_id, end_id, settings = {} ) {

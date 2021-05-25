@@ -28,11 +28,15 @@ DatePicker.prototype.constructor = DatePicker;
  * @example
  * // In settings object you can use either a date string (in ISO format) or a date object
  * new DatePicker( 'id', {
- * first_date: "2030-01-02",
- * start_date: "2030-01-05",
- * last_date: new Date( 2030, 0, 29 ),
- * first_day_no: 0,
- * date_output: "timestamp",
+ *  first_date: "2030-01-02",
+ *  start_date: "2030-01-05",
+ *  last_date: new Date( 2030, 0, 29 ),
+ *  first_day_no: 1,
+ *  date_output: "timestamp",
+ *  styles: {
+ *    active_background: '#e34c26',
+ *    active_color: '#fff'
+ *  }
  * } );
  */
 export function DatePicker( id, settings = {} ) {

@@ -13,7 +13,10 @@ new DatePicker( 'select_date_2', {
   last_date: new Date( 2030, 0, 29 ),
   first_day_no: 1,
   date_output: "timestamp",
-  styles: { active_background: '#e34c26', active_color: '#fff' }
+  styles: {
+    active_background: '#e34c26',
+    active_color: '#fff'
+  }
 } );
 
 new DatePicker( 'select_date_3', {

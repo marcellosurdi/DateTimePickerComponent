@@ -73,9 +73,9 @@
  * @property {Date} start_date Start selected date
  * @property {Date} end_date End selected date
  * @property {Date} last_date Last selectable date
- * @property {Date} current_month Information about current year/month relative to the picker just opened (*_month values are updated **each time** a picker is opened)
- * @property {Date} prev_month Information about previous year/month relative to the picker just opened
- * @property {Date} next_month Information about next year/month relative to the picker just opened
+ * @property {Date} current_month Date object with current year/month relative to the picker just opened (*_month values are updated **each time** a picker is opened)
+ * @property {Date} prev_month Date object with previous year/month relative to the picker just opened
+ * @property {Date} next_month Date object with next year/month relative to the picker just opened
  * @property {string} date_output Denotes the date format returned to the value attribute of `input.date_output` (accepted values are short_ISO, full_ISO and timestamp)
  * @property {number} min_range The minimum range in milliseconds that must elapse between `start_date` and `end_date`
  */
@@ -233,8 +233,7 @@ export function PickerBase() {
 
   /**
    * @desc
-   * Returns dates converted in milliseconds without hour/minute information for comparisons
-   * in {@link module:js/picker-base.PickerBase#getDayClassName|getDayClassName} method.
+   * Returns dates converted in milliseconds with hours and minutes set to 0.
    *
    * @return {object} The object containing `_dates`
    */
@@ -269,8 +268,8 @@ export function PickerBase() {
    * and when updating it ({@link module:js/picker-base.PickerBase#selectDay|selectDay}).
    *
    * @param {string} day The current day inside a loop iteration
-   * @param {Date} date Date object with current year/month information
-   * @param {object} _dates Dates converted in milliseconds without hour/minute information
+   * @param {Date} date Date object with current year/month
+   * @param {object} _dates Dates converted in milliseconds with hours and minutes set to 0
    * @return {string} Classes to be assigned to the `td` element
    */
   this.getDayClassName = function( day, date, _dates ) {
@@ -316,7 +315,7 @@ export function PickerBase() {
    * and when updating it ({@link module:js/picker-base.PickerBase#selectHour|selectHour}).
    *
    * @param {string} hour An hour/minute pair (HH:mm) inside a loop iteration
-   * @param {Date} date Date object with current hour/minutes information
+   * @param {Date} date Date object with current hour/minutes
    * @return {string} Classes to be assigned to the `td` element
    */
   this.getHourClassName = function( hour, date ) {
@@ -911,7 +910,7 @@ export function PickerBase() {
         output_date = arr[ 0 ];
         // [ output_date, ] = full_iso.split( 'T' );
       break;
-      // Timestamp value without milliseconds information
+      // Timestamp value without milliseconds
       case 'timestamp':
       default:
         output_date = Math.round( date.getTime() / 1000 );

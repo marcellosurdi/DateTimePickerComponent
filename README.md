@@ -2,8 +2,8 @@
 ## Description
 DateTimePickerComponent is a very lightweight and dependency-free web component written in pure JavaScript. It supports localization, date format, range selections and disabled dates.
 
-![Dates view](https://www.marcellosurdi.name/demo/date-time-picker-component/img/screenshot-date.png "Dates view")
-![Hours view](https://www.marcellosurdi.name/demo/date-time-picker-component/img/screenshot-time.png "Hours view")
+![Date picker](https://www.marcellosurdi.name/demo/date-time-picker-component/img/screenshot-date-picker.png "Date picker")
+![Time picker](https://www.marcellosurdi.name/demo/date-time-picker-component/img/screenshot-time-picker.png "Time picker")
 
 ## Motivation
 Some time ago, during the development of some booking applications, I needed a date time picker that didn't require any heavy dependencies. I didn't find anything that met all my needs and browser's native implementations are currently inconsistent, so I developed mine.
@@ -278,9 +278,9 @@ new DateTimeRangePicker( 'start_date_time', 'end_date_time', {
 } );
 ```
 
-All you need to do is to use `active_background`, `active_color`, `inactive_background` and `inactive_color` properties like above. As you can see, Date\*Picker classes don't support `inactive_\*` properties. Active colors denote the clicked buttons and the day you're setting, inactive colors the other day in the range (if any).
+All you need to do is to use `active_background`, `active_color`, `inactive_background` and `inactive_color` properties like above. Active colors denote the clicked buttons and the day you're setting, inactive colors the other day in the range. Date\*Picker classes of course don't support inactive_\* properties because there isn't a range.
 
-![Colors scheme](https://www.marcellosurdi.name/demo/date-time-picker-component/img/screenshot-colors.png "Colors scheme")
+![Color scheme](https://www.marcellosurdi.name/demo/date-time-picker-component/img/screenshot-color-scheme.png "Color scheme")
 
 ### Maintaining state
 To retain the user selected dates after a page reload due, for instance, to a failed validation, you have to manually add the `input.date_output` inside the `div` in this way:

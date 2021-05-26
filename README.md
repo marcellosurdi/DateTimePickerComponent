@@ -3,7 +3,6 @@
 DateTimePickerComponent is a very lightweight and dependency-free web component written in pure JavaScript. It supports localization, date format, range selections and disabled dates.
 
 ![Dates view](https://www.marcellosurdi.name/demo/date-time-picker-component/img/screenshot-date.png "Dates view")
-
 ![Hours view](https://www.marcellosurdi.name/demo/date-time-picker-component/img/screenshot-time.png "Hours view")
 
 ## Motivation

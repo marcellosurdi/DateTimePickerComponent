@@ -167,50 +167,48 @@ export function PickerBase() {
    * and {@link module:js/picker-base.PickerBase#selectHour|selectHour} methods.
   */
   this.checkDateTimeConsistency = function() {
-    // Fix for DateTimePicker
+    // DateTimePicker
     const start_date_ms = this.start_date.getTime();
     const last_date_ms = this.last_date.getTime();
     if( start_date_ms >= last_date_ms ) {
       this.start_date.setHours( this.last_date.getHours(), this.last_date.getMinutes(), 0, 0 );
     }
 
-    if( !this.end_date ) {
-      return;
-    }
+    if( this.end_date ) {
+      const end_date_ms = this.end_date.getTime();
+      const first_date_ms = this.first_date.getTime();
 
-    const end_date_ms = this.end_date.getTime();
-    const first_date_ms = this.first_date.getTime();
+      // start
+      if( mode == 'start' ) {
+        if( ( start_date_ms + this.min_range ) >= end_date_ms ) {
+          if( ( start_date_ms + this.min_range ) >= last_date_ms ) {
+            this.start_date.setTime( last_date_ms - this.min_range );
+          }
 
-    // start
-    if( mode == 'start' ) {
-      if( ( start_date_ms + this.min_range ) >= end_date_ms ) {
-        if( ( start_date_ms + this.min_range ) >= last_date_ms ) {
-          this.start_date.setTime( last_date_ms - this.min_range );
+          this.end_date.setTime( this.start_date.getTime() + this.min_range );
+          this.printDateAndTime( this.end_container, this.end_date );
         }
 
-        this.end_date.setTime( this.start_date.getTime() + this.min_range );
-				this.showDateAndTime( this.end_container, this.end_date );
-			}
-
-			if( start_date_ms <= first_date_ms ) {
-				this.start_date.setHours( this.first_date.getHours(), this.first_date.getMinutes(), 0, 0 );
-			}
-    }
-
-    // end
-    else {
-      if( ( end_date_ms - this.min_range ) <= start_date_ms ) {
-        if( ( end_date_ms - this.min_range ) <= first_date_ms ) {
-          this.end_date.setTime( first_date_ms + this.min_range );
+        if( start_date_ms <= first_date_ms ) {
+          this.start_date.setHours( this.first_date.getHours(), this.first_date.getMinutes(), 0, 0 );
         }
-
-        this.start_date.setTime( this.end_date.getTime() - this.min_range );
-        this.showDateAndTime( this.start_container, this.start_date );
       }
 
-      if( end_date_ms >= last_date_ms ) {
-				this.end_date.setHours( this.last_date.getHours(), this.last_date.getMinutes(), 0, 0 );
-			}
+      // end
+      else {
+        if( ( end_date_ms - this.min_range ) <= start_date_ms ) {
+          if( ( end_date_ms - this.min_range ) <= first_date_ms ) {
+            this.end_date.setTime( first_date_ms + this.min_range );
+          }
+
+          this.start_date.setTime( this.end_date.getTime() - this.min_range );
+          this.printDateAndTime( this.start_container, this.start_date );
+        }
+
+        if( end_date_ms >= last_date_ms ) {
+          this.end_date.setHours( this.last_date.getHours(), this.last_date.getMinutes(), 0, 0 );
+        }
+      }
     }
   }
 
@@ -426,6 +424,8 @@ export function PickerBase() {
    * @param {Event} e
    *
    * @see {@link module:js/picker-base.PickerBase#closePicker|closePicker}
+   *
+   * @todo a.prev-month and a.next-month must be outside the table.date element
   */
   this.onClickOutside = ( e ) => {
     let div = ( mode == 'start' ) ? this.start_picker : this.end_picker;
@@ -434,8 +434,13 @@ export function PickerBase() {
     let inside = false;
 
     do {
-      if( el.matches( `#${ div.parentElement.id }.datetime-container` ) ) {
+      if(
+        el.matches( `#${ div.parentElement.id }.datetime-container` ) ||
+        el.classList.contains( 'prev-month' ) ||
+        el.classList.contains( 'next-month' )
+      ) {
         inside = true;
+        break;
       }
       el = el.parentElement;
     } while( el !== null && el.nodeType === 1 );
@@ -498,7 +503,7 @@ export function PickerBase() {
 
       document.addEventListener( click, this.onClickOutside );
 
-      let suffix = ( btn.classList.contains( 'date' ) )? 'Date' : 'Time';
+      let suffix = ( btn.classList.contains( 'date' ) ) ? 'Date' : 'Time';
       let method = 'show' + suffix + 'Picker';
       this[ method ]( picker, date );
 
@@ -576,7 +581,7 @@ export function PickerBase() {
    *
    * @param {module:js/picker-base.PickerBaseNS.UserSelection} o Object with contextual info
    *
-   * @see {@link module:js/picker-base.PickerBase#showDateAndTime|showDateAndTime}
+   * @see {@link module:js/picker-base.PickerBase#printDateAndTime|printDateAndTime}
    * @see {@link module:js/picker-base.PickerBase#closePicker|closePicker}
    */
   this.selectDay = function( o ) {
@@ -614,7 +619,7 @@ export function PickerBase() {
       coll[ i ].className = class_name;
     }
 
-    this.showDateAndTime( o.container, o.date, 'date' );
+    this.printDateAndTime( o.container, o.date, 'date' );
 
     this.closePicker( o.picker, o.btn, 500 );
   }
@@ -628,7 +633,7 @@ export function PickerBase() {
    *
    * @param {module:js/picker-base.PickerBaseNS.UserSelection} o Object with contextual info
    *
-   * @see {@link module:js/picker-base.PickerBase#showDateAndTime|showDateAndTime}
+   * @see {@link module:js/picker-base.PickerBase#printDateAndTime|printDateAndTime}
    * @see {@link module:js/picker-base.PickerBase#closePicker|closePicker}
    */
   this.selectHour = function( o ) {
@@ -644,7 +649,7 @@ export function PickerBase() {
       coll[ i ].className = this.getHourClassName( coll[ i ].textContent, o.date );
     }
 
-    this.showDateAndTime( o.container, o.date, 'time' );
+    this.printDateAndTime( o.container, o.date, 'time' );
 
     this.closePicker( o.picker, o.btn, 500 );
   }
@@ -873,7 +878,7 @@ export function PickerBase() {
    * @see {@link module:js/picker-base.PickerBase~getWeekDayNo|getWeekDayNo}
    * @see {@link module:js/picker-base.PickerBase~getISOStringTZ|getISOStringTZ}
    */
-  this.showDateAndTime = function( div, date ) {
+  this.printDateAndTime = function( div, date ) {
     // Displays date
     const date_coll = div.querySelectorAll( 'button.date > *' );
     const week_day_span = date_coll[ 0 ];
@@ -1024,7 +1029,7 @@ export function PickerBase() {
 
   /**
    * Returns a ISO string with timezone offset from date passed as parameter.
-   * It's used by {@link module:js/picker-base.PickerBase#showDateAndTime|showDateAndTime}.
+   * It's used by {@link module:js/picker-base.PickerBase#printDateAndTime|printDateAndTime}.
    *
    * @param {Date} date
    */

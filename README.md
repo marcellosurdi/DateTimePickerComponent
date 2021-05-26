@@ -1,6 +1,6 @@
 # DateTimePickerComponent
 ## Description
-DateTimePickerComponent is a very lightweight and dependency-free web component written in pure JavaScript. It supports localization, date format, range selections and disabled dates. [See the online demo](https://www.marcellosurdi.name/demo/date-time-picker-component/)
+DateTimePickerComponent is a very lightweight (less than 20KB) and dependency-free web component written in pure JavaScript. It supports localization, date format, range selections and disabled dates. [See the online demo](https://www.marcellosurdi.name/demo/date-time-picker-component/)
 
 ![Date picker](https://www.marcellosurdi.name/demo/date-time-picker-component/img/screenshot-date-picker.png "Date picker")
 ![Time picker](https://www.marcellosurdi.name/demo/date-time-picker-component/img/screenshot-time-picker.png "Time picker")
@@ -256,7 +256,7 @@ new DatePicker( 'select_date', {
 ```
 
 ### Styles customization
-All classes support the `settings.styles` property for styles customizing.
+All classes support the `settings.styles` property for styles customization.
 
 ``` javascript
 // Date*Picker classes
@@ -304,7 +304,7 @@ To retain the user selected dates after a page reload due, for instance, to a fa
 </body>
 ```
 
-The component will detect hidden input fields and print the content of the value attribute as default.
+The component will detect hidden input fields and print the content of their value attribute as default.
 
 ## To do list
 1. Provide a year/month picker.

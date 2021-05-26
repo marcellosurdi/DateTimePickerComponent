@@ -58,7 +58,7 @@ export function DateTimePicker( id, settings = {} ) {
   // Start date
   this.start_container.classList.add( 'datetime-container', 'fix-float' );
   this.start_container.insertAdjacentHTML( 'afterbegin', this.getHTML( 'start', 'datetime', styles ) );
-  this.showDateAndTime( this.start_container, this.start_date );
+  this.printDateAndTime( this.start_container, this.start_date );
 
   this.start_date_btn = this.start_container.querySelector( 'button.date.start' );
   this.start_time_btn = this.start_container.querySelector( 'button.time.start' );

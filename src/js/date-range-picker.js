@@ -66,7 +66,7 @@ export function DateRangePicker( start_id, end_id, settings = {} ) {
   // Start date
   this.start_container.classList.add( 'datetime-container' );
   this.start_container.insertAdjacentHTML( 'afterbegin', this.getHTML( 'start', 'date', styles ) );
-  this.showDateAndTime( this.start_container, this.start_date );
+  this.printDateAndTime( this.start_container, this.start_date );
 
   this.start_date_btn = this.start_container.querySelector( 'button.date.start' );
   this.start_picker = this.start_container.querySelector( 'div.picker' );
@@ -77,7 +77,7 @@ export function DateRangePicker( start_id, end_id, settings = {} ) {
   // End date
   this.end_container.classList.add( 'datetime-container' );
   this.end_container.insertAdjacentHTML( 'afterbegin', this.getHTML( 'end', 'date', styles ) );
-  this.showDateAndTime( this.end_container, this.end_date );
+  this.printDateAndTime( this.end_container, this.end_date );
 
   this.end_date_btn = this.end_container.querySelector( 'button.date.end' );
   this.end_picker = this.end_container.querySelector( 'div.picker' );

@@ -76,7 +76,7 @@
  * @property {Date} current_month Date object with current year/month relative to the picker just opened (*_month values are updated **each time** a picker is opened)
  * @property {Date} prev_month Date object with previous year/month relative to the picker just opened
  * @property {Date} next_month Date object with next year/month relative to the picker just opened
- * @property {string} date_output Denotes the date format returned to the value attribute of `input.date_output` (accepted values are short_ISO, full_ISO and timestamp)
+ * @property {string} date_output The date format returned to the value attribute of `input.date_output` (accepted values are short_ISO, full_ISO and timestamp)
  * @property {number} min_range The minimum range in milliseconds that must elapse between `start_date` and `end_date`
  */
 export function PickerBase() {
@@ -140,8 +140,8 @@ export function PickerBase() {
 
   /**
    * Adds an event handler to `td.selectable` elements.
-   * It's used by both {@link module:js/picker-base.PickerBase#showCalendar|showCalendar}
-   * and {@link module:js/picker-base.PickerBase#showTimeTable|showTimeTable} methods.
+   * It's used by both {@link module:js/picker-base.PickerBase#showDatePicker|showDatePicker}
+   * and {@link module:js/picker-base.PickerBase#showTimePicker|showTimePicker} methods.
    *
    * @param {HTMLDivElement} picker The picker currently open
    */
@@ -167,15 +167,21 @@ export function PickerBase() {
    * and {@link module:js/picker-base.PickerBase#selectHour|selectHour} methods.
   */
   this.checkDateTimeConsistency = function() {
+    // Fix for DateTimePicker
+    const start_date_ms = this.start_date.getTime();
+    const last_date_ms = this.last_date.getTime();
+    if( start_date_ms >= last_date_ms ) {
+      this.start_date.setHours( this.last_date.getHours(), this.last_date.getMinutes(), 0, 0 );
+    }
+
     if( !this.end_date ) {
       return;
     }
 
-    const start_date_ms = this.start_date.getTime();
     const end_date_ms = this.end_date.getTime();
     const first_date_ms = this.first_date.getTime();
-    const last_date_ms = this.last_date.getTime();
 
+    // start
     if( mode == 'start' ) {
       if( ( start_date_ms + this.min_range ) >= end_date_ms ) {
         if( ( start_date_ms + this.min_range ) >= last_date_ms ) {
@@ -191,7 +197,7 @@ export function PickerBase() {
 			}
     }
 
-    // mode == 'end'
+    // end
     else {
       if( ( end_date_ms - this.min_range ) <= start_date_ms ) {
         if( ( end_date_ms - this.min_range ) <= first_date_ms ) {
@@ -264,7 +270,7 @@ export function PickerBase() {
   /**
    * @desc
    * Returns classes for `td` elements that contain the days of calendar.
-   * It's used inside a loop both when building table ({@link module:js/picker-base.PickerBase#showCalendar|showCalendar})
+   * It's used inside a loop both when building table ({@link module:js/picker-base.PickerBase#showDatePicker|showDatePicker})
    * and when updating it ({@link module:js/picker-base.PickerBase#selectDay|selectDay}).
    *
    * @param {string} day The current day inside a loop iteration
@@ -311,7 +317,7 @@ export function PickerBase() {
 
   /**
    * Returns classes for `td` elements that contain the hour/minute pairs (HH:mm).
-   * It's used inside a loop both when building table ({@link module:js/picker-base.PickerBase#showTimeTable|showTimeTable})
+   * It's used inside a loop both when building table ({@link module:js/picker-base.PickerBase#showTimePicker|showTimePicker})
    * and when updating it ({@link module:js/picker-base.PickerBase#selectHour|selectHour}).
    *
    * @param {string} hour An hour/minute pair (HH:mm) inside a loop iteration
@@ -449,8 +455,8 @@ export function PickerBase() {
    *
    * @param {Event} e
    *
-   * @see {@link module:js/picker-base.PickerBase#showCalendar|showCalendar}
-   * @see {@link module:js/picker-base.PickerBase#showTimeTable|showTimeTable}
+   * @see {@link module:js/picker-base.PickerBase#showDatePicker|showDatePicker}
+   * @see {@link module:js/picker-base.PickerBase#showTimePicker|showTimePicker}
    * @see {@link module:js/picker-base.PickerBase~scrollPage|scrollPage}
   */
   this.onOpenPicker = ( e ) => {
@@ -492,8 +498,8 @@ export function PickerBase() {
 
       document.addEventListener( click, this.onClickOutside );
 
-      let suffix = ( btn.classList.contains( 'date' ) )? 'Calendar' : 'TimeTable';
-      let method = 'show' + suffix;
+      let suffix = ( btn.classList.contains( 'date' ) )? 'Date' : 'Time';
+      let method = 'show' + suffix + 'Picker';
       this[ method ]( picker, date );
 
       scrollPage( picker );
@@ -751,7 +757,7 @@ export function PickerBase() {
    * @see {@link module:js/picker-base.PickerBase#getDayClassName|getDayClassName}
    * @see {@link module:js/picker-base.PickerBase#addEventOnSelect|addEventOnSelect}
    */
-  this.showCalendar = function( picker, date ) {
+  this.showDatePicker = function( picker, date ) {
     let class_name, html = '';
 
     const month = date.getMonth();
@@ -830,7 +836,7 @@ export function PickerBase() {
     prev_month.setDate( prev_month_total_days );
     const prev_month_btn = picker.querySelector( '.prev-month' );
     if( prev_month > this.first_date ) {
-      prev_month_btn.addEventListener( 'click', () => this.showCalendar( picker, prev_month ) );
+      prev_month_btn.addEventListener( 'click', () => this.showDatePicker( picker, prev_month ) );
     }
     else {
       prev_month_btn.classList.add( 'disabled' );
@@ -839,7 +845,7 @@ export function PickerBase() {
     // Next month button
     const next_month_btn = picker.querySelector( '.next-month' );
     if( this.last_date > next_month ) {
-      next_month_btn.addEventListener( 'click', () => this.showCalendar( picker, next_month ) );
+      next_month_btn.addEventListener( 'click', () => this.showDatePicker( picker, next_month ) );
     }
     else {
       next_month_btn.classList.add( 'disabled' );
@@ -934,7 +940,7 @@ export function PickerBase() {
    * @see {@link module:js/picker-base.PickerBase#getHourClassName|getHourClassName}
    * @see {@link module:js/picker-base.PickerBase#addEventOnSelect|addEventOnSelect}
    */
-  this.showTimeTable = function( picker, day ) {
+  this.showTimePicker = function( picker, day ) {
     let i = 0, html = '', class_name;
 
     // Nine rows

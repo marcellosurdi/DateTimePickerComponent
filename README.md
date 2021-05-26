@@ -1,6 +1,6 @@
 # DateTimePickerComponent
 ## Description
-DateTimePickerComponent is a very lightweight and dependency-free web component written in pure JavaScript. It supports localization, date format, range selections and disabled dates.
+DateTimePickerComponent is a very lightweight and dependency-free web component written in pure JavaScript. It supports localization, date format, range selections and disabled dates. [See the online demo](https://www.marcellosurdi.name/demo/date-time-picker-component/)
 
 ![Date picker](https://www.marcellosurdi.name/demo/date-time-picker-component/img/screenshot-date-picker.png "Date picker")
 ![Time picker](https://www.marcellosurdi.name/demo/date-time-picker-component/img/screenshot-time-picker.png "Time picker")
@@ -192,8 +192,8 @@ And the corresponding HTML:
 | `first_date`      | `{Date\|string}` | Current date                    | First selectable date. **All date values** can be a date string (in ISO format) or a date object |
 | `start_date`      | `{Date\|string}` | One day more than current date  | Start selected date |
 | `last_date`       | `{Date\|string}` | One year more than `start_date` | Last selectable date |
-| `first_day_no`    | `{number}`       | `0` (Sunday)                    | Day the week must start with. Similarly to the returned values of `Date.getDate` method, accepted range values are 0-6 where 0 means Sunday, 1 means Monday and so on |
-| `date_output`     | `{string}`       | `"short_ISO"` or `"full_ISO"`   | The date format returned to the value attribute of `input.date_output` (accepted values are short_ISO (`"2030-01-05"`), full_ISO (`"2021-07-16T09:30:00"`) and timestamp (without milliseconds)) |
+| `first_day_no`    | `{number}`       | `0` (Sunday)                    | Day the week must start with. Accepted range values are 0-6 where 0 means Sunday, 1 means Monday and so on |
+| `date_output`     | `{string}`       | `"short_ISO"` or `"full_ISO"`   | The date format returned to the value attribute of `input.date_output`. Accepted values are short_ISO (default for Date* classes, e.g. `"2030-01-05"`), full_ISO (default for DateTime* classes, e.g. `"2021-07-16T09:30:00"`) and timestamp (without milliseconds). |
 | `l10n`            | `{object}`       | Object with English strings     | Object with strings for translation |
 | `styles`          | `{object}`       | `{}`                            | Object with custom styles |
 
@@ -278,7 +278,7 @@ new DateTimeRangePicker( 'start_date_time', 'end_date_time', {
 } );
 ```
 
-All you need to do is to use `active_background`, `active_color`, `inactive_background` and `inactive_color` properties like above. Active colors denote the clicked buttons and the day you're setting, inactive colors the other day in the range. Date\*Picker classes of course don't support inactive_\* properties because there isn't a range.
+All you need to do is to use `active_background`, `active_color`, `inactive_background` and `inactive_color` properties like above. Active colors denote the clicked buttons and the day/hour you're setting, inactive colors the other day in the range. Date\*Picker classes of course don't support inactive_\* properties because there isn't a range.
 
 ![Color scheme](https://www.marcellosurdi.name/demo/date-time-picker-component/img/screenshot-color-scheme.png "Color scheme")
 

@@ -2,6 +2,10 @@
 ## Description
 DateTimePickerComponent is a very lightweight and dependency-free web component written in pure JavaScript. It supports localization, date format, range selections and disabled dates.
 
+![Dates view](https://www.marcellosurdi.name/demo/date-time-picker-component/img/screenshot-date.png "Dates view")
+
+![Hours view](https://www.marcellosurdi.name/demo/date-time-picker-component/img/screenshot-time.png "Hours view")
+
 ## Motivation
 Some time ago, during the development of some booking applications, I needed a date time picker that didn't require any heavy dependencies. I didn't find anything that met all my needs and browser's native implementations are currently inconsistent, so I developed mine.
 
@@ -190,9 +194,9 @@ And the corresponding HTML:
 | `start_date`      | `{Date\|string}` | One day more than current date  | Start selected date |
 | `last_date`       | `{Date\|string}` | One year more than `start_date` | Last selectable date |
 | `first_day_no`    | `{number}`       | `0` (Sunday)                    | Day the week must start with. Similarly to the returned values of `Date.getDate` method, accepted range values are 0-6 where 0 means Sunday, 1 means Monday and so on |
-| `date_output`     | `{string}`       | `"short_ISO"`                   | Denotes the date format returned to the value attribute of `input.date_output` (accepted values are short_ISO (`"2030-01-05"`), full_ISO (`"2021-07-16T09:30:00"`) and timestamp (without milliseconds)) |
+| `date_output`     | `{string}`       | `"short_ISO"` or `"full_ISO"`   | The date format returned to the value attribute of `input.date_output` (accepted values are short_ISO (`"2030-01-05"`), full_ISO (`"2021-07-16T09:30:00"`) and timestamp (without milliseconds)) |
 | `l10n`            | `{object}`       | Object with English strings     | Object with strings for translation |
-| `styles`          | `{object}`       | Empty object `{}`               | Object with custom styles |
+| `styles`          | `{object}`       | `{}`                            | Object with custom styles |
 
 Only the **Date*RangePicker** classes also support these properties:
 
@@ -275,7 +279,9 @@ new DateTimeRangePicker( 'start_date_time', 'end_date_time', {
 } );
 ```
 
-All you need to do is to use `active_background`, `active_color`, `inactive_background` and `inactive_color` properties like above. As you can see, Date*Picker classes don't support `inactive_\*` properties.
+All you need to do is to use `active_background`, `active_color`, `inactive_background` and `inactive_color` properties like above. As you can see, Date\*Picker classes don't support `inactive_\*` properties. Active colors denote the clicked buttons and the day you're setting, inactive colors the other day in the range (if any).
+
+![Colors scheme](https://www.marcellosurdi.name/demo/date-time-picker-component/img/screenshot-colors.png "Colors scheme")
 
 ### Maintaining state
 To retain the user selected dates after a page reload due, for instance, to a failed validation, you have to manually add the `input.date_output` inside the `div` in this way:
@@ -307,5 +313,4 @@ The component will detect hidden input fields and print the content of the value
 3. Provide support for swiping months.
 
 ## Links
-1. [Online demo](https://www.marcellosurdi.name/demo/date-time-picker-component/)
-2. [JSDoc documentation](https://www.marcellosurdi.name/jsdoc/date-time-picker-component/) (if you are a developer probably you can find here other useful information).
+[Online demo](https://www.marcellosurdi.name/demo/date-time-picker-component/)

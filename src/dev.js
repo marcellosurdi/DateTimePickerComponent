@@ -99,6 +99,7 @@ new DateTimeRangePicker( 'start_date_time', 'end_date_time', {
     active_background: '#e34c26',
     active_color: '#fff',
     inactive_background: '#0366d9',
-    inactive_color: '#fff' },
+    inactive_color: '#fff'
+  },
   min_range_hours: 18
 } );

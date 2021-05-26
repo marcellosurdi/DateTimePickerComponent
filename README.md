@@ -1,6 +1,6 @@
 # DateTimePickerComponent
 ## Description
-DateTimePickerComponent is a very lightweight (less than 20KB) and dependency-free web component written in pure JavaScript. It supports localization, date format, range selections and disabled dates. [See the online demo](https://www.marcellosurdi.name/demo/date-time-picker-component/)
+DateTimePickerComponent is a very lightweight (less than 20KB) and dependency-free web component written in pure JavaScript. It supports localization, date formats, range selections and disabled dates. [See the online demo](https://www.marcellosurdi.name/demo/date-time-picker-component/)
 
 ![Date picker](https://www.marcellosurdi.name/demo/date-time-picker-component/img/screenshot-date-picker.png "Date picker")
 ![Time picker](https://www.marcellosurdi.name/demo/date-time-picker-component/img/screenshot-time-picker.png "Time picker")

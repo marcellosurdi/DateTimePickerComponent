@@ -280,7 +280,7 @@ new DateTimeRangePicker( 'start_date_time', 'end_date_time', {
 
 All you need to do is to use `active_background`, `active_color`, `inactive_background` and `inactive_color` properties like above. Active colors denote the clicked buttons and the day/hour you're setting, inactive colors the other day in the range. Date\*Picker classes of course don't support inactive_\* properties because there isn't a range.
 
-![Color scheme](https://www.marcellosurdi.name/demo/date-time-picker-component/img/screenshot-color-scheme.png "Color scheme")
+![Color scheme](https://www.marcellosurdi.name/demo/date-time-picker-component/img/screenshot-color-scheme.png?v2 "Color scheme")
 
 ### Maintaining state
 To retain the user selected dates after a page reload due, for instance, to a failed validation, you have to manually add the `input.date_output` inside the `div` in this way:

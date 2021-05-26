@@ -185,11 +185,11 @@ And the corresponding HTML:
 ```
 
 ### Settings
-**All classes** support these properties in `settings` object:
+**All classes** support these properties in `settings` object. **All date values** can be a date string (in ISO format) or a date object.
 
 | Property | Type | Default | Description |
 | -------- | ---- | ------- | ----------- |
-| `first_date`      | `{Date\|string}` | Current date                    | First selectable date. **All date values** can be a date string (in ISO format) or a date object |
+| `first_date`      | `{Date\|string}` | Current date                    | First selectable date. |
 | `start_date`      | `{Date\|string}` | One day more than current date  | Start selected date |
 | `last_date`       | `{Date\|string}` | One year more than `start_date` | Last selectable date |
 | `first_day_no`    | `{number}`       | `0` (Sunday)                    | Day the week must start with. Accepted range values are 0-6 where 0 means Sunday, 1 means Monday and so on |

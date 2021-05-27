@@ -22,8 +22,8 @@ DateTimeRangePicker.prototype.constructor = DateTimeRangePicker;
  * @classdesc
  * Creates a date time range picker inside the `div` elements passed as parameters
  *
- * @param {string} start_id Id of the `div` element that will contain the start date/time buttons
- * @param {string} end_id Id of the `div` element that will contain the end date/time buttons
+ * @param {string} start_id Id of the start date `div` element
+ * @param {string} end_id Id of the end date `div` element
  * @param {object} [settings={}] Object with user defined settings
  *
  * @example

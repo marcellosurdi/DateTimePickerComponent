@@ -60,9 +60,9 @@ new DateTimePickerComponent.DatePicker( 'select_date' );
 
 ## Usage
 ### How does this component work?
-When one of the classes is called with `new` operator, like above example `new DatePicker( 'select_date' );`, the necessary HTML is dynamically appended to the `div#select_date`.
+When one of the classes is called with `new` operator, the necessary HTML is dynamically appended to the `div#select_date`.
 
-For **Date*Picker** classes the resulting HTML will look similar to these lines of code:
+The resulting HTML for **Date*Picker** classes will look similar to these lines of code:
 
 ``` html
 <div id="select_date" class="datetime-container">
@@ -98,7 +98,7 @@ For **Date*RangePicker** classes instead:
 </div>
 ```
 
-As you can see, the picker **is not tied** to an input text, so the selected date is always returned to the value attribute of the `input.date_output` according to `settings.date_output` property, see the settings section below.
+As you can see, the picker **is not tied** to an input text, so the selected date is always returned to the value attribute of the `input.date_output` according to `settings.date_output` property. See the settings section below.
 
 ### Date*Picker classes
 DatePicker and DateTimePicker classes allow to select a date or a date/time respectively, [see the online demo](https://www.marcellosurdi.name/demo/date-time-picker-component/).
@@ -145,8 +145,8 @@ DateRangePicker and DateTimeRangePicker classes allow to select a date range or 
 #### Params
 | Property | Type | Default | Description |
 | -------- | ---- | ------- | ----------- |
-| `start_id`        | `{string}` | None        | Id of the `div` element where to append the component for the start date. **An error is thrown** if no value or invalid value is passed |
-| `end_id`          | `{string}` | None        | Id of the `div` element where to append the component for the end date. **An error is thrown** if no value or invalid value is passed |
+| `start_id`        | `{string}` | None        | Id of the start date `div` element. **An error is thrown** if no value or invalid value is passed |
+| `end_id`          | `{string}` | None        | Id of the end date `div` element. **An error is thrown** if no value or invalid value is passed |
 | [`settings`]      | `{object}` | `{}`        | Object with user defined settings |
 
 See the settings section for more details.
@@ -185,7 +185,7 @@ And the corresponding HTML:
 ```
 
 ### Settings
-**All classes** support these properties in `settings` object. **All date properties** can be a date string (in ISO format) or a date object.
+**All classes** support these properties in `settings` object. **All *_date properties** can be a date string (in ISO format) or a date object.
 
 | Property | Type | Default | Description |
 | -------- | ---- | ------- | ----------- |

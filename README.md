@@ -185,7 +185,7 @@ And the corresponding HTML:
 ```
 
 ### Settings
-**All classes** support these properties in `settings` object. **All *_date properties** can be a date string (in ISO format) or a date object.
+**All classes** support these properties in `settings` object. **All \*_date properties** can be a date string (in ISO format) or a date object.
 
 | Property | Type | Default | Description |
 | -------- | ---- | ------- | ----------- |

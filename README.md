@@ -310,7 +310,7 @@ To retain the user selected dates after a page reload due, for instance, to a fa
 The component will detect hidden input fields and print the content of their value attribute as default.
 
 ## Build
-To compile DateTimePickerComponent by yourself, make sure that you have [Node.js](http://nodejs.org/) and [WebPack](https://webpack.js.org/guides/installation/#root) installed, then:
+To compile DateTimePickerComponent by yourself, make sure that you have [Node.js](http://nodejs.org/) installed, then:
 1. Fork and clone the [GitHub repository](https://github.com/marcellosurdi/DateTimePickerComponent).
 2. From the command line go to the local DateTimePickerComponent folder.
 3. Run `npm install` and wait for the necessary modules installation.

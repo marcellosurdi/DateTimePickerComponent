@@ -1,9 +1,9 @@
 # DateTimePickerComponent
-![GitHub package.json version](https://img.shields.io/github/package-json/v/marcellosurdi/DateTimePickerComponent) 
+![GitHub package.json version](https://img.shields.io/github/package-json/v/marcellosurdi/DateTimePickerComponent)
 ![npm](https://img.shields.io/npm/dw/date-time-picker-component)
 
 ## Description
-DateTimePickerComponent is a very lightweight (less than 20KB) and dependency-free web component written in pure JavaScript. It supports localization, date formats, range selections and disabled dates. [See the online demo](https://www.marcellosurdi.name/demo/date-time-picker-component/)
+DateTimePickerComponent is a very lightweight (less than 20KB) and dependency-free web component written in pure JavaScript. It supports localization, date formats, range selections and disabled dates. [See the online demo](https://www.marcellosurdi.name/demo/date-time-picker-component/).
 
 ![Date picker](https://www.marcellosurdi.name/demo/date-time-picker-component/img/screenshot-date-picker.png "Date picker")
 ![Time picker](https://www.marcellosurdi.name/demo/date-time-picker-component/img/screenshot-time-picker.png "Time picker")
@@ -308,6 +308,18 @@ To retain the user selected dates after a page reload due, for instance, to a fa
 ```
 
 The component will detect hidden input fields and print the content of their value attribute as default.
+
+## Build
+To compile DateTimePickerComponent by yourself, make sure that you have [Node.js](http://nodejs.org/) and [WebPack](https://webpack.js.org/guides/installation/#root) installed, then:
+1. Fork and clone the [GitHub repository](https://github.com/marcellosurdi/DateTimePickerComponent).
+2. From the command line go to the local DateTimePickerComponent folder.
+3. Run `npm install` and wait for the necessary modules installation.
+4. The `npm run dev` command opens a Chrome window for developing purposes, `npm run build` compiles in `dist` folder.
+
+That's it!
+
+## Do you use DateTimePickerComponent?
+Let me know [with a link](mailto:marcellosurdi@gmail.com) if you've used DateTimePickerComponent in some interesting way, or on a popular site.
 
 ## To do list
 1. Provide a year/month picker.

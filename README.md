@@ -313,7 +313,7 @@ The component will detect hidden input fields and print the content of their val
 To compile DateTimePickerComponent by yourself, make sure that you have [Node.js](http://nodejs.org/) installed, then:
 1. Fork and clone the [GitHub repository](https://github.com/marcellosurdi/DateTimePickerComponent).
 2. From the command line go to the local DateTimePickerComponent folder.
-3. Run `npm install` and wait for the necessary modules installation.
+3. Run `npm install` and wait for the necessary modules installation. [Webpack](https://webpack.js.org/guides/installation/#root) will be installed, look at the other dev dependencies in `package.json` file.
 4. The `npm run dev` command opens a Chrome window for developing purposes, `npm run build` compiles in `dist` folder.
 
 That's it!

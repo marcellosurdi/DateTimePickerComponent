@@ -63,7 +63,7 @@ new DateTimePickerComponent.DatePicker( 'select_date' );
 
 ## Usage
 ### How does this component work?
-When one of the classes is called with `new` operator, the necessary HTML is dynamically appended to the `div#select_date`.
+When one of the classes is called with `new` operator like above (`new DatePicker( 'select_date' );`), the necessary HTML is dynamically appended to the `div#select_date`.
 
 The resulting HTML for **Date*Picker** classes will look similar to these lines of code:
 

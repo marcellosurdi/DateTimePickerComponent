@@ -20,13 +20,10 @@ DatePicker.prototype.constructor = DatePicker;
  * @class
  *
  * @classdesc
- * Creates a date picker inside the `div` passed as parameter
+ * Creates a date picker inside the `div` passed as parameter.
  *
- * @param {string} id Id of the `div` element where to append the component
- * @param {object} [settings={}] Object with user defined settings
- *
- * @example
- * // In settings object you can use either a date string (in ISO format) or a date object
+ * Example:
+ * ``` javascript
  * new DatePicker( 'id', {
  *  first_date: "2030-01-02",
  *  start_date: "2030-01-05",
@@ -38,6 +35,10 @@ DatePicker.prototype.constructor = DatePicker;
  *    active_color: '#fff'
  *  }
  * } );
+ * ```
+ *
+ * @param {string} id Id of the `div` element where to append the component
+ * @param {object} [settings={}] Object with user defined settings
  */
 export function DatePicker( id, settings = {} ) {
   PickerBase.call( this );

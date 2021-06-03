@@ -20,14 +20,10 @@ DateRangePicker.prototype.constructor = DateRangePicker;
  * @class
  *
  * @classdesc
- * Creates a date range picker inside the `div` elements passed as parameters
+ * Creates a date range picker inside the `div` elements passed as parameters.
  *
- * @param {string} start_id Id of the start date `div` element
- * @param {string} end_id Id of the end date `div` element
- * @param {object} [settings={}] Object with user defined settings
- *
- * @example
- * // In settings object you can use either a date string (in ISO format) or a date object
+ * Example:
+ * ``` javascript
  * new DateRangePicker( 'start_id', 'end_id' {
  *  first_date: "2030-01-02",
  *  start_date: "2030-01-05",
@@ -40,8 +36,13 @@ DateRangePicker.prototype.constructor = DateRangePicker;
  *    active_color: '#fff',
  *    inactive_background: '#0366d9',
  *    inactive_color: '#fff' },
- *  min_range_hours: 24
+ *    min_range_hours: 24
  * } );
+ * ```
+ *
+ * @param {string} start_id Id of the start date `div` element
+ * @param {string} end_id Id of the end date `div` element
+ * @param {object} [settings={}] Object with user defined settings
  */
 export function DateRangePicker( start_id, end_id, settings = {} ) {
   PickerBase.call( this );

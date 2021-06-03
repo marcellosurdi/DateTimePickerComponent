@@ -327,4 +327,5 @@ Let me know [with a link](mailto:marcellosurdi@gmail.com) if you've used DateTim
 3. Provide support for swiping months.
 
 ## Links
-[Online demo](https://www.marcellosurdi.name/demo/date-time-picker-component/)
+1. [Online demo](https://www.marcellosurdi.name/demo/date-time-picker-component/)
+2. [Source code documentation](https://www.marcellosurdi.name/docs/date-time-picker-component/)

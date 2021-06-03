@@ -1,0 +1,13 @@
+{
+  "opts": {
+    "template": "node_modules/clean-jsdoc-theme"
+  },
+  "plugins": [
+    "plugins/markdown"
+  ],
+  "templates": {
+    "default": {
+      "useLongnameInNav": true
+    }
+  }
+}

@@ -876,7 +876,7 @@ export function PickerBase() {
    * @param {Date} date Date to be displayed
    *
    * @see {@link module:js/picker-base.PickerBase~getWeekDayNo|getWeekDayNo}
-   * @see {@link module:js/picker-base.PickerBase~getISOStringTZ|getISOStringTZ}
+   * @see {@link module:js/picker-base.PickerBase~date2ISO|date2ISO}
    */
   this.printDateAndTime = function( div, date ) {
     // Displays date
@@ -909,7 +909,7 @@ export function PickerBase() {
 
     // Outputs date and time according to this.date_output
     let output_date;
-    const full_iso = getISOStringTZ( date );
+    const full_iso = date2ISO( date );
     switch( this.date_output ) {
       // YYYY-MM-DDTHH:mm:ss
       case 'full_ISO':
@@ -987,6 +987,25 @@ export function PickerBase() {
 
 
   /**
+   * Returns a ISO string from date passed as parameter.
+   * It's used by {@link module:js/picker-base.PickerBase#printDateAndTime|printDateAndTime}.
+   *
+   * @param {Date} d
+   */
+  function date2ISO( d ) {
+    const YYYY = d.getFullYear();
+    const MO = ( '0' + ( d.getMonth() + 1 ) ).slice( -2 );
+    const DD = ( '0' + d.getDate() ).slice( -2 );
+    const HH = ( '0' + d.getHours() ).slice( -2 );
+    const MI = ( '0' + d.getMinutes() ).slice( -2 );
+    return `${ YYYY }-${ MO }-${ DD }T${ HH }:${ MI }:00`;
+  }
+
+
+
+
+
+  /**
    * @desc
    * Returns a date depending on these precedence criteria:
    * - the date provided in a hidden input field takes priority over other dates;
@@ -1021,23 +1040,6 @@ export function PickerBase() {
     }
 
     return date_default;
-  }
-
-
-
-
-
-  /**
-   * Returns a ISO string with timezone offset from date passed as parameter.
-   * It's used by {@link module:js/picker-base.PickerBase#printDateAndTime|printDateAndTime}.
-   *
-   * @param {Date} date
-   */
-  function getISOStringTZ( date ) {
-    // Offset in milliseconds (because Date.getTimezoneOffset returns minutes)
-    const time_zone_offset = ( new Date() ).getTimezoneOffset() * 60000;
-    // toISOString with timezone offset, the slice(0, -5) gets rid of the trailing .ssssZ
-    return ( new Date( date.getTime() - time_zone_offset ) ).toISOString().slice( 0, -5 );
   }
 
 

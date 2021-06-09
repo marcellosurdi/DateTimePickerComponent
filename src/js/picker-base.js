@@ -994,7 +994,7 @@ export function PickerBase() {
 
 
   /**
-   * Returns a ISO string from date passed as parameter.
+   * Returns a ISO string from a date passed as parameter.
    * It's used by {@link module:js/picker-base.PickerBase#printDateAndTime|printDateAndTime}.
    *
    * @param {Date} d

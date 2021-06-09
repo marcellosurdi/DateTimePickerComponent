@@ -30,6 +30,7 @@ DateTimeRangePicker.prototype.constructor = DateTimeRangePicker;
  *  end_date: "2030-01-06T18:00:00",
  *  last_date: new Date( 2030, 0, 29, 14, 0 ),
  *  first_day_no: 1,
+ *  round_minutes: 30,
  *  date_output: "timestamp",
  *  styles: {
  *    active_background: '#e34c26',
@@ -56,11 +57,12 @@ export function DateTimeRangePicker( start_id, end_id, settings = {} ) {
   const first_date = ( settings.first_date ) ? settings.first_date : null;
   const last_date = ( settings.last_date ) ? settings.last_date : null;
   const first_day_no = ( typeof settings.first_day_no !== 'undefined' ) ? settings.first_day_no : 0;
+  const round_minutes = ( settings.round_minutes ) ? settings.round_minutes : false;
   const styles = ( settings.styles ) ? settings.styles : {};
-  this.setStartPickerProps( start_id, start_date, first_date, last_date, first_day_no );
+  this.setStartPickerProps( start_id, start_date, first_date, last_date, first_day_no, round_minutes );
 
   const end_date = ( settings.end_date ) ? settings.end_date : null;
-  this.setEndPickerProps( end_id, end_date );
+  this.setEndPickerProps( end_id, end_date, round_minutes );
 
 
   // Start date

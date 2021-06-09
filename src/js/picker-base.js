@@ -663,12 +663,13 @@ export function PickerBase() {
    * Initializes the end date picker properties.
    *
    * @param {string} id id of the `div` element that will contain the button(s)
-   * @param {Date|string|null} [end_date_setting] End selected date from settings
+   * @param {Date|string|null} end_date_setting End selected date from settings
+   * @param {boolean|number} round_minutes Whether or not to round minutes (accepted values 15 or 30)
    *
    * @see {@link module:js/picker-base.PickerBase~getDateBetween|getDateBetween}
    * @see {@link module:js/picker-base.PickerBase~roundMinutes|roundMinutes}
    */
-  this.setEndPickerProps = function( id, end_date_setting ) {
+  this.setEndPickerProps = function( id, end_date_setting, round_minutes ) {
     const el = document.getElementById( id );
     if( el == null || el.nodeName != 'DIV' ) {
       throw new Error( `Does div#${ id } exist? Please, check your HTML code` );
@@ -682,7 +683,9 @@ export function PickerBase() {
       end_date = end_date_default;
     }
 
-    roundMinutes( [ end_date ] );
+    if( round_minutes ) {
+      roundMinutes( [ end_date ], round_minutes );
+    }
 
     // End selected date can't be greater than last selectable date
     if( end_date > this.last_date ) {
@@ -702,16 +705,17 @@ export function PickerBase() {
    * Initializes the start date picker properties.
    *
    * @param {string} id id of the `div` element that will contain the button(s)
-   * @param {Date} [start_date_setting] Start selected date from settings
-   * @param {Date} [first_date_setting] First selectable date from settings
-   * @param {Date} [last_date_setting] Last selectable date from settings
-   * @param {number} [first_day_no] Day the week must start with. Similarly to the returned values of `Date.getDate` method, accepted range values are 0-6 where 0 means Sunday, 1 means Monday and so on
+   * @param {Date|string|null} start_date_setting Start selected date from settings
+   * @param {Date|string|null} first_date_setting First selectable date from settings
+   * @param {Date|string|null} last_date_setting Last selectable date from settings
+   * @param {number} first_day_no Day the week must start with. Similarly to the returned values of `Date.getDate` method, accepted range values are 0-6 where 0 means Sunday, 1 means Monday and so on
+   * @param {boolean|number} round_minutes Whether or not to round minutes (accepted values 15 or 30)
    *
    * @see {@link module:js/picker-base.PickerBase~getDateBetween|getDateBetween}
    * @see {@link module:js/picker-base.PickerBase~roundMinutes|roundMinutes}
    * @see {@link module:js/picker-base.PickerBase~setDaysOrder|setDaysOrder}
    */
-  this.setStartPickerProps = function( id, start_date_setting, first_date_setting, last_date_setting, first_day_no ) {
+  this.setStartPickerProps = function( id, start_date_setting, first_date_setting, last_date_setting, first_day_no, round_minutes ) {
     const el = document.getElementById( id );
     if( el == null || el.nodeName != 'DIV' ) {
       throw new Error( `Does div#${ id } exist? Please, check your HTML code` );
@@ -737,7 +741,9 @@ export function PickerBase() {
       last_date = last_date_default;
     }
 
-    roundMinutes( [ start_date, first_date, last_date ] );
+    if( round_minutes ) {
+      roundMinutes( [ start_date, first_date, last_date ], round_minutes );
+    }
 
     setDaysOrder( first_day_no );
 
@@ -909,6 +915,7 @@ export function PickerBase() {
 
     // Outputs date and time according to this.date_output
     let output_date;
+    console.log(  date );
     const full_iso = date2ISO( date );
     switch( this.date_output ) {
       // YYYY-MM-DDTHH:mm:ss
@@ -1108,17 +1115,31 @@ export function PickerBase() {
    * Rounds minutes to the next half hour.
    *
    * @param {array} dates An array containing an arbitrary number of dates to be rounded
+   * @param {boolean|number} round_minutes Whether or not to round minutes (accepted values 15 or 30)
    */
-  function roundMinutes( dates ) {
+  function roundMinutes( dates, round_minutes ) {
     dates.forEach( ( date ) => {
       date.setSeconds( 0, 0 );
 
+      let sum_one_hour = false;
       let m = date.getMinutes();
       let h = date.getHours();
-      if( m > 0 && m <= 30 ) {
-        m = 30;
+
+      switch( round_minutes ) {
+        case 15:
+          if( m > 0 && m <= 15 ) m = 15;
+          else if( m > 15 && m <= 30 ) m = 30;
+          else if( m > 30 && m <= 45 ) m = 45;
+          else sum_one_hour = true;
+        break;
+
+        case 30:
+          if( m > 0 && m <= 30 ) m = 30;
+          else sum_one_hour = true;
+        break;
       }
-      else if( m > 30 ) {
+
+      if( sum_one_hour ) {
         m = 0;
         // If we round the minutes to 0 we have to sum +1 hour
         h = h + 1;
@@ -1128,6 +1149,7 @@ export function PickerBase() {
           date.setDate( date.getDate() + 1 );
         }
       }
+
       date.setHours( h, m );
     } );
   }

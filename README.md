@@ -101,7 +101,7 @@ For **Date*RangePicker** classes instead:
 </div>
 ```
 
-As you can see, the picker **is not tied** to an input text, so the selected date is always returned to the value attribute of the `input.date_output` according to `settings.date_output` property. See the settings section below.
+As you can see, the picker **is not tied** to an input text, so the selected date is always returned to the value attribute of the `input.date_output`, according to `settings.date_output` property. See the settings section below.
 
 ### Date*Picker classes
 DatePicker and DateTimePicker classes allow to select a date or a date/time respectively, [see the online demo](https://www.marcellosurdi.name/demo/date-time-picker-component/).
@@ -206,6 +206,18 @@ Only the **Date*RangePicker** classes also support these properties:
 | -------- | ---- | ------- | ----------- |
 | `end_date`        | `{Date\|string}` | One day more than `start_date`  | End selected date |
 | `min_range_hours` | `{number}`       | `1`                             | The minimum range expressed in hours that must elapse between `start_date` and `end_date` |
+
+### Getting date selection in a JS variable
+As we said before, the selected date is always returned to the value attribute of the `input.date_output`, according to `settings.date_output` property. So we simply have to get the value of `input.date_output` inside the top level div where the component is appended.
+
+``` javascript
+new DatePicker( 'select_date' );
+
+let current_date = document.querySelector( 'div#select_date input.date_output' ).value;
+```
+
+### Rounding minutes
+To be write...
 
 ### Localization (i10n)
 All classes support the `settings.l10n` property to localize the component in your language. You just have to pass an object like the one below to that property.
@@ -320,11 +332,6 @@ That's it!
 
 ## Do you use DateTimePickerComponent?
 Let me know [with a link](mailto:marcellosurdi@gmail.com) if you've used DateTimePickerComponent in some interesting way, or on a popular site.
-
-## To do list
-1. Provide a year/month picker.
-2. Provide support for disabling arbitrary days/hours between `first_date` and `last_date`.
-3. Provide support for swiping months.
 
 ## Links
 1. [Online demo](https://www.marcellosurdi.name/demo/date-time-picker-component/)

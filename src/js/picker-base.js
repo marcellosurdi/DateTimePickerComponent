@@ -125,9 +125,9 @@ export function PickerBase() {
   const default_days_order = [ 'sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat' ];
   const months_order = [ 'jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec' ];
   const hours = [
-    '00:00', '00:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:30', '04:00', '04:30', '05:00', '05:30', '06:00', '06:30', '07:00', '07:30',
-    '08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30',
-    '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30', '22:00', '22:30', '23:00', '23:30'
+    '00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00',
+    '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00',
+    '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00',
   ];
   // Click events don't always work like expected on iOS, we can use touchstart instead
   const click = ( navigator.userAgent.match( /(iPad|iPhone|iPod)/g ) ) ? 'touchstart' : 'click';
@@ -576,6 +576,120 @@ export function PickerBase() {
 
   /**
    * @desc
+   * Displays date and/or time in their own buttons. According to `settings.date_output` property,
+   * it outputs the date in local time to the value attribute of `input.date_output`.
+   *
+   * @param {HTMLDivElement} div `div` element where to display the date/time
+   * @param {Date} date Date to be displayed
+   *
+   * @see {@link module:js/picker-base.PickerBase~getWeekDayNo|getWeekDayNo}
+   * @see {@link module:js/picker-base.PickerBase~date2ISO|date2ISO}
+   */
+  this.printDateAndTime = function( div, date ) {
+    // Displays date
+    const date_coll = div.querySelectorAll( 'button.date > *' );
+    const week_day_span = date_coll[ 0 ];
+    const month_day = date_coll[ 1 ];
+    const month_year_span = date_coll[ 2 ];
+    // const [ week_day_span, month_day, month_year_span ] = div.querySelectorAll( 'button.date > *' );
+
+    const week_day_number = getWeekDayNo( date );
+
+    week_day_span.textContent = this.i18n[ days_order[ week_day_number ] ];
+    month_day.textContent = ( '0' + date.getDate() ).slice( -2 );
+    month_year_span.innerHTML =
+      `<span data-i18n="${ months_order[ date.getMonth() ] }">${ this.i18n[ months_order[ date.getMonth() ] ] }</span><br>${ date.getFullYear() }`;
+
+
+    // Displays time
+    const button_time = div.querySelector( 'button.time' );
+    if( button_time ) {
+      const time_coll = button_time.querySelectorAll( 'span' );
+      const hours = time_coll[ 0 ];
+      const minutes = time_coll[ 1 ];
+      // const [ hours, minutes ] = button_time.querySelectorAll( 'span' );
+
+      hours.textContent = ( '0' + date.getHours() ).slice( -2 );
+      minutes.textContent = `:${ ( '0' + date.getMinutes() ).slice( -2 ) }`;
+    }
+
+
+    // Outputs date and time according to this.date_output
+    let output_date;
+    const full_iso = date2ISO( date );
+    switch( this.date_output ) {
+      // YYYY-MM-DDTHH:mm:ss
+      case 'full_ISO':
+        output_date = full_iso;
+      break;
+      // YYYY-MM-DD
+      case 'short_ISO':
+        let arr = full_iso.split( 'T' );
+        output_date = arr[ 0 ];
+        // [ output_date, ] = full_iso.split( 'T' );
+      break;
+      // Timestamp value without milliseconds
+      case 'timestamp':
+      default:
+        output_date = Math.round( date.getTime() / 1000 );
+    }
+
+    div.querySelector( 'input.date_output' ).value = output_date;
+  }
+
+
+
+
+
+  /**
+   * @desc
+   * Rounds minutes to the next half hour.
+   *
+   * @param {array} dates An array containing an arbitrary number of dates to be rounded
+   */
+  this.roundMinutes = function( dates ) {
+    dates.forEach( ( date ) => {
+      date.setSeconds( 0, 0 );
+
+      let sum_one_hour = false;
+      let m = date.getMinutes();
+      let h = date.getHours();
+
+      switch( this.round_minutes ) {
+        case 15:
+          if( m > 0 && m <= 15 ) m = 15;
+          else if( m > 15 && m <= 30 ) m = 30;
+          else if( m > 30 && m <= 45 ) m = 45;
+          else sum_one_hour = true;
+        break;
+
+        case 30:
+          if( m > 0 && m <= 30 ) m = 30;
+          else sum_one_hour = true;
+        break;
+      }
+
+      if( sum_one_hour ) {
+        m = 0;
+        // If we round the minutes to 0 we have to sum +1 hour
+        h = h + 1;
+        // If, after rounding, the midnight is reached, we have to sum +1 day
+        if( h == 24 ) {
+          h = 0;
+          date.setDate( date.getDate() + 1 );
+        }
+      }
+
+      date.setHours( h, m );
+    } );
+  }
+
+
+
+
+
+  /**
+   * @desc
    * Selects the day clicked by the user and then closes the picker. It's used by
    * {@link module:js/picker-base.PickerBase#onSelectDayOrHour|onSelectDayOrHour} method.
    *
@@ -664,12 +778,11 @@ export function PickerBase() {
    *
    * @param {string} id id of the `div` element that will contain the button(s)
    * @param {Date|string|null} end_date_setting End selected date from settings
-   * @param {boolean|number} round_minutes Whether or not to round minutes (accepted values 15 or 30)
    *
    * @see {@link module:js/picker-base.PickerBase~getDateBetween|getDateBetween}
    * @see {@link module:js/picker-base.PickerBase~roundMinutes|roundMinutes}
    */
-  this.setEndPickerProps = function( id, end_date_setting, round_minutes ) {
+  this.setEndPickerProps = function( id, end_date_setting ) {
     const el = document.getElementById( id );
     if( el == null || el.nodeName != 'DIV' ) {
       throw new Error( `Does div#${ id } exist? Please, check your HTML code` );
@@ -683,8 +796,8 @@ export function PickerBase() {
       end_date = end_date_default;
     }
 
-    if( round_minutes ) {
-      roundMinutes( [ end_date ], round_minutes );
+    if( this.round_minutes ) {
+      this.roundMinutes( [ end_date ] );
     }
 
     // End selected date can't be greater than last selectable date
@@ -741,8 +854,8 @@ export function PickerBase() {
       last_date = last_date_default;
     }
 
-    if( round_minutes ) {
-      roundMinutes( [ start_date, first_date, last_date ], round_minutes );
+    if( this.round_minutes ) {
+      this.roundMinutes( [ start_date, first_date, last_date ] );
     }
 
     setDaysOrder( first_day_no );
@@ -875,74 +988,6 @@ export function PickerBase() {
 
   /**
    * @desc
-   * Displays date and/or time in their own buttons. According to `settings.date_output` property,
-   * it outputs the date in local time to the value attribute of `input.date_output`.
-   *
-   * @param {HTMLDivElement} div `div` element where to display the date/time
-   * @param {Date} date Date to be displayed
-   *
-   * @see {@link module:js/picker-base.PickerBase~getWeekDayNo|getWeekDayNo}
-   * @see {@link module:js/picker-base.PickerBase~date2ISO|date2ISO}
-   */
-  this.printDateAndTime = function( div, date ) {
-    // Displays date
-    const date_coll = div.querySelectorAll( 'button.date > *' );
-    const week_day_span = date_coll[ 0 ];
-    const month_day = date_coll[ 1 ];
-    const month_year_span = date_coll[ 2 ];
-    // const [ week_day_span, month_day, month_year_span ] = div.querySelectorAll( 'button.date > *' );
-
-    const week_day_number = getWeekDayNo( date );
-
-    week_day_span.textContent = this.i18n[ days_order[ week_day_number ] ];
-    month_day.textContent = ( '0' + date.getDate() ).slice( -2 );
-    month_year_span.innerHTML =
-      `<span data-i18n="${ months_order[ date.getMonth() ] }">${ this.i18n[ months_order[ date.getMonth() ] ] }</span><br>${ date.getFullYear() }`;
-
-
-    // Displays time
-    const button_time = div.querySelector( 'button.time' );
-    if( button_time ) {
-      const time_coll = button_time.querySelectorAll( 'span' );
-      const hours = time_coll[ 0 ];
-      const minutes = time_coll[ 1 ];
-      // const [ hours, minutes ] = button_time.querySelectorAll( 'span' );
-
-      hours.textContent = ( '0' + date.getHours() ).slice( -2 );
-      minutes.textContent = `:${ ( '0' + date.getMinutes() ).slice( -2 ) }`;
-    }
-
-
-    // Outputs date and time according to this.date_output
-    let output_date;
-    console.log(  date );
-    const full_iso = date2ISO( date );
-    switch( this.date_output ) {
-      // YYYY-MM-DDTHH:mm:ss
-      case 'full_ISO':
-        output_date = full_iso;
-      break;
-      // YYYY-MM-DD
-      case 'short_ISO':
-        let arr = full_iso.split( 'T' );
-        output_date = arr[ 0 ];
-        // [ output_date, ] = full_iso.split( 'T' );
-      break;
-      // Timestamp value without milliseconds
-      case 'timestamp':
-      default:
-        output_date = Math.round( date.getTime() / 1000 );
-    }
-
-    div.querySelector( 'input.date_output' ).value = output_date;
-  }
-
-
-
-
-
-  /**
-   * @desc
    * Creates the table of hours inside the picker
    *
    * @param {HTMLDivElement} picker The picker that contains the table
@@ -956,11 +1001,11 @@ export function PickerBase() {
     let i = 0, html = '', class_name;
 
     // Nine rows
-    for( let j = 1; j < 9; j++ ) {
+    for( let j = 1; j < 7; j++ ) {
       html += "<tr>";
 
       // Six columns
-      for( i = 1 * i ; i < 6 * j; i++ ) {
+      for( i = 1 * i ; i < 4 * j; i++ ) {
         if( hours[ i ] ) {
           class_name = ''
           class_name = this.getHourClassName( hours[ i ], day );
@@ -1104,54 +1149,6 @@ export function PickerBase() {
     }
 
     return ( date ) ? date : null;
-  }
-
-
-
-
-
-  /**
-   * @desc
-   * Rounds minutes to the next half hour.
-   *
-   * @param {array} dates An array containing an arbitrary number of dates to be rounded
-   * @param {boolean|number} round_minutes Whether or not to round minutes (accepted values 15 or 30)
-   */
-  function roundMinutes( dates, round_minutes ) {
-    dates.forEach( ( date ) => {
-      date.setSeconds( 0, 0 );
-
-      let sum_one_hour = false;
-      let m = date.getMinutes();
-      let h = date.getHours();
-
-      switch( round_minutes ) {
-        case 15:
-          if( m > 0 && m <= 15 ) m = 15;
-          else if( m > 15 && m <= 30 ) m = 30;
-          else if( m > 30 && m <= 45 ) m = 45;
-          else sum_one_hour = true;
-        break;
-
-        case 30:
-          if( m > 0 && m <= 30 ) m = 30;
-          else sum_one_hour = true;
-        break;
-      }
-
-      if( sum_one_hour ) {
-        m = 0;
-        // If we round the minutes to 0 we have to sum +1 hour
-        h = h + 1;
-        // If, after rounding, the midnight is reached, we have to sum +1 day
-        if( h == 24 ) {
-          h = 0;
-          date.setDate( date.getDate() + 1 );
-        }
-      }
-
-      date.setHours( h, m );
-    } );
   }
 
 

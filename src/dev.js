@@ -77,7 +77,6 @@ new DateTimePicker( 'select_datetime', {
   l10n: it,
 } );
 
-console.log( document.querySelector( 'div#select_datetime input.date_output' ).value );
 //
 //
 //

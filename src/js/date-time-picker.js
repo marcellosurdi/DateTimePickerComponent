@@ -48,15 +48,15 @@ export function DateTimePicker( id, settings = {} ) {
 
   // Settings
   this.i18n = ( settings.l10n ) ? settings.l10n : this.i18n;
+  this.round_minutes = ( settings.round_minutes ) ? settings.round_minutes : false;
   this.date_output = ( settings.date_output ) ? settings.date_output : 'full_ISO';
 
   const start_date = ( settings.start_date ) ? settings.start_date : null;
   const first_date = ( settings.first_date ) ? settings.first_date : null;
   const last_date = ( settings.last_date ) ? settings.last_date : null;
   const first_day_no = ( typeof settings.first_day_no !== 'undefined' ) ? settings.first_day_no : 0;
-  const round_minutes = ( settings.round_minutes ) ? settings.round_minutes : false;
   const styles = ( settings.styles ) ? settings.styles : {};
-  this.setStartPickerProps( id, start_date, first_date, last_date, first_day_no, round_minutes );
+  this.setStartPickerProps( id, start_date, first_date, last_date, first_day_no );
 
 
   // Start date

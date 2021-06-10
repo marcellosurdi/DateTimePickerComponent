@@ -50,6 +50,7 @@ export function DateTimeRangePicker( start_id, end_id, settings = {} ) {
 
   // Settings
   this.i18n = ( settings.l10n ) ? settings.l10n : this.i18n;
+  this.round_minutes = ( settings.round_minutes ) ? settings.round_minutes : false;
   this.date_output = ( settings.date_output ) ? settings.date_output : 'full_ISO';
   this.min_range = ( settings.min_range_hours ) ? ( settings.min_range_hours * 60 * 60 * 1000 ) : ( 1 * 60 * 60 * 1000 );
 
@@ -57,12 +58,11 @@ export function DateTimeRangePicker( start_id, end_id, settings = {} ) {
   const first_date = ( settings.first_date ) ? settings.first_date : null;
   const last_date = ( settings.last_date ) ? settings.last_date : null;
   const first_day_no = ( typeof settings.first_day_no !== 'undefined' ) ? settings.first_day_no : 0;
-  const round_minutes = ( settings.round_minutes ) ? settings.round_minutes : false;
   const styles = ( settings.styles ) ? settings.styles : {};
-  this.setStartPickerProps( start_id, start_date, first_date, last_date, first_day_no, round_minutes );
+  this.setStartPickerProps( start_id, start_date, first_date, last_date, first_day_no );
 
   const end_date = ( settings.end_date ) ? settings.end_date : null;
-  this.setEndPickerProps( end_id, end_date, round_minutes );
+  this.setEndPickerProps( end_id, end_date );
 
 
   // Start date

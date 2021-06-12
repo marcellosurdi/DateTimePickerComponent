@@ -124,11 +124,6 @@ export function PickerBase() {
   const ms_per_day = 24 * 60 * 60 * 1000;
   const default_days_order = [ 'sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat' ];
   const months_order = [ 'jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec' ];
-  const hours = [
-    '00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00',
-    '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00',
-    '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00',
-  ];
   // Click events don't always work like expected on iOS, we can use touchstart instead
   const click = ( navigator.userAgent.match( /(iPad|iPhone|iPod)/g ) ) ? 'touchstart' : 'click';
   let user_days_order, days_order;
@@ -314,11 +309,11 @@ export function PickerBase() {
 
 
   /**
-   * Returns classes for `td` elements that contain the hour/minute pairs (HH:mm).
+   * Returns classes for `td` elements that match the current hour.
    * It's used inside a loop both when building table ({@link module:js/picker-base.PickerBase#showTimePicker|showTimePicker})
    * and when updating it ({@link module:js/picker-base.PickerBase#selectHour|selectHour}).
    *
-   * @param {string} hour An hour/minute pair (HH:mm) inside a loop iteration
+   * @param {number} hour Current hour inside a loop iteration
    * @param {Date} date Date object with current hour/minutes
    * @return {string} Classes to be assigned to the `td` element
    */
@@ -998,22 +993,22 @@ export function PickerBase() {
    * @see {@link module:js/picker-base.PickerBase#addEventOnSelect|addEventOnSelect}
    */
   this.showTimePicker = function( picker, day ) {
-    let i = 0, html = '', class_name;
+    let hours = 0, html = '', class_name;
 
-    // Nine rows
-    for( let j = 1; j < 7; j++ ) {
+    // Six rows
+    for( let j = 0; j < 6; j++ ) {
       html += "<tr>";
 
-      // Six columns
-      for( i = 1 * i ; i < 4 * j; i++ ) {
-        if( hours[ i ] ) {
-          class_name = ''
-          class_name = this.getHourClassName( hours[ i ], day );
+      // Four columns
+      for( let i = 1 ; i <= 4; i++, hours++ ) {
+        class_name = ''
+        // class_name = this.getHourClassName( hours, day );
 
-          html += `<td class="${ class_name }">${ hours[ i ] }</td>`;
-        } else {
-          html += `<td class="white-background disabled"></td>`;
+        for( let m = 0; m < 60; m++ ) {
+          if( m % this.round_minutes == 0 ) console.log( m );
         }
+
+        html += `<td class="${ class_name }">${ ( '0' + hours ).slice( -2 ) }</td>`;
       }
 
       html += "</tr>";

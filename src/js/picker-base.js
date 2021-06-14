@@ -650,6 +650,22 @@ export function PickerBase() {
       let m = date.getMinutes();
       let h = date.getHours();
 
+
+      // const ROUND = 15;
+      // let n = 16;
+      // console.log( n );
+      //
+      // if( n % ROUND != 0 ) {
+      //   for( let i = n; i <= ( n + ROUND ); i++ ) {
+      //     if( i % ROUND == 0 ) {
+      //       n = i;
+      //       break;
+      //     }
+      //   }
+      // }
+      //
+      // console.log( n );
+
       switch( this.round_minutes ) {
         case 15:
           if( m > 0 && m <= 15 ) m = 15;
@@ -1004,11 +1020,18 @@ export function PickerBase() {
         class_name = ''
         // class_name = this.getHourClassName( hours, day );
 
+        let current_hour = ( '0' + hours ).slice( -2 );
+        let select =  '<select class="select-hour">';
         for( let m = 0; m < 60; m++ ) {
-          if( m % this.round_minutes == 0 ) console.log( m );
+          if( m % this.round_minutes == 0 ) {
+            let current_minute = ( '0' + m ).slice( -2 );
+            let option_value = current_hour + ':' + current_minute;
+            select +=   `<option value="${ option_value }">${ option_value }</option>`;
+          }
         }
+        select +=     '</select>';
 
-        html += `<td class="${ class_name }">${ ( '0' + hours ).slice( -2 ) }</td>`;
+        html += `<td class="${ class_name }">${ select }</td>`;
       }
 
       html += "</tr>";

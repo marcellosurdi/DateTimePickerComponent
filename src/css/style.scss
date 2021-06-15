@@ -144,14 +144,9 @@ div.datetime-container {
           border: 0;
           outline: none;
           background-color: transparent;
-          padding: 5px;
+          padding: 0 5px;
           font-size: 100%;
           appearance: none;
         }
         table td select::-ms-expand { display: none; }
-        table td select option:checked, table td select option:hover  {
-            background: linear-gradient(#d6d6d6, #d6d6d6);
-            background-color: #d6d6d6 !important; /* for IE */
-            color: #000000 !important;
-        }
       }

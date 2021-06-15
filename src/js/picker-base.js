@@ -1031,6 +1031,8 @@ export function PickerBase() {
         }
         select +=     '</select>';
 
+        if( current_hour == '22' ) class_name = 'time-selected';
+
         html += `<td class="${ class_name }">${ select }</td>`;
       }
 

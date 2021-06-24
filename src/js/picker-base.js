@@ -309,41 +309,6 @@ export function PickerBase() {
 
 
   /**
-   * Returns classes for `td` elements that match the current hour.
-   * It's used inside a loop both when building table ({@link module:js/picker-base.PickerBase#showTimePicker|showTimePicker})
-   * and when updating it ({@link module:js/picker-base.PickerBase#selectHour|selectHour}).
-   *
-   * @param {number} hour Current hour inside a loop iteration
-   * @param {Date} date Date object with current hour/minutes
-   * @return {string} Classes to be assigned to the `td` element
-   */
-  this.getHourClassName = function( hour, date ) {
-    const selected_hour = ( '0' + date.getHours() ).slice( -2 ) + ':' + ( '0' + date.getMinutes() ).slice( -2 );
-
-    const arr = hour.split( ':' );
-    const h = arr[ 0 ];
-    const m = arr[ 1 ];
-    // const [ h, m ] = hour.split( ':' );
-
-    const _curr_day = new Date( date );
-    _curr_day.setHours( h, m, 0, 0 );
-
-    let class_name = 'hour ';
-    if( _curr_day < this.first_date || _curr_day > this.last_date ) {
-      class_name += 'disabled';
-    } else {
-      class_name += 'selectable';
-      class_name += ( selected_hour == hour ) ? ' time-selected ' + mode : '';
-    }
-
-    return class_name;
-  }
-
-
-
-
-
-  /**
    * @desc
    * Returns HTML for buttons. It's used to populate `start_container` and `end_container`.
    *
@@ -768,11 +733,11 @@ export function PickerBase() {
     this.checkDateTimeConsistency();
 
     // Updates the table after user selection
-    let coll = document.querySelectorAll( 'td.selectable' );
-
-    for( let i = 0, n = coll.length; i < n; i++ ) {
-      coll[ i ].className = this.getHourClassName( coll[ i ].textContent, o.date );
-    }
+    // let coll = document.querySelectorAll( 'td.selectable' );
+    //
+    // for( let i = 0, n = coll.length; i < n; i++ ) {
+    //   coll[ i ].className = this.getHourClassName( coll[ i ].textContent, o.date );
+    // }
 
     this.printDateAndTime( o.container, o.date, 'time' );
 
@@ -1005,53 +970,51 @@ export function PickerBase() {
    * @param {Date} day Current day
    *
    * @see {@link module:js/picker-base.PickerBase~getWeekDayNo|getWeekDayNo}
-   * @see {@link module:js/picker-base.PickerBase#getHourClassName|getHourClassName}
    * @see {@link module:js/picker-base.PickerBase#addEventOnSelect|addEventOnSelect}
    */
   this.showTimePicker = function( picker, day ) {
-    let hours = 0, html = '', class_name;
+    let hours = 0, class_name;
 
-    // Six rows
-    for( let j = 0; j < 6; j++ ) {
-      html += "<tr>";
-
-      // Four columns
-      for( let i = 1 ; i <= 4; i++, hours++ ) {
-        class_name = ''
-        // class_name = this.getHourClassName( hours, day );
-
-        let current_hour = ( '0' + hours ).slice( -2 );
-        let select =  '<select class="select-hour">';
-        for( let m = 0; m < 60; m++ ) {
-          if( m % this.round_minutes == 0 ) {
-            let current_minute = ( '0' + m ).slice( -2 );
-            let option_value = current_hour + ':' + current_minute;
-            select +=   `<option value="${ option_value }">${ option_value }</option>`;
-          }
-        }
-        select +=     '</select>';
-
-        if( current_hour == '22' ) class_name = 'time-selected';
-
-        html += `<td class="${ class_name }">${ select }</td>`;
-      }
-
-      html += "</tr>";
+    let select_hours = '<select id="select-hours">';
+    for( let h = 0; h <= 23; h++ ) {
+      let current_hour = ( '0' + h ).slice( -2 );
+      let selected = ( h == day.getHours() ) ? 'selected' : '';
+      select_hours +=      `<option value="${ current_hour }" ${ selected }>${ current_hour }</option>`;
     }
+    select_hours +=      '</select>';
+
+    let select_minutes = '<select id="select-minutes">';
+    for( let m = 0; m <= 59; m++ ) {
+      if( m % this.round_minutes == 0 ) {
+        let current_minute = ( '0' + m ).slice( -2 );
+        let selected = ( m == day.getMinutes() ) ? 'selected' : '';
+        select_minutes +=   `<option value="${ current_minute }" ${ selected }>${ current_minute }</option>`;
+      }
+    }
+    select_minutes +=     '</select>';
 
     picker.innerHTML =
     `<table class="time">
       <tr>
-        <th colspan="7">
+        <th>
           ${ this.i18n[ days_order[ getWeekDayNo( day ) ] + '_' ] }
           ${ day.getDate() }
           <span class="month" data-i18n="${ months_order[ day.getMonth() ] + '_' }">${ this.i18n[ months_order[ day.getMonth() ] + '_' ] }</span>
         </th>
       </tr>
-      ${ html }
+      <tr>
+        <td>
+          ${ select_hours }
+          ${ select_minutes }
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <button>Cancel</button>
+          <button>Confirm</button>
+        </td>
+      </tr>
     </table>`;
-
-    this.addEventOnSelect( picker );
   }
 
 

@@ -615,39 +615,19 @@ export function PickerBase() {
       let m = date.getMinutes();
       let h = date.getHours();
 
-
-      // const ROUND = 15;
-      // let n = 16;
-      // console.log( n );
-      //
-      // if( n % ROUND != 0 ) {
-      //   for( let i = n; i <= ( n + ROUND ); i++ ) {
-      //     if( i % ROUND == 0 ) {
-      //       n = i;
-      //       break;
-      //     }
-      //   }
-      // }
-      //
-      // console.log( n );
-
-      switch( this.round_minutes ) {
-        case 15:
-          if( m > 0 && m <= 15 ) m = 15;
-          else if( m > 15 && m <= 30 ) m = 30;
-          else if( m > 30 && m <= 45 ) m = 45;
-          else sum_one_hour = true;
-        break;
-
-        case 30:
-          if( m > 0 && m <= 30 ) m = 30;
-          else sum_one_hour = true;
-        break;
+      // Rounds m to the next round value
+      if( m % this.round_minutes != 0 ) {
+        for( let i = m; i <= ( m + this.round_minutes ); i++ ) {
+          if( i % this.round_minutes == 0 ) {
+            m = i;
+            break;
+          }
+        }
       }
 
-      if( sum_one_hour ) {
+      if( m == 60 ) {
         m = 0;
-        // If we round the minutes to 0 we have to sum +1 hour
+        // If we round minutes to 0 we have to sum +1 hour
         h = h + 1;
         // If, after rounding, the midnight is reached, we have to sum +1 day
         if( h == 24 ) {
@@ -831,6 +811,10 @@ export function PickerBase() {
     }
 
     if( this.round_minutes ) {
+      if( [ 5, 10, 15, 20, 30 ].indexOf( this.round_minutes ) < 0 ) {
+        this.round_minutes = 1;
+      }
+
       this.roundMinutes( [ start_date, first_date, last_date ] );
     }
 
@@ -973,25 +957,40 @@ export function PickerBase() {
    * @see {@link module:js/picker-base.PickerBase#addEventOnSelect|addEventOnSelect}
    */
   this.showTimePicker = function( picker, day ) {
-    let hours = 0, class_name;
+    let _curr_day = new Date( day );
+    let selected_hour;
 
     let select_hours = '<select id="select-hours">';
     for( let h = 0; h <= 23; h++ ) {
+
+       _curr_day.setHours( h );
+      if( _curr_day < this.first_date || _curr_day > this.last_date ) {
+        continue;
+      }
+
       let current_hour = ( '0' + h ).slice( -2 );
       let selected = ( h == day.getHours() ) ? 'selected' : '';
+      if( selected ) {
+        selected_hour = h;
+      }
       select_hours +=      `<option value="${ current_hour }" ${ selected }>${ current_hour }</option>`;
     }
-    select_hours +=      '</select>';
+    select_hours +=     '</select>';
 
     let select_minutes = '<select id="select-minutes">';
     for( let m = 0; m <= 59; m++ ) {
       if( m % this.round_minutes == 0 ) {
+        _curr_day.setHours( selected_hour, m );
+        if( _curr_day < this.first_date || _curr_day > this.last_date ) {
+          continue;
+        }
+
         let current_minute = ( '0' + m ).slice( -2 );
         let selected = ( m == day.getMinutes() ) ? 'selected' : '';
         select_minutes +=   `<option value="${ current_minute }" ${ selected }>${ current_minute }</option>`;
       }
     }
-    select_minutes +=     '</select>';
+    select_minutes +=    '</select>';
 
     picker.innerHTML =
     `<table class="time">
@@ -1010,8 +1009,7 @@ export function PickerBase() {
       </tr>
       <tr>
         <td>
-          <button>Cancel</button>
-          <button>Confirm</button>
+          <button>Conferma</button>
         </td>
       </tr>
     </table>`;

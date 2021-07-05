@@ -948,7 +948,7 @@ export function PickerBase() {
 
   /**
    * @desc
-   * Creates the table of hours inside the picker
+   * Creates select elements for hours and minutes inside the picker
    *
    * @param {HTMLDivElement} picker The picker that contains the table
    * @param {Date} day Current day
@@ -959,6 +959,32 @@ export function PickerBase() {
   this.showTimePicker = function( picker, day ) {
     let _curr_day = new Date( day );
     let selected_hour;
+
+    let getSelectMinutesOptions = () => {
+      let select_content = '';
+      for( let m = 0; m <= 59; m++ ) {
+        if( m % this.round_minutes == 0 ) {
+          _curr_day.setHours( selected_hour, m );
+          if( _curr_day < this.first_date || _curr_day > this.last_date ) {
+            continue;
+          }
+
+          let current_minute = ( '0' + m ).slice( -2 );
+          let selected = ( m == day.getMinutes() ) ? 'selected' : '';
+          select_content +=   `<option value="${ current_minute }" ${ selected }>${ current_minute }</option>`;
+        }
+      }
+
+      return select_content;
+    }
+
+    let onChangeHour = ( e ) => {
+      let select_hours = e.currentTarget;
+      selected_hour = select_hours.options[ select_hours.selectedIndex ].value;
+      let select_content = getSelectMinutesOptions();
+      document.querySelector( 'select#select-minutes' ).innerHTML = select_content;
+    }
+
 
     let select_hours = '<select id="select-hours">';
     for( let h = 0; h <= 23; h++ ) {
@@ -978,18 +1004,7 @@ export function PickerBase() {
     select_hours +=     '</select>';
 
     let select_minutes = '<select id="select-minutes">';
-    for( let m = 0; m <= 59; m++ ) {
-      if( m % this.round_minutes == 0 ) {
-        _curr_day.setHours( selected_hour, m );
-        if( _curr_day < this.first_date || _curr_day > this.last_date ) {
-          continue;
-        }
-
-        let current_minute = ( '0' + m ).slice( -2 );
-        let selected = ( m == day.getMinutes() ) ? 'selected' : '';
-        select_minutes +=   `<option value="${ current_minute }" ${ selected }>${ current_minute }</option>`;
-      }
-    }
+    select_minutes +=       getSelectMinutesOptions();
     select_minutes +=    '</select>';
 
     picker.innerHTML =
@@ -1013,6 +1028,8 @@ export function PickerBase() {
         </td>
       </tr>
     </table>`;
+
+    document.querySelector( 'select#select-hours' ).onchange = onChangeHour;
   }
 
 

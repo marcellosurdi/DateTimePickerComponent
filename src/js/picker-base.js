@@ -119,6 +119,7 @@ export function PickerBase() {
     'fri_':'Friday',
     'sat_':'Saturday',
     'sun_':'Sunday',
+    'done':'Done',
   };
 
   const ms_per_day = 24 * 60 * 60 * 1000;
@@ -985,6 +986,9 @@ export function PickerBase() {
       document.querySelector( 'select#select-minutes' ).innerHTML = select_content;
     }
 
+    let onSetTime = ( e ) => {
+      console.log( 'test!' );
+    }
 
     let select_hours = '<select id="select-hours">';
     for( let h = 0; h <= 23; h++ ) {
@@ -1020,16 +1024,13 @@ export function PickerBase() {
         <td>
           ${ select_hours }
           ${ select_minutes }
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <button>Conferma</button>
+          <button class="confirm">${ this.i18n['done'] }</button>
         </td>
       </tr>
     </table>`;
 
-    document.querySelector( 'select#select-hours' ).onchange = onChangeHour;
+    document.querySelector( 'table.time select#select-hours' ).onchange = onChangeHour;
+    document.querySelector( 'table.time button.confirm' ).onclick = onSetTime;
   }
 
 

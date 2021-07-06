@@ -67,6 +67,7 @@ const it = {
   'fri_':'Venerdì',
   'sat_':'Sabato',
   'sun_':'Domenica',
+  'done':'Imposta'
 };
 
 new DateTimePicker( 'select_datetime', {

@@ -140,21 +140,31 @@ div.datetime-container {
 
         table td.range { background-color: $range_background; }
 
-        // @see https://css-tricks.com/styling-a-select-like-its-2019/
         table td select {
+          border-color: $light_grey_color;
           outline: none;
-          border-color: #ccc;
           border-radius: 5px 5px 0 0;
-          background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23AAA%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'), linear-gradient(to bottom, #fff 0%, #e5e5e5 100%);
-          background-repeat: no-repeat, repeat;
-          background-position: right .7em top 50%, 0 0;
-          background-size: .65em auto, 100%;
-          background-color: transparent;
-          width: 150px;
+          background-image: url("data:image/svg+xml,%3Csvg width='15' height='15' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M13.02 7.409v-3.98L7.752 7.854 2.485 3.43v3.978l5.267 4.426z'/%3E%3C/svg%3E");
+          background-repeat: no-repeat;
+          background-position: right .7em top 50%;
+          background-size: .65em auto;
+          width: 60px;
           height: 40px;
           padding: 0 5px;
           font-size: 18px;
           appearance: none;
         }
         table td select::-ms-expand { display: none; }
+
+        button.confirm {
+          -webkit-appearance: none;
+          border: 0;
+          border-radius: 5px 5px 0 0;
+          background-color: $light_grey_color;
+          padding: 10px;
+          height: 40px;
+          outline: 0;
+          text-transform: uppercase;
+          cursor: pointer;
+        }
       }

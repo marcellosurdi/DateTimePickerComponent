@@ -141,7 +141,7 @@ div.datetime-container {
         table td.range { background-color: $range_background; }
 
         table td select {
-          border-color: $light_grey_color;
+          border: 0;
           outline: none;
           border-radius: 5px 5px 0 0;
           background-image: url("data:image/svg+xml,%3Csvg width='15' height='15' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M13.02 7.409v-3.98L7.752 7.854 2.485 3.43v3.978l5.267 4.426z'/%3E%3C/svg%3E");

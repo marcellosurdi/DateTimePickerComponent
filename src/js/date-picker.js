@@ -1,7 +1,6 @@
 /**
  * @module js/date-picker
  * @author Marcello Surdi
- * @version 1.0.0
  *
  * @desc
  * This module contains the DatePicker class

@@ -1,7 +1,6 @@
 /**
  * @module js/date-time-picker
  * @author Marcello Surdi
- * @version 1.0.0
  *
  * @desc
  * This module contains the DateTimePicker class

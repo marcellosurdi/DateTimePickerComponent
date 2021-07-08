@@ -1,4 +1,4 @@
-round_to# DateTimePickerComponent
+# DateTimePickerComponent
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/marcellosurdi/DateTimePickerComponent)
 ![npm](https://img.shields.io/npm/dw/date-time-picker-component)
 
@@ -225,7 +225,7 @@ With DateTimePicker and DateTimeRangePicker classes it also make sense to set th
 | -------- | ---- | ------- | ----------- |
 | `round_to`   | `{number}` | `false`  | Value to round minutes of time picker. Accepted values are `1`, `5`, `10`, `15`, `20`, `30` |
 
-If you don't set this property you'll see the time picker exactly as the 1.0.x version. If you set this property you'll get a time picker with two select elements, one for the hours and one for the minutes. Minutes will be rounded **to the `round_to` value and his multiples**. For instance with `15` the options in the select element will be `00`, `15`, `30`, `45`; with `20` the options will be `00`, `20`, `40` and so on. `1` (or an unaccepted value) will show all values from `00` to `59`.
+If you don't set this property you'll see the time picker exactly as the 1.0.x version. If you set this property you'll get a time picker with two select elements, one for the hours and one for the minutes. Minutes will be rounded **to the `round_to` value and his multiples**. For instance with `round_to` set to `15`, the options in the select element will be `00`, `15`, `30`, `45`; with `20`, the options will be `00`, `20`, `40` and so on. `1` (or an unaccepted value) will show all values from `00` to `59`.
 
 ![Alternative time picker](https://www.marcellosurdi.name/demo/date-time-picker-component/img/screenshot-alternative-time-picker.png "Alternative time picker")
 

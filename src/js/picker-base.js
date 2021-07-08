@@ -373,7 +373,7 @@ export function PickerBase() {
       }
       if( styles.inactive_background && styles.inactive_color ) {
         css +=
-        `${ selector2 } { 
+        `${ selector2 } {
           background-color: ${ styles.inactive_background }; color: ${ styles.inactive_color };
         }`;
       }
@@ -509,7 +509,7 @@ export function PickerBase() {
       document.addEventListener( click, this.onClickOutside );
 
       let prefix = ( btn.classList.contains( 'date' ) ) ? 'Date' : 'Time';
-      if( prefix == 'Time' && this.round_minutes ) {
+      if( prefix == 'Time' && this.round_to ) {
         prefix = 'Alternative' + prefix;
       }
       let method = 'show' + prefix + 'Picker';
@@ -664,7 +664,7 @@ export function PickerBase() {
       let h = date.getHours();
 
       // Rounds m to the next round value
-      const round = ( this.round_minutes ) ? this.round_minutes : 30;
+      const round = ( this.round_to ) ? this.round_to : 30;
       if( m % round != 0 ) {
         for( let i = m; i <= ( m + round ); i++ ) {
           if( i % round == 0 ) {
@@ -825,13 +825,12 @@ export function PickerBase() {
    * @param {Date|string|null} first_date_setting First selectable date from settings
    * @param {Date|string|null} last_date_setting Last selectable date from settings
    * @param {number} first_day_no Day the week must start with. Similarly to the returned values of `Date.getDate` method, accepted range values are 0-6 where 0 means Sunday, 1 means Monday and so on
-   * @param {boolean|number} round_minutes Whether or not to round minutes (accepted values 1, 5, 10, 15, 20, 30)
    *
    * @see {@link module:js/picker-base.PickerBase~getDateBetween|getDateBetween}
    * @see {@link module:js/picker-base.PickerBase~roundMinutes|roundMinutes}
    * @see {@link module:js/picker-base.PickerBase~setDaysOrder|setDaysOrder}
    */
-  this.setStartPickerProps = function( id, start_date_setting, first_date_setting, last_date_setting, first_day_no, round_minutes ) {
+  this.setStartPickerProps = function( id, start_date_setting, first_date_setting, last_date_setting, first_day_no ) {
     const el = document.getElementById( id );
     if( el == null || el.nodeName != 'DIV' ) {
       throw new Error( `Does div#${ id } exist? Please, check your HTML code` );
@@ -857,9 +856,9 @@ export function PickerBase() {
       last_date = last_date_default;
     }
 
-    if( this.round_minutes ) {
-      if( [ 1, 5, 10, 15, 20, 30 ].indexOf( this.round_minutes ) < 0 ) {
-        this.round_minutes = 1;
+    if( this.round_to ) {
+      if( [ 1, 5, 10, 15, 20, 30 ].indexOf( this.round_to ) < 0 ) {
+        this.round_to = 1;
       }
     }
     this.roundMinutes( [ start_date, first_date, last_date ] );
@@ -1010,7 +1009,7 @@ export function PickerBase() {
     let getSelectMinutesOptions = () => {
       let select_content = '';
       for( let m = 0; m <= 59; m++ ) {
-        if( m % this.round_minutes == 0 ) {
+        if( m % this.round_to == 0 ) {
           _curr_day.setHours( selected_hour, m );
           if( _curr_day < this.first_date || _curr_day > this.last_date ) {
             continue;

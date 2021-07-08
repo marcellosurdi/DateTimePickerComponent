@@ -75,7 +75,7 @@ new DateTimePicker( 'select_datetime', {
   start_date: "2030-03-22T23:10:00",
   last_date: new Date( 2030, 2, 29, 22, 30 ),
   first_day_no: 1,
-  round_minutes: 15,
+  round_to: 15,
   l10n: it,
 } );
 
@@ -97,7 +97,7 @@ new DateTimeRangePicker( 'start_date_time', 'end_date_time', {
   end_date: "2030-01-06T18:00:00",
   last_date: new Date( 2030, 0, 29, 14, 0 ),
   first_day_no: 1,
-  round_minutes: 5,
+  round_to: 5,
   date_output: "timestamp",
   styles: {
     active_background: '#e34c26',

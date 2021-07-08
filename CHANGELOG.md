@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 
 ## 1.1.0 - 2021-07-12
-Added an **alternative** time picker with two select elements, one for the hours and one for the minutes. Minutes are rounded to the the `round_minutes` value and his multiples.
+Added an **alternative time picker** with two select elements, one for the hours and one for the minutes. Minutes are rounded to the `round_to` value and his multiples.
 
 ### Added
 - `settings.round_to` property for DateTimePicker and DateTimeRangePicker classes;

@@ -76,7 +76,7 @@ export function DateRangePicker( start_id, end_id, settings = {} ) {
 
   // End date
   this.end_container.classList.add( 'datetime-container' );
-  this.end_container.insertAdjacentHTML( 'afterbegin', this.getHTML( 'end', 'date', styles ) );
+  this.end_container.insertAdjacentHTML( 'afterbegin', this.getHTML( 'end', 'date' ) );
   this.printDateAndTime( this.end_container, this.end_date );
 
   this.end_date_btn = this.end_container.querySelector( 'button.date.end' );

@@ -49,7 +49,7 @@ module.exports = ( env, argv ) => {
         }),
 
         new HtmlWebpackPlugin({
-          filename: 'index.html',
+          filename: 'index_' + version + '.html',
           title: 'date-time-picker-component@' + version,
           template: paths.static + '/tpl/export.html',
           inject: false,

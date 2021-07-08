@@ -354,25 +354,35 @@ export function PickerBase() {
    */
   this.getHTML = function( mode, type, styles ) {
     let html, css = '';
+    const id = this[ mode + '_container' ].id;
 
     if( styles ) {
-      const id = this[ mode + '_container' ].id;
+      let selector1 = `div#${ id } button.active, div#${ id } table td.active, div#${ id } table td.time-selected`;
+      let selector2 = `div#${ id } table td.inactive`;
+      if( this.end_container ) {
+        const id2 = this.end_container.id;
+        selector1 += `, div#${ id2 } button.active, div#${ id2 } table td.active, div#${ id2 } table td.time-selected`;
+        selector2 += `, div#${ id2 } table td.inactive`;
+      }
 
       if( styles.active_background && styles.active_color ) {
         css +=
-        `div#${ id } button.active, div#${ id } table td.active, div#${ id } table td.time-selected {
+        `${ selector1 } {
           background-color: ${ styles.active_background }; color: ${ styles.active_color };
         }`;
       }
       if( styles.inactive_background && styles.inactive_color ) {
-        css += `div#${ id } table td.inactive { background-color: ${ styles.inactive_background }; color: ${ styles.inactive_color }; }`;
+        css +=
+        `${ selector2 } { 
+          background-color: ${ styles.inactive_background }; color: ${ styles.inactive_color };
+        }`;
       }
 
       if( css ) { css = `<style>${ css }</style>`; }
     }
 
     const input = ( !this[ mode + '_container' ].querySelector( 'input.date_output' ) )
-      ? '<input type="hidden" class="date_output" value="">'
+      ? `<input type="hidden" name="${ id }_value" class="date_output" value="">`
       : '';
 
     switch( type ) {
@@ -500,7 +510,7 @@ export function PickerBase() {
 
       let prefix = ( btn.classList.contains( 'date' ) ) ? 'Date' : 'Time';
       if( prefix == 'Time' && this.round_minutes ) {
-        prefix = 'Roundable' + prefix;
+        prefix = 'Alternative' + prefix;
       }
       let method = 'show' + prefix + 'Picker';
       this[ method ]( picker, date );
@@ -654,9 +664,10 @@ export function PickerBase() {
       let h = date.getHours();
 
       // Rounds m to the next round value
-      if( m % this.round_minutes != 0 ) {
-        for( let i = m; i <= ( m + this.round_minutes ); i++ ) {
-          if( i % this.round_minutes == 0 ) {
+      const round = ( this.round_minutes ) ? this.round_minutes : 30;
+      if( m % round != 0 ) {
+        for( let i = m; i <= ( m + round ); i++ ) {
+          if( i % round == 0 ) {
             m = i;
             break;
           }
@@ -790,9 +801,7 @@ export function PickerBase() {
       end_date = end_date_default;
     }
 
-    if( this.round_minutes ) {
-      this.roundMinutes( [ end_date ] );
-    }
+    this.roundMinutes( [ end_date ] );
 
     // End selected date can't be greater than last selectable date
     if( end_date > this.last_date ) {
@@ -816,7 +825,7 @@ export function PickerBase() {
    * @param {Date|string|null} first_date_setting First selectable date from settings
    * @param {Date|string|null} last_date_setting Last selectable date from settings
    * @param {number} first_day_no Day the week must start with. Similarly to the returned values of `Date.getDate` method, accepted range values are 0-6 where 0 means Sunday, 1 means Monday and so on
-   * @param {boolean|number} round_minutes Whether or not to round minutes (accepted values 15 or 30)
+   * @param {boolean|number} round_minutes Whether or not to round minutes (accepted values 1, 5, 10, 15, 20, 30)
    *
    * @see {@link module:js/picker-base.PickerBase~getDateBetween|getDateBetween}
    * @see {@link module:js/picker-base.PickerBase~roundMinutes|roundMinutes}
@@ -849,12 +858,11 @@ export function PickerBase() {
     }
 
     if( this.round_minutes ) {
-      if( [ 5, 10, 15, 20, 30 ].indexOf( this.round_minutes ) < 0 ) {
+      if( [ 1, 5, 10, 15, 20, 30 ].indexOf( this.round_minutes ) < 0 ) {
         this.round_minutes = 1;
       }
-
-      this.roundMinutes( [ start_date, first_date, last_date ] );
     }
+    this.roundMinutes( [ start_date, first_date, last_date ] );
 
     setDaysOrder( first_day_no );
 
@@ -995,7 +1003,7 @@ export function PickerBase() {
    *
    * @since 1.1.0
    */
-  this.showRoundableTimePicker = function( picker, day ) {
+  this.showAlternativeTimePicker = function( picker, day ) {
     let _curr_day = new Date( day );
     let selected_hour;
 
@@ -1017,7 +1025,7 @@ export function PickerBase() {
       return select_content;
     }
 
-    let select_hours = '<select id="select-hours">';
+    let select_hours = '<select class="select-hours">';
     for( let h = 0; h <= 23; h++ ) {
 
        _curr_day.setHours( h );
@@ -1034,7 +1042,7 @@ export function PickerBase() {
     }
     select_hours +=     '</select>';
 
-    let select_minutes = '<select id="select-minutes">';
+    let select_minutes = '<select class="select-minutes">';
     select_minutes +=       getSelectMinutesOptions();
     select_minutes +=    '</select>';
 
@@ -1056,37 +1064,33 @@ export function PickerBase() {
       </tr>
     </table>`;
 
-    const select_hours_el = document.querySelector( 'table.time select#select-hours' );
-    const select_minutes_el = document.querySelector( 'table.time select#select-minutes' );
-    const button_confirm = document.querySelector( 'table.time button.confirm' );
+    let container, btn;
+    if( mode == 'start' ) {
+      container = this.start_container;
+      btn = this.start_time_btn;
+    } else {
+      container = this.end_container;
+      btn = this.end_time_btn;
+    }
+    const select_hours_el = container.querySelector( 'select.select-hours' );
+    const select_minutes_el = container.querySelector( 'select.select-minutes' );
+    const button_confirm = container.querySelector( 'button.confirm' );
 
     let onChangeHour = ( e ) => {
-      // let select_hours = e.currentTarget;
       selected_hour = select_hours_el.options[ select_hours_el.selectedIndex ].value;
       let select_content = getSelectMinutesOptions();
-      document.querySelector( 'select#select-minutes' ).innerHTML = select_content;
+      select_minutes_el.innerHTML = select_content;
     }
 
     let onSetTime = ( e ) => {
       const current_hour = select_hours_el.options[ select_hours_el.selectedIndex ].value;
       const current_minute = select_minutes_el.options[ select_minutes_el.selectedIndex ].value;
 
-      let container, btn;
-      if( mode == 'start' ) {
-        container = this.start_container;
-        btn = this.start_time_btn;
-      } else {
-        container = this.end_container;
-        btn = this.end_time_btn;
-      }
-
       day.setHours( current_hour, current_minute, 0, 0 );
-
       this.printDateAndTime( container, day );
-
       this.closePicker( picker, btn, 500 );
+      button_confirm.disabled = true;
     }
-
 
     select_hours_el.onchange = onChangeHour;
     button_confirm.onclick = onSetTime;

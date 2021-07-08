@@ -79,7 +79,7 @@ export function DateTimeRangePicker( start_id, end_id, settings = {} ) {
 
   // End date
   this.end_container.classList.add( 'datetime-container', 'fix-float' );
-  this.end_container.insertAdjacentHTML( 'afterbegin', this.getHTML( 'end', 'datetime', styles ) );
+  this.end_container.insertAdjacentHTML( 'afterbegin', this.getHTML( 'end', 'datetime' ) );
   this.printDateAndTime( this.end_container, this.end_date );
 
   this.end_date_btn = this.end_container.querySelector( 'button.date.end' );

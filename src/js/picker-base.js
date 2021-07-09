@@ -77,6 +77,7 @@
  * @property {Date} next_month Date object with next year/month relative to the picker just opened
  * @property {string} date_output The date format returned to the value attribute of `input.date_output` (accepted values are short_ISO, full_ISO and timestamp)
  * @property {number} min_range The minimum range in milliseconds that must elapse between `start_date` and `end_date`
+ * @property {number} round_to Minutes are rounded to the `round_to` value (if any) and his multiples
  */
 export function PickerBase() {
   this.i18n = {
@@ -140,7 +141,7 @@ export function PickerBase() {
    *
    * @param {HTMLDivElement} picker The picker currently open
    */
-  this.addEventOnSelect = function( picker ) {
+  this.addOnSelectEvent = function( picker ) {
     let coll = picker.querySelectorAll( 'td.selectable' );
 
     for( let i = 0, n = coll.length; i < n; i++ ) {
@@ -153,27 +154,33 @@ export function PickerBase() {
 
   /**
    * Checks if dates are still consistent after user selection and fixes any inconsistencies:
-   * - `start_date` plus `min_range` must always be less or equal than `end_date`;
    * - `start_date` must always be greater than `first_date`;
-   * - `end_date` minus `min_range` must always be greater or equal than 'start_date';
    * - `end_date` must always be less than `last_date`.
+   * - `start_date` plus `min_range` must always be less or equal than `end_date`;
+   * - `end_date` minus `min_range` must always be greater or equal than `start_date`;
    *
    * It's used by both {@link module:js/picker-base.PickerBase#selectDay|selectDay}
    * and {@link module:js/picker-base.PickerBase#selectHour|selectHour} methods.
   */
   this.checkDateTimeConsistency = function() {
-    // DateTimePicker
+    const first_date_ms = this.first_date.getTime();
     const start_date_ms = this.start_date.getTime();
     const last_date_ms = this.last_date.getTime();
+
+    // Always checks these conditions
+    if( start_date_ms <= first_date_ms ) {
+      this.start_date.setHours( this.first_date.getHours(), this.first_date.getMinutes(), 0, 0 );
+    }
+
     if( start_date_ms >= last_date_ms ) {
       this.start_date.setHours( this.last_date.getHours(), this.last_date.getMinutes(), 0, 0 );
     }
 
+    // Only checks if there's a range
     if( this.end_date ) {
       const end_date_ms = this.end_date.getTime();
-      const first_date_ms = this.first_date.getTime();
 
-      // start
+      // start mode
       if( mode == 'start' ) {
         if( ( start_date_ms + this.min_range ) >= end_date_ms ) {
           if( ( start_date_ms + this.min_range ) >= last_date_ms ) {
@@ -183,13 +190,9 @@ export function PickerBase() {
           this.end_date.setTime( this.start_date.getTime() + this.min_range );
           this.printDateAndTime( this.end_container, this.end_date );
         }
-
-        if( start_date_ms <= first_date_ms ) {
-          this.start_date.setHours( this.first_date.getHours(), this.first_date.getMinutes(), 0, 0 );
-        }
       }
 
-      // end
+      // end mode
       else {
         if( ( end_date_ms - this.min_range ) <= start_date_ms ) {
           if( ( end_date_ms - this.min_range ) <= first_date_ms ) {
@@ -371,6 +374,7 @@ export function PickerBase() {
           background-color: ${ styles.active_background }; color: ${ styles.active_color };
         }`;
       }
+
       if( styles.inactive_background && styles.inactive_color ) {
         css +=
         `${ selector2 } {
@@ -651,7 +655,7 @@ export function PickerBase() {
 
   /**
    * @desc
-   * Rounds minutes to the next half hour.
+   * Rounds minutes to the next `round_to` value.
    *
    * @param {array} dates An array containing an arbitrary number of dates to be rounded
    */
@@ -877,6 +881,120 @@ export function PickerBase() {
 
   /**
    * @desc
+   * Creates select elements for hours and minutes inside the picker
+   *
+   * @param {HTMLDivElement} picker The picker that contains the table
+   * @param {Date} day Current day
+   *
+   * @see {@link module:js/picker-base.PickerBase~getWeekDayNo|getWeekDayNo}
+   *
+   * @since 1.1.0
+   */
+  this.showAlternativeTimePicker = function( picker, day ) {
+    let _curr_day = new Date( day );
+    let selected_hour;
+
+    let getSelectMinutesOptions = () => {
+      let select_content = '';
+      for( let m = 0; m <= 59; m++ ) {
+        if( m % this.round_to == 0 ) {
+          _curr_day.setHours( selected_hour, m );
+          if( _curr_day < this.first_date || _curr_day > this.last_date ) {
+            continue;
+          }
+
+          let current_minute = ( '0' + m ).slice( -2 );
+          let selected = ( m == day.getMinutes() ) ? 'selected' : '';
+          select_content +=   `<option value="${ current_minute }" ${ selected }>${ current_minute }</option>`;
+        }
+      }
+
+      return select_content;
+    }
+
+    let select_hours = '<select class="select-hours">';
+    for( let h = 0; h <= 23; h++ ) {
+
+       _curr_day.setHours( h );
+      if( _curr_day < this.first_date || _curr_day > this.last_date ) {
+        continue;
+      }
+
+      let current_hour = ( '0' + h ).slice( -2 );
+      let selected = ( h == day.getHours() ) ? 'selected' : '';
+      if( selected ) {
+        selected_hour = h;
+      }
+      select_hours +=      `<option value="${ current_hour }" ${ selected }>${ current_hour }</option>`;
+    }
+    select_hours +=     '</select>';
+
+    let select_minutes = '<select class="select-minutes">';
+    select_minutes +=       getSelectMinutesOptions();
+    select_minutes +=    '</select>';
+
+    picker.innerHTML =
+    `<table class="time">
+      <tr>
+        <th>
+          ${ this.i18n[ days_order[ getWeekDayNo( day ) ] + '_' ] }
+          ${ day.getDate() }
+          <span class="month" data-i18n="${ months_order[ day.getMonth() ] + '_' }">${ this.i18n[ months_order[ day.getMonth() ] + '_' ] }</span>
+        </th>
+      </tr>
+      <tr>
+        <td>
+          ${ select_hours }
+          ${ select_minutes }
+          <button type="button" class="confirm">${ this.i18n['done'] }</button>
+        </td>
+      </tr>
+    </table>`;
+
+    let container, btn;
+    if( mode == 'start' ) {
+      container = this.start_container;
+      btn = this.start_time_btn;
+    } else {
+      container = this.end_container;
+      btn = this.end_time_btn;
+    }
+    const select_hours_el = container.querySelector( 'select.select-hours' );
+    const select_minutes_el = container.querySelector( 'select.select-minutes' );
+    const button_confirm = container.querySelector( 'button.confirm' );
+
+    let onChangeHour = ( e ) => {
+      selected_hour = select_hours_el.options[ select_hours_el.selectedIndex ].value;
+      let select_content = getSelectMinutesOptions();
+      select_minutes_el.innerHTML = select_content;
+    }
+
+    let onSetTime = ( e ) => {
+      e.preventDefault();
+
+      const current_hour = select_hours_el.options[ select_hours_el.selectedIndex ].value;
+      const current_minute = select_minutes_el.options[ select_minutes_el.selectedIndex ].value;
+
+      day.setHours( current_hour, current_minute, 0, 0 );
+
+      this.checkDateTimeConsistency();
+
+      this.printDateAndTime( container, day );
+      this.closePicker( picker, btn, 500 );
+
+      button_confirm.disabled = true;
+    }
+
+    select_hours_el.onchange = onChangeHour;
+    button_confirm.onclick = onSetTime;
+  }
+
+
+
+
+
+  /**
+   * @desc
    * Creates the calendar of the current month inside the picker.
    *
    * @param {HTMLDivElement} picker The picker that contains the calendar
@@ -884,7 +1002,7 @@ export function PickerBase() {
    *
    * @see {@link module:js/picker-base.PickerBase~getWeekDayNo|getWeekDayNo}
    * @see {@link module:js/picker-base.PickerBase#getDayClassName|getDayClassName}
-   * @see {@link module:js/picker-base.PickerBase#addEventOnSelect|addEventOnSelect}
+   * @see {@link module:js/picker-base.PickerBase#addOnSelectEvent|addOnSelectEvent}
    */
   this.showDatePicker = function( picker, date ) {
     let class_name, html = '';
@@ -980,119 +1098,11 @@ export function PickerBase() {
       next_month_btn.classList.add( 'disabled' );
     }
 
-    this.addEventOnSelect( picker );
+    this.addOnSelectEvent( picker );
 
     this.current_month = current_month;
     this.prev_month = prev_month;
     this.next_month = next_month;
-  }
-
-
-
-
-
-  /**
-   * @desc
-   * Creates select elements for hours and minutes inside the picker
-   *
-   * @param {HTMLDivElement} picker The picker that contains the table
-   * @param {Date} day Current day
-   *
-   * @see {@link module:js/picker-base.PickerBase~getWeekDayNo|getWeekDayNo}
-   *
-   * @since 1.1.0
-   */
-  this.showAlternativeTimePicker = function( picker, day ) {
-    let _curr_day = new Date( day );
-    let selected_hour;
-
-    let getSelectMinutesOptions = () => {
-      let select_content = '';
-      for( let m = 0; m <= 59; m++ ) {
-        if( m % this.round_to == 0 ) {
-          _curr_day.setHours( selected_hour, m );
-          if( _curr_day < this.first_date || _curr_day > this.last_date ) {
-            continue;
-          }
-
-          let current_minute = ( '0' + m ).slice( -2 );
-          let selected = ( m == day.getMinutes() ) ? 'selected' : '';
-          select_content +=   `<option value="${ current_minute }" ${ selected }>${ current_minute }</option>`;
-        }
-      }
-
-      return select_content;
-    }
-
-    let select_hours = '<select class="select-hours">';
-    for( let h = 0; h <= 23; h++ ) {
-
-       _curr_day.setHours( h );
-      if( _curr_day < this.first_date || _curr_day > this.last_date ) {
-        continue;
-      }
-
-      let current_hour = ( '0' + h ).slice( -2 );
-      let selected = ( h == day.getHours() ) ? 'selected' : '';
-      if( selected ) {
-        selected_hour = h;
-      }
-      select_hours +=      `<option value="${ current_hour }" ${ selected }>${ current_hour }</option>`;
-    }
-    select_hours +=     '</select>';
-
-    let select_minutes = '<select class="select-minutes">';
-    select_minutes +=       getSelectMinutesOptions();
-    select_minutes +=    '</select>';
-
-    picker.innerHTML =
-    `<table class="time">
-      <tr>
-        <th>
-          ${ this.i18n[ days_order[ getWeekDayNo( day ) ] + '_' ] }
-          ${ day.getDate() }
-          <span class="month" data-i18n="${ months_order[ day.getMonth() ] + '_' }">${ this.i18n[ months_order[ day.getMonth() ] + '_' ] }</span>
-        </th>
-      </tr>
-      <tr>
-        <td>
-          ${ select_hours }
-          ${ select_minutes }
-          <button class="confirm">${ this.i18n['done'] }</button>
-        </td>
-      </tr>
-    </table>`;
-
-    let container, btn;
-    if( mode == 'start' ) {
-      container = this.start_container;
-      btn = this.start_time_btn;
-    } else {
-      container = this.end_container;
-      btn = this.end_time_btn;
-    }
-    const select_hours_el = container.querySelector( 'select.select-hours' );
-    const select_minutes_el = container.querySelector( 'select.select-minutes' );
-    const button_confirm = container.querySelector( 'button.confirm' );
-
-    let onChangeHour = ( e ) => {
-      selected_hour = select_hours_el.options[ select_hours_el.selectedIndex ].value;
-      let select_content = getSelectMinutesOptions();
-      select_minutes_el.innerHTML = select_content;
-    }
-
-    let onSetTime = ( e ) => {
-      const current_hour = select_hours_el.options[ select_hours_el.selectedIndex ].value;
-      const current_minute = select_minutes_el.options[ select_minutes_el.selectedIndex ].value;
-
-      day.setHours( current_hour, current_minute, 0, 0 );
-      this.printDateAndTime( container, day );
-      this.closePicker( picker, btn, 500 );
-      button_confirm.disabled = true;
-    }
-
-    select_hours_el.onchange = onChangeHour;
-    button_confirm.onclick = onSetTime;
   }
 
 
@@ -1108,7 +1118,7 @@ export function PickerBase() {
    *
    * @see {@link module:js/picker-base.PickerBase~getWeekDayNo|getWeekDayNo}
    * @see {@link module:js/picker-base.PickerBase#getHourClassName|getHourClassName}
-   * @see {@link module:js/picker-base.PickerBase#addEventOnSelect|addEventOnSelect}
+   * @see {@link module:js/picker-base.PickerBase#addOnSelectEvent|addOnSelectEvent}
    */
   this.showTimePicker = function( picker, day ) {
     const hours = [
@@ -1150,7 +1160,7 @@ export function PickerBase() {
       ${ html }
     </table>`;
 
-    this.addEventOnSelect( picker );
+    this.addOnSelectEvent( picker );
   }
 
 

@@ -77,7 +77,7 @@ start_date: "2030-01-05",
 
       <code class="code-block html">
         <pre>&lt;div id="select_date_3"&gt;
-&lt;input type="hidden" class="date_output" value="2030-01-06"&gt;
+&lt;input type="hidden" name="your-custom-value" class="date_output" value="2030-01-06"&gt;
 &lt;/div&gt;
 </pre>
       </code>
@@ -86,7 +86,7 @@ start_date: "2030-01-05",
       View source
     </a>
     <div id="select_date_3">
-      <input type="hidden" class="date_output" value="2030-01-06">
+      <input type="hidden" name="your-custom-value" class="date_output" value="2030-01-06">
     </div>
 
 
@@ -150,7 +150,6 @@ new DateTimePicker( 'select_datetime', {
 start_date: '2030-03-22T14:30:00',
 last_date: new Date( 2030, 2, 29, 22, 30 ),
 first_day_no: 1,
-round_minutes: 15,
 l10n: it
 } );</pre>
       </code>
@@ -206,6 +205,7 @@ min_range_hours: 48,
     <h3>Example 6</h3>
     <p>
       In this example <code>input.date_output</code> elements overwrite <code>settings.start_date</code> and <code>settings.end_date</code>.
+      <code>settings.round_to</code> property enables the time picker with select elements. Minutes are rounded to the `round_to` value (<code>5</code>) and his multiples.
     </p>
     <div class="collapsible-element">
       <code class="code-block js">
@@ -215,7 +215,7 @@ start_date: "2030-01-05T16:00:00",
 end_date: "2030-01-06T18:00:00",
 last_date: new Date( 2030, 0, 29, 14, 0 ),
 first_day_no: 1,
-round_minutes: 5,
+round_to: 5,
 date_output: "timestamp",
 styles: {
   active_background: '#e34c26',

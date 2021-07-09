@@ -3,7 +3,7 @@
 ![npm](https://img.shields.io/npm/dw/date-time-picker-component)
 
 ## Description
-DateTimePickerComponent is a very lightweight (just over 20KB) and dependency-free web component written in pure JavaScript. It supports localization, date formats, range selections and disabled dates. [See the online demo](https://www.marcellosurdi.name/demo/date-time-picker-component/index_1.1.0.html).
+DateTimePickerComponent is a very lightweight (just over 20KB) and dependency-free web component written in pure JavaScript. It supports localization, date formats, range selections and disabled dates. [See the online demo](https://www.marcellosurdi.name/demo/date-time-picker-component_1.0.27/index.html).
 
 ![Date picker](https://www.marcellosurdi.name/demo/date-time-picker-component/img/screenshot-date-picker.png "Date picker")
 ![Time picker](https://www.marcellosurdi.name/demo/date-time-picker-component/img/screenshot-time-picker.png "Time picker")
@@ -101,7 +101,7 @@ For **Date*RangePicker** classes instead:
 </div>
 ```
 ### Getting date time selection in a JS variable
-As you can see, the picker **is not tied** to an input text, so the selected date is always returned to the value attribute of the `input.date_output`, according to `settings.date_output` property. So we simply have to get the value of `input.date_output` inside the top level div where the component is appended.
+As you can see, the picker **is not tied** to an input text, so the selected date is always returned to the value attribute of the `input.date_output`, according to `settings.date_output` property. So we simply have to get the value of `input.date_output` inside the top level div.
 
 ``` javascript
 new DatePicker( 'select_date' );
@@ -115,7 +115,7 @@ let selection = document.querySelector( 'div#select_date input.date_output' ).va
 See the settings section below to know supported date time formats.
 
 ### Date*Picker classes
-DatePicker and DateTimePicker classes allow to select a date or a date/time respectively, [see the online demo](https://www.marcellosurdi.name/demo/date-time-picker-component/index_1.1.0.html).
+DatePicker and DateTimePicker classes allow to select a date or a date/time respectively, [see the online demo](https://www.marcellosurdi.name/demo/date-time-picker-component_1.0.27/index.html).
 
 #### Params
 | Property | Type | Default | Description |
@@ -154,7 +154,7 @@ And the corresponding HTML:
 ```
 
 ### Date*RangePicker classes
-DateRangePicker and DateTimeRangePicker classes allow to select a date range or a date/time range respectively, [see the online demo](https://www.marcellosurdi.name/demo/date-time-picker-component/index_1.1.0.html).
+DateRangePicker and DateTimeRangePicker classes allow to select a date range or a date/time range respectively, [see the online demo](https://www.marcellosurdi.name/demo/date-time-picker-component_1.0.27/index.html).
 
 #### Params
 | Property | Type | Default | Description |
@@ -227,6 +227,25 @@ With DateTimePicker and DateTimeRangePicker classes it also make sense to set th
 
 If you don't set this property you'll see the time picker exactly as the 1.0.x version. If you set this property you'll get a time picker with two select elements, one for the hours and one for the minutes. Minutes will be rounded **to the `round_to` value and his multiples**. For instance with `round_to` set to `15`, the options in the select element will be `00`, `15`, `30`, `45`; with `20`, the options will be `00`, `20`, `40` and so on. `1` (or an unaccepted value) will show all values from `00` to `59`.
 
+``` javascript
+new DateTimeRangePicker( 'start_date_time', 'end_date_time', {
+  first_date: "2030-01-02T10:30:00",
+  start_date: "2030-01-05T16:00:00",
+  end_date: "2030-01-06T18:00:00",
+  last_date: new Date( 2030, 0, 29, 14, 0 ),
+  first_day_no: 1,
+  round_to: 5, // Enables the time picker with two select elements
+  date_output: "timestamp",
+  styles: {
+    active_background: '#e34c26',
+    active_color: '#fff',
+    inactive_background: '#0366d9',
+    inactive_color: '#fff'
+  },
+    min_range_hours: 18
+} );
+```
+
 ![Alternative time picker](https://www.marcellosurdi.name/demo/date-time-picker-component/img/screenshot-alternative-time-picker.png "Alternative time picker")
 
 ### Localization (i10n)
@@ -272,7 +291,7 @@ let it = {
   'fri_':'Venerdì',
   'sat_':'Sabato',
   'sun_':'Domenica',
-  'done':'Imposta'
+  'done':'Imposta' // @since 1.1.0
 };
 
 new DatePicker( 'select_date', {
@@ -309,7 +328,7 @@ All you need to do is to use `active_background`, `active_color`, `inactive_back
 ![Color scheme](https://www.marcellosurdi.name/demo/date-time-picker-component/img/screenshot-color-scheme.png "Color scheme")
 
 ### Maintaining state
-To set date time default or to retain the date time selection after a page reload due, for instance, to a failed validation, you can add the `input.date_output` inside the top level `div` in this way:
+To set date time default or to retain the date time selection after a page reload due, for instance, to a failed validation, you can by yourself add the `input.date_output` inside the top level `div` in this way:
 
 ``` html
 <body>
@@ -330,7 +349,7 @@ To set date time default or to retain the date time selection after a page reloa
 </body>
 ```
 
-The component will detect hidden input fields (it will no longer add them), and use the content of their `value` attribute as default. This may be useful if you are a server side developer and you can't access to separate js files of your application. In this case the content of `name` attribute is totally up to you, otherwise it will be `top_level_div_id + '_value'`.
+The component will detect hidden input fields (it will no longer add them), and use the content of their `value` attribute as default. This may be useful if you are a server side developer and you can't access separate js files of your application. In this case the content of `name` attribute is totally up to you, otherwise it will be `top_level_div_id + '_value'`.
 
 ## Build
 To compile DateTimePickerComponent by yourself, make sure that you have [Node.js](http://nodejs.org/) installed, then:
@@ -345,6 +364,6 @@ That's it!
 Let me know [with a link](mailto:marcellosurdi@gmail.com) if you've used DateTimePickerComponent in some interesting way, or on a popular site.
 
 ## Links
-1. [Online demo](https://www.marcellosurdi.name/demo/date-time-picker-component/index_1.1.0.html)
-2. [Source code documentation](https://www.marcellosurdi.name/docs/date-time-picker-component/docs_1.1.0)
+1. [Online demo](https://www.marcellosurdi.name/demo/date-time-picker-component_1.0.27/index.html)
+2. [Source code documentation](https://www.marcellosurdi.name/docs/date-time-picker-component_1.0.27/)
 3. [Changelog](https://github.com/marcellosurdi/DateTimePickerComponent/blob/master/CHANGELOG.md)

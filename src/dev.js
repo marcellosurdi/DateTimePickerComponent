@@ -71,11 +71,9 @@ const it = {
 };
 
 new DateTimePicker( 'select_datetime', {
-  first_date: "2030-03-15T15:50:00",
-  start_date: "2030-03-22T23:10:00",
+  start_date: "2030-03-22T14:30:00",
   last_date: new Date( 2030, 2, 29, 22, 30 ),
   first_day_no: 1,
-  round_to: 15,
   l10n: it,
 } );
 

@@ -3,7 +3,7 @@
 ![npm](https://img.shields.io/npm/dw/date-time-picker-component)
 
 ## Description
-DateTimePickerComponent is a very lightweight (just over 20KB) and dependency-free web component written in pure JavaScript. It supports localization, date formats, range selections and disabled dates. [See the online demo](https://www.marcellosurdi.name/demo/date-time-picker-component_1.0.27/index.html).
+DateTimePickerComponent is a very lightweight (just over 20KB) and dependency-free web component written in pure JavaScript. It supports localization, date formats, range selections and disabled dates. [See the online demo](https://www.marcellosurdi.name/demo/date-time-picker-component_1.1.0/index.html).
 
 ![Date picker](https://www.marcellosurdi.name/demo/date-time-picker-component/img/screenshot-date-picker.png "Date picker")
 ![Time picker](https://www.marcellosurdi.name/demo/date-time-picker-component/img/screenshot-time-picker.png "Time picker")
@@ -115,7 +115,7 @@ let selection = document.querySelector( 'div#select_date input.date_output' ).va
 See the settings section below to know supported date time formats.
 
 ### Date*Picker classes
-DatePicker and DateTimePicker classes allow to select a date or a date/time respectively, [see the online demo](https://www.marcellosurdi.name/demo/date-time-picker-component_1.0.27/index.html).
+DatePicker and DateTimePicker classes allow to select a date or a date/time respectively, [see the online demo](https://www.marcellosurdi.name/demo/date-time-picker-component_1.1.0/index.html).
 
 #### Params
 | Property | Type | Default | Description |
@@ -154,7 +154,7 @@ And the corresponding HTML:
 ```
 
 ### Date*RangePicker classes
-DateRangePicker and DateTimeRangePicker classes allow to select a date range or a date/time range respectively, [see the online demo](https://www.marcellosurdi.name/demo/date-time-picker-component_1.0.27/index.html).
+DateRangePicker and DateTimeRangePicker classes allow to select a date range or a date/time range respectively, [see the online demo](https://www.marcellosurdi.name/demo/date-time-picker-component_1.1.0/index.html).
 
 #### Params
 | Property | Type | Default | Description |
@@ -364,6 +364,6 @@ That's it!
 Let me know [with a link](mailto:marcellosurdi@gmail.com) if you've used DateTimePickerComponent in some interesting way, or on a popular site.
 
 ## Links
-1. [Online demo](https://www.marcellosurdi.name/demo/date-time-picker-component_1.0.27/index.html)
-2. [Source code documentation](https://www.marcellosurdi.name/docs/date-time-picker-component_1.0.27/)
+1. [Online demo](https://www.marcellosurdi.name/demo/date-time-picker-component_1.1.0/index.html)
+2. [Source code documentation](https://www.marcellosurdi.name/docs/date-time-picker-component_1.1.0/)
 3. [Changelog](https://github.com/marcellosurdi/DateTimePickerComponent/blob/master/CHANGELOG.md)

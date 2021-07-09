@@ -328,7 +328,7 @@ All you need to do is to use `active_background`, `active_color`, `inactive_back
 ![Color scheme](https://www.marcellosurdi.name/demo/date-time-picker-component/img/screenshot-color-scheme.png "Color scheme")
 
 ### Maintaining state
-To set date time default or to retain the date time selection after a page reload due, for instance, to a failed validation, you can by yourself add the `input.date_output` inside the top level `div` in this way:
+To set date time default or to retain the date time selection after a page reload due, for instance, to a failed validation, you can add by yourself the `input.date_output` inside the top level `div` in this way:
 
 ``` html
 <body>

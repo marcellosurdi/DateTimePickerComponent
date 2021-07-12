@@ -108,7 +108,7 @@ new DatePicker( 'select_date' );
 
 // your code...
 
-// Retrieves the date time selection and put it in the 'selection' variable
+// Retrieves the date time selection and puts it in the 'selection' variable
 let selection = document.querySelector( 'div#select_date input.date_output' ).value;
 ```
 
@@ -154,7 +154,7 @@ And the corresponding HTML:
 ```
 
 ### Date*RangePicker classes
-DateRangePicker and DateTimeRangePicker classes allow to select a date range or a date/time range respectively, [see the online demo](https://www.marcellosurdi.name/demo/date-time-picker-component_1.1.0/index.html).
+DateRangePicker and DateTimeRangePicker classes allow to select a date range or a date/time range respectively, [see the online demo](https://www.marcellosurdi.name/demo/date-time-picker-component_1.1.0/index.html#example5).
 
 #### Params
 | Property | Type | Default | Description |
@@ -218,14 +218,14 @@ Only the **Date*RangePicker** classes also support these properties:
 | `end_date`        | `{Date\|string}` | One day more than `start_date`  | End selected date |
 | `min_range_hours` | `{number}`       | `1`                             | The minimum range expressed in hours that must elapse between `start_date` and `end_date` |
 
-### Rounding minutes
+### Rounding minutes (since 1.1.0)
 With DateTimePicker and DateTimeRangePicker classes it also make sense to set the `settings.round_to` property.
 
 | Property | Type | Default | Description |
 | -------- | ---- | ------- | ----------- |
 | `round_to`   | `{number}` | `false`  | Value to round minutes of time picker. Accepted values are `1`, `5`, `10`, `15`, `20`, `30` |
 
-If you don't set this property you'll see the time picker exactly as the 1.0.x version. If you set this property you'll get a time picker with two select elements, one for the hours and one for the minutes. Minutes will be rounded **to the `round_to` value and his multiples**. For instance with `round_to` set to `15`, the options in the select element will be `00`, `15`, `30`, `45`; with `20`, the options will be `00`, `20`, `40` and so on. `1` (or an unaccepted value) will show all values from `00` to `59`.
+If you don't set this property you'll see the time picker exactly as the 1.0.x version (see [example 4](https://www.marcellosurdi.name/demo/date-time-picker-component_1.1.0/index.html#example4)). If you set this property you'll get a time picker with two select elements, one for the hours and one for the minutes (see [example 6](https://www.marcellosurdi.name/demo/date-time-picker-component_1.1.0/index.html#example6)). Minutes will be rounded **to the `round_to` value and his multiples**. For instance with `round_to` set to `15`, the options in the select element will be `00`, `15`, `30`, `45`; with `20`, the options will be `00`, `20`, `40` and so on. `1` (or an unaccepted value) will show all values from `00` to `59`.
 
 ``` javascript
 new DateTimeRangePicker( 'start_date_time', 'end_date_time', {
@@ -355,8 +355,8 @@ The component will detect hidden input fields (it will no longer add them), and 
 To compile DateTimePickerComponent by yourself, make sure that you have [Node.js](http://nodejs.org/) installed, then:
 1. Fork and clone the [GitHub repository](https://github.com/marcellosurdi/DateTimePickerComponent).
 2. From the command line go to the local DateTimePickerComponent folder.
-3. Run `npm install` and wait for the necessary modules installation. [Webpack](https://webpack.js.org/guides/installation/#root) will be installed, look at the other dev dependencies in `package.json` file.
-4. The `npm run dev` command opens a Chrome window for developing purposes, `npm run build` compiles in `dist` folder.
+3. Run `npm install` and wait for the necessary modules installation. [Webpack](https://webpack.js.org/guides/installation/#root) will be installed, look at the other dev dependencies in the `package.json` file.
+4. The `npm run dev` command opens a new Chrome window for developing purposes, `npm run build` compiles in `dist` folder.
 
 That's it!
 

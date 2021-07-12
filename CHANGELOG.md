@@ -9,6 +9,9 @@ Added an **alternative time picker** with two select elements, one for the hours
 - `name` attribute in `input.date_output` fields;
 - `i18n.done` property.
 
+### Changed
+- README.md documentation improved
+
 ### Fixed
 - inline styles are no longer duplicated in `start_container` and `end_container`;
 - checkDateTimeConsistency logic.

@@ -1,7 +1,6 @@
 /**
  * @module js/date-time-picker
  * @author Marcello Surdi
- * @version 1.0.0
  *
  * @desc
  * This module contains the DateTimePicker class
@@ -29,6 +28,7 @@ DateTimePicker.prototype.constructor = DateTimePicker;
    *  start_date: "2030-01-05T16:00:00",
    *  last_date: new Date( 2030, 0, 29, 16 ),
    *  first_day_no: 1,
+   *  round_to: 15,
    *  date_output: "timestamp",
    *  styles: {
    *    active_background: '#e34c26',
@@ -47,6 +47,7 @@ export function DateTimePicker( id, settings = {} ) {
 
   // Settings
   this.i18n = ( settings.l10n ) ? settings.l10n : this.i18n;
+  this.round_to = ( settings.round_to ) ? settings.round_to : false;
   this.date_output = ( settings.date_output ) ? settings.date_output : 'full_ISO';
 
   const start_date = ( settings.start_date ) ? settings.start_date : null;

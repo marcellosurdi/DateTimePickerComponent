@@ -67,6 +67,7 @@ const it = {
   'fri_':'Venerdì',
   'sat_':'Sabato',
   'sun_':'Domenica',
+  'done':'Imposta'
 };
 
 new DateTimePicker( 'select_datetime', {
@@ -94,6 +95,7 @@ new DateTimeRangePicker( 'start_date_time', 'end_date_time', {
   end_date: "2030-01-06T18:00:00",
   last_date: new Date( 2030, 0, 29, 14, 0 ),
   first_day_no: 1,
+  round_to: 5,
   date_output: "timestamp",
   styles: {
     active_background: '#e34c26',

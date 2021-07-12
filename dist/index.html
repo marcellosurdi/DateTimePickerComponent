@@ -2,7 +2,7 @@
 <html lang='en'>
 
 <head>
-  <title>date-time-picker-component@1.1.10</title>
+  <title>date-time-picker-component@1.0.31</title>
   <meta charset='utf-8'>
   <meta name='viewport' content='width=device-width, initial-scale=1'>
   <meta name="format-detection" content="telephone=no">
@@ -11,7 +11,7 @@
 </head>
 
 <body>
-  <div id="container"> <div> <h1>DateTimePickerComponent</h1> <p> <a href="https://github.com/marcellosurdi/DateTimePickerComponent" title="See GitHub repository">DateTimePickerComponent</a> is a very lightweight and dependency-free web component written in pure JavaScript. </p> <h2>DatePicker</h2> <p> DatePicker class allows you to select a <strong>single date</strong>. See <a href="https://github.com/marcellosurdi/DateTimePickerComponent#datepicker-classes">documentation</a> on GitHub. </p> <h3>Example 1</h3> <p> If you don't pass any settings object, the first selectable date (<code>first_date</code>) is the current date. <code>start_date</code> is one day more than current date, <code>last_date</code> is one year more than <code>start_date</code>. The first week day is Sunday. </p> <div class="collapsible-element"> <code class="code-block js"> <pre>new DatePicker( 'select_date' );</pre> </code> <code class="code-block html"> <pre>&lt;div id="select_date"&gt;&lt;/div&gt;</pre> </code> </div> <a href="javascript:void(0);" class="collapse" data-max-height="1000px" data-text-open="View source" data-text-close="Hide source"> View source </a> <div id="select_date"></div> <h3>Example 2</h3> <p> When you define settings object, <strong>all *_date properties</strong> can be a date string (in ISO format) or a date object. If you're creating a date with <code>new</code> operator, remember that months are <strong>zero-indexed</strong>. </p> <div class="collapsible-element"> <code class="code-block js"> <pre>new DatePicker( 'select_date_2', {
+  <div id="container"> <div> <h1>DateTimePickerComponent</h1> <p> <a href="https://github.com/marcellosurdi/DateTimePickerComponent" title="See GitHub repository">DateTimePickerComponent</a> is a very lightweight and dependency-free web component written in pure JavaScript. </p> <h2>DatePicker</h2> <p> DatePicker class allows you to select a <strong>single date</strong>. See <a href="https://github.com/marcellosurdi/DateTimePickerComponent#datepicker-classes">documentation</a> on GitHub. </p> <h3 id="example1">Example 1</h3> <p> If you don't pass any settings object, the first selectable date (<code>first_date</code>) is the current date. <code>start_date</code> is one day more than current date, <code>last_date</code> is one year more than <code>start_date</code>. The first week day is Sunday. </p> <div class="collapsible-element"> <code class="code-block js"> <pre>new DatePicker( 'select_date' );</pre> </code> <code class="code-block html"> <pre>&lt;div id="select_date"&gt;&lt;/div&gt;</pre> </code> </div> <a href="javascript:void(0);" class="collapse" data-max-height="1000px" data-text-open="View source" data-text-close="Hide source"> View source </a> <div id="select_date"></div> <h3 id="example2">Example 2</h3> <p> When you define settings object, <strong>all *_date properties</strong> can be a date string (in ISO format) or a date object. If you're creating a date with <code>new</code> operator, remember that months are <strong>zero-indexed</strong>. </p> <div class="collapsible-element"> <code class="code-block js"> <pre>new DatePicker( 'select_date_2', {
 first_date: "2030-01-02",
 start_date: "2030-01-05",
 last_date: new Date( 2030, 0, 29 ),
@@ -21,14 +21,14 @@ styles: {
   active_background: '#e34c26',
   active_color: '#fff'
 }
-} );</pre> </code> <code class="code-block html"> <pre>&lt;div id="select_date_2"&gt;&lt;/div&gt;</pre> </code> </div> <a href="javascript:void(0);" class="collapse" data-max-height="1000px" data-text-open="View source" data-text-close="Hide source"> View source </a> <div id="select_date_2"></div> <h3>Example 3</h3> <p> In this example <code>input.date_output</code> overwrites <code>settings.start_date</code> </p> <div class="collapsible-element"> <code class="code-block js"> <pre>new DatePicker( 'select_date_3', {
+} );</pre> </code> <code class="code-block html"> <pre>&lt;div id="select_date_2"&gt;&lt;/div&gt;</pre> </code> </div> <a href="javascript:void(0);" class="collapse" data-max-height="1000px" data-text-open="View source" data-text-close="Hide source"> View source </a> <div id="select_date_2"></div> <h3 id="example3">Example 3</h3> <p> In this example <code>input.date_output</code> overwrites <code>settings.start_date</code> </p> <div class="collapsible-element"> <code class="code-block js"> <pre>new DatePicker( 'select_date_3', {
 first_date: "2030-01-02",
 start_date: "2030-01-05",
 } );
 </pre> </code> <code class="code-block html"> <pre>&lt;div id="select_date_3"&gt;
-&lt;input type="hidden" class="date_output" value="2030-01-06"&gt;
+&lt;input type="hidden" name="your-custom-value" class="date_output" value="2030-01-06"&gt;
 &lt;/div&gt;
-</pre> </code> </div> <a href="javascript:void(0);" class="collapse" data-max-height="1000px" data-text-open="View source" data-text-close="Hide source"> View source </a> <div id="select_date_3"> <input type="hidden" class="date_output" value="2030-01-06"> </div> <h2>DateTimePicker</h2> <p> DateTimePicker class allows you to select a <strong>single date/time</strong>. See <a href="https://github.com/marcellosurdi/DateTimePickerComponent#datepicker-classes">documentation</a> on GitHub. </p> <h3>Example 4</h3> <p> If you localize this component in Italian, you have to use the <code>l10n</code> property and Monday should be the first week day (<code>first_day_no: 1</code>). Note that, unlike DatePicker and DateRangePicker classes, with DateTime* classes it make sense to have a datetime representation of date like in source code below. Remember: if you're creating date with <code>new</code> operator months are <strong>zero-indexed</strong>. </p> <div class="collapsible-element"> <code class="code-block js"> <pre>const it = {
+</pre> </code> </div> <a href="javascript:void(0);" class="collapse" data-max-height="1000px" data-text-open="View source" data-text-close="Hide source"> View source </a> <div id="select_date_3"> <input type="hidden" name="your-custom-value" class="date_output" value="2030-01-06"> </div> <h2>DateTimePicker</h2> <p> DateTimePicker class allows you to select a <strong>single date/time</strong>. See <a href="https://github.com/marcellosurdi/DateTimePickerComponent#datepicker-classes">documentation</a> on GitHub. </p> <h3 id="example4">Example 4</h3> <p> If you localize this component in Italian, you have to use the <code>l10n</code> property and Monday should be the first week day (<code>first_day_no: 1</code>). Note that, unlike DatePicker and DateRangePicker classes, with DateTime* classes it make sense to have a datetime representation of date like in source code below. Remember: if you're creating date with <code>new</code> operator months are <strong>zero-indexed</strong>. </p> <div class="collapsible-element"> <code class="code-block js"> <pre>const it = {
 'jan':'Gen',
 'feb':'Feb',
 'mar':'Mar',
@@ -67,6 +67,7 @@ start_date: "2030-01-05",
 'fri_':'Venerdì',
 'sat_':'Sabato',
 'sun_':'Domenica',
+'done':'Imposta'
 };
 
 new DateTimePicker( 'select_datetime', {
@@ -74,16 +75,17 @@ start_date: '2030-03-22T14:30:00',
 last_date: new Date( 2030, 2, 29, 22, 30 ),
 first_day_no: 1,
 l10n: it
-} );</pre> </code> <code class="code-block html"> <pre>&lt;div id="select_datetime"&gt;&lt;/div&gt;</pre> </code> </div> <a href="javascript:void(0);" class="collapse" data-max-height="1250px" data-text-open="View source" data-text-close="Hide source"> View source </a> <div id="select_datetime"></div> <h2>DateRangePicker</h2> <p> DateRangePicker class allows you to select a <strong>date range</strong>. See <a href="https://github.com/marcellosurdi/DateTimePickerComponent#daterangepicker-classes">documentation</a> on GitHub. </p> <h3>Example 5</h3> <p> Here we've set 2 days of minimum range (<code>min_range_hours: 48</code>) </p> <div class="collapsible-element"> <code class="code-block js"> <pre>new DateRangePicker( 'start_date', 'end_date', {
+} );</pre> </code> <code class="code-block html"> <pre>&lt;div id="select_datetime"&gt;&lt;/div&gt;</pre> </code> </div> <a href="javascript:void(0);" class="collapse" data-max-height="1250px" data-text-open="View source" data-text-close="Hide source"> View source </a> <div id="select_datetime"></div> <h2>DateRangePicker</h2> <p> DateRangePicker class allows you to select a <strong>date range</strong>. See <a href="https://github.com/marcellosurdi/DateTimePickerComponent#daterangepicker-classes">documentation</a> on GitHub. </p> <h3 id="example5">Example 5</h3> <p> Here we've set 2 days of minimum range (<code>min_range_hours: 48</code>) </p> <div class="collapsible-element"> <code class="code-block js"> <pre>new DateRangePicker( 'start_date', 'end_date', {
 min_range_hours: 48,
 } );</pre> </code> <code class="code-block html"> <pre>&lt;div id="start_date"&gt;&lt;/div&gt;
 &lt;div id="end_date"&gt;&lt;/div&gt;
-</pre> </code> </div> <a href="javascript:void(0);" class="collapse" data-max-height="1000px" data-text-open="View source" data-text-close="Hide source"> View source </a> <div id="start_date"></div> <div id="end_date"></div> <h2>DateTimeRangePicker</h2> <p> DateTimeRangePicker class allows you to select a <strong>date/time range</strong>. See <a href="https://github.com/marcellosurdi/DateTimePickerComponent#daterangepicker-classes">documentation</a> on GitHub. </p> <h3>Example 6</h3> <p> In this example <code>input.date_output</code> elements overwrite <code>settings.start_date</code> and <code>settings.end_date</code>. </p> <div class="collapsible-element"> <code class="code-block js"> <pre>new DateTimeRangePicker( 'start_date_time', 'end_date_time', {
+</pre> </code> </div> <a href="javascript:void(0);" class="collapse" data-max-height="1000px" data-text-open="View source" data-text-close="Hide source"> View source </a> <div id="start_date"></div> <div id="end_date"></div> <h2>DateTimeRangePicker</h2> <p> DateTimeRangePicker class allows you to select a <strong>date/time range</strong>. See <a href="https://github.com/marcellosurdi/DateTimePickerComponent#daterangepicker-classes">documentation</a> on GitHub. </p> <h3 id="example6">Example 6</h3> <p> In this example <code>input.date_output</code> elements overwrite <code>settings.start_date</code> and <code>settings.end_date</code>. <code>settings.round_to</code> property enables the time picker with select elements. Minutes are rounded to the `round_to` value (<code>5</code>) and his multiples. </p> <div class="collapsible-element"> <code class="code-block js"> <pre>new DateTimeRangePicker( 'start_date_time', 'end_date_time', {
 first_date: "2030-01-02T10:30:00",
 start_date: "2030-01-05T16:00:00",
 end_date: "2030-01-06T18:00:00",
 last_date: new Date( 2030, 0, 29, 14, 0 ),
 first_day_no: 1,
+round_to: 5,
 date_output: "timestamp",
 styles: {
   active_background: '#e34c26',
@@ -167,6 +169,7 @@ min_range_hours: 18
     'fri_':'Venerdì',
     'sat_':'Sabato',
     'sun_':'Domenica',
+    'done':'Imposta'
   };
 
   new DateTimePickerComponent.DateTimePicker( 'select_datetime', {
@@ -194,6 +197,7 @@ min_range_hours: 18
     end_date: "2030-01-06T18:00:00",
     last_date: new Date( 2030, 0, 29, 14, 0 ),
     first_day_no: 1,
+    round_to: 5,
     date_output: "timestamp",
     styles: {
       active_background: '#e34c26',

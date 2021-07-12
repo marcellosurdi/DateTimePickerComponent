@@ -1,7 +1,6 @@
 /**
  * @module js/date-time-range-picker
  * @author Marcello Surdi
- * @version 1.0.0
  *
  * @desc
  * This module contains the DateTimeRangePicker class
@@ -30,6 +29,7 @@ DateTimeRangePicker.prototype.constructor = DateTimeRangePicker;
  *  end_date: "2030-01-06T18:00:00",
  *  last_date: new Date( 2030, 0, 29, 14, 0 ),
  *  first_day_no: 1,
+ *  round_to: 30,
  *  date_output: "timestamp",
  *  styles: {
  *    active_background: '#e34c26',
@@ -49,6 +49,7 @@ export function DateTimeRangePicker( start_id, end_id, settings = {} ) {
 
   // Settings
   this.i18n = ( settings.l10n ) ? settings.l10n : this.i18n;
+  this.round_to = ( settings.round_to ) ? settings.round_to : false;
   this.date_output = ( settings.date_output ) ? settings.date_output : 'full_ISO';
   this.min_range = ( settings.min_range_hours ) ? ( settings.min_range_hours * 60 * 60 * 1000 ) : ( 1 * 60 * 60 * 1000 );
 
@@ -78,7 +79,7 @@ export function DateTimeRangePicker( start_id, end_id, settings = {} ) {
 
   // End date
   this.end_container.classList.add( 'datetime-container', 'fix-float' );
-  this.end_container.insertAdjacentHTML( 'afterbegin', this.getHTML( 'end', 'datetime', styles ) );
+  this.end_container.insertAdjacentHTML( 'afterbegin', this.getHTML( 'end', 'datetime' ) );
   this.printDateAndTime( this.end_container, this.end_date );
 
   this.end_date_btn = this.end_container.querySelector( 'button.date.end' );

@@ -8,6 +8,7 @@ Added an **alternative time picker** with two select elements, one for the hours
 - `settings.round_to` property for DateTimePicker and DateTimeRangePicker classes;
 - `name` attribute in `input.date_output` fields;
 - `i18n.done` property.
+- CHANGELOG.md
 
 ### Changed
 - README.md documentation improved

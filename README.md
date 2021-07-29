@@ -1,6 +1,5 @@
 # DateTimePickerComponent
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/marcellosurdi/DateTimePickerComponent)
-![npm](https://img.shields.io/npm/dw/date-time-picker-component)
 
 ## Description
 DateTimePickerComponent is a very lightweight (just over 20KB) and dependency-free web component written in pure JavaScript. It supports localization, date formats, range selections and disabled dates. [See the online demo](https://www.marcellosurdi.name/demo/date-time-picker-component_1.1.0/index.html).

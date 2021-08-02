@@ -2,7 +2,7 @@
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/marcellosurdi/DateTimePickerComponent)
 
 ## Description
-DateTimePickerComponent is a very lightweight (just over 20KB) and dependency-free web component written in pure JavaScript. It supports localization, date formats, range selections and disabled dates. [See the online demo](https://www.marcellosurdi.name/demo/date-time-picker-component_1.1.0/index.html).
+DateTimePickerComponent is a very lightweight (just over 20KB) and dependency-free web component written in pure JavaScript. It supports localization, date formats, range selections and disabled dates. [See the online demo](https://www.marcellosurdi.name/demo/date-time-picker-component_1.1.2/index.html).
 
 ![Date picker](https://www.marcellosurdi.name/demo/date-time-picker-component/img/screenshot-date-picker.png "Date picker")
 ![Time picker](https://www.marcellosurdi.name/demo/date-time-picker-component/img/screenshot-time-picker.png "Time picker")
@@ -114,7 +114,7 @@ let selection = document.querySelector( 'div#select_date input.date_output' ).va
 See the settings section below to know supported date time formats.
 
 ### Date*Picker classes
-DatePicker and DateTimePicker classes allow to select a date or a date/time respectively, [see the online demo](https://www.marcellosurdi.name/demo/date-time-picker-component_1.1.0/index.html).
+DatePicker and DateTimePicker classes allow to select a date or a date/time respectively, [see the online demo](https://www.marcellosurdi.name/demo/date-time-picker-component_1.1.2/index.html).
 
 #### Params
 | Property | Type | Default | Description |
@@ -153,7 +153,7 @@ And the corresponding HTML:
 ```
 
 ### Date*RangePicker classes
-DateRangePicker and DateTimeRangePicker classes allow to select a date range or a date/time range respectively, [see the online demo](https://www.marcellosurdi.name/demo/date-time-picker-component_1.1.0/index.html#example5).
+DateRangePicker and DateTimeRangePicker classes allow to select a date range or a date/time range respectively, [see the online demo](https://www.marcellosurdi.name/demo/date-time-picker-component_1.1.2/index.html#example5).
 
 #### Params
 | Property | Type | Default | Description |
@@ -206,7 +206,7 @@ And the corresponding HTML:
 | `start_date`      | `{Date\|string}` | One day more than current date  | Start selected date |
 | `last_date`       | `{Date\|string}` | One year more than `start_date` | Last selectable date |
 | `first_day_no`    | `{number}`       | `0` (Sunday)                    | Day the week must start with. Accepted range values are 0-6 where 0 means Sunday, 1 means Monday and so on |
-| `date_output`     | `{string}`       | `"short_ISO"` or `"full_ISO"`   | The date format returned to the value attribute of `input.date_output`. Accepted values are short_ISO (default for Date* classes, e.g. `"2030-01-05"`), full_ISO (default for DateTime* classes, e.g. `"2021-07-16T09:30:00"`) and timestamp (without milliseconds). |
+| `date_output`     | `{string}`       | `"short_ISO"` or `"full_ISO"`   | The date format returned to the value attribute of `input.date_output`. Accepted values are `short_ISO` (default for Date* classes, e.g. `"2030-01-05"`), `full_ISO` (default for DateTime* classes, e.g. `"2021-07-16T09:30:00"`) and `timestamp` (without milliseconds). |
 | `l10n`            | `{object}`       | Object with English strings     | Object with strings for translation |
 | `styles`          | `{object}`       | `{}`                            | Object with custom styles |
 
@@ -224,7 +224,7 @@ With DateTimePicker and DateTimeRangePicker classes it also make sense to set th
 | -------- | ---- | ------- | ----------- |
 | `round_to`   | `{number}` | `false`  | Value to round minutes of time picker. Accepted values are `1`, `5`, `10`, `15`, `20`, `30` |
 
-If you don't set this property you'll see the time picker exactly as the 1.0.x version (see [example 4](https://www.marcellosurdi.name/demo/date-time-picker-component_1.1.0/index.html#example4)). If you set this property you'll get a time picker with two select elements, one for the hours and one for the minutes (see [example 6](https://www.marcellosurdi.name/demo/date-time-picker-component_1.1.0/index.html#example6)). Minutes will be rounded **to the `round_to` value and his multiples**. For instance with `round_to` set to `15`, the options in the select element will be `00`, `15`, `30`, `45`; with `round_to` set to `20`, the options will be `00`, `20`, `40` and so on. `1` (or an unaccepted value) will show all values from `00` to `59`.
+If you don't set this property you'll see the time picker exactly as the 1.0.x version (see [example 4](https://www.marcellosurdi.name/demo/date-time-picker-component_1.1.2/index.html#example4)). If you set this property you'll get a time picker with two select elements, one for the hours and one for the minutes (see [example 6](https://www.marcellosurdi.name/demo/date-time-picker-component_1.1.2/index.html#example6)). Minutes will be rounded **to the `round_to` value and his multiples**. For instance with `round_to` set to `15`, the options in the select element will be `00`, `15`, `30`, `45`; with `round_to` set to `20`, the options will be `00`, `20`, `40` and so on. `1` (or an unaccepted value) will show all values from `00` to `59`.
 
 ``` javascript
 new DateTimeRangePicker( 'start_date_time', 'end_date_time', {
@@ -363,6 +363,6 @@ That's it!
 Let me know [with a link](mailto:marcellosurdi@gmail.com) if you've used DateTimePickerComponent in some interesting way, or on a popular site.
 
 ## Links
-1. [Online demo](https://www.marcellosurdi.name/demo/date-time-picker-component_1.1.0/index.html)
-2. [Source code documentation](https://www.marcellosurdi.name/docs/date-time-picker-component_1.1.0/)
+1. [Online demo](https://www.marcellosurdi.name/demo/date-time-picker-component_1.1.2/index.html)
+2. [Source code documentation](https://www.marcellosurdi.name/docs/date-time-picker-component_1.1.2/)
 3. [Changelog](https://github.com/marcellosurdi/DateTimePickerComponent/blob/master/CHANGELOG.md)

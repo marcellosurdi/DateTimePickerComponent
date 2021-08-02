@@ -595,7 +595,7 @@ export function PickerBase() {
    * @param {Date} date Date to be displayed
    *
    * @see {@link module:js/picker-base.PickerBase~getWeekDayNo|getWeekDayNo}
-   * @see {@link module:js/picker-base.PickerBase~date2ISO|date2ISO}
+   * @see {@link module:js/picker-base.PickerBase~date2ISOString|date2ISOString}
    */
   this.printDateAndTime = function( div, date ) {
     // Displays date
@@ -628,7 +628,7 @@ export function PickerBase() {
 
     // Outputs date and time according to this.date_output
     let output_date;
-    const full_iso = date2ISO( date );
+    const full_iso = date2ISOString( date );
     switch( this.date_output ) {
       // YYYY-MM-DDTHH:mm:ss
       case 'full_ISO':
@@ -643,7 +643,7 @@ export function PickerBase() {
       // Timestamp value without milliseconds
       case 'timestamp':
       default:
-        output_date = Math.round( date.getTime() / 1000 );
+        output_date = date2UTCTimestamp( date );
     }
 
     div.querySelector( 'input.date_output' ).value = output_date;
@@ -1173,13 +1173,30 @@ export function PickerBase() {
    *
    * @param {Date} d
    */
-  function date2ISO( d ) {
+  function date2ISOString( d ) {
     const YYYY = d.getFullYear();
     const MO = ( '0' + ( d.getMonth() + 1 ) ).slice( -2 );
     const DD = ( '0' + d.getDate() ).slice( -2 );
     const HH = ( '0' + d.getHours() ).slice( -2 );
     const MI = ( '0' + d.getMinutes() ).slice( -2 );
     return `${ YYYY }-${ MO }-${ DD }T${ HH }:${ MI }:00`;
+  }
+
+
+
+
+
+  /**
+   * Returns a UTC timestamp from a local date passed as parameter.
+   * It's used by {@link module:js/picker-base.PickerBase#printDateAndTime|printDateAndTime}.
+   *
+   * @param {Date} d
+   *
+   * @see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/UTC|Date.UTC}
+   */
+  function date2UTCTimestamp( d ) {
+    const utc_timestamp = Date.UTC( d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes(), 0, 0 );
+    return Math.floor( utc_timestamp / 1000 );
   }
 
 
@@ -1198,14 +1215,14 @@ export function PickerBase() {
    * @param {HTMLInputElement|null} [input=null] A hidden input field with ISO date string in its value attribute
    * @return {Date}
    *
-   * @see {@link module:js/picker-base.PickerBase~ISO2Date|ISO2Date}
+   * @see {@link module:js/picker-base.PickerBase~ISOString2Date|ISOString2Date}
    */
   function getDateBetween( date_default, date_param, input = null ) {
     let date;
 
     const prev_date = input?.value;
     if( prev_date ) {
-      date = ISO2Date( prev_date );
+      date = ISOString2Date( prev_date );
       if( date ) return date;
     }
 
@@ -1215,7 +1232,7 @@ export function PickerBase() {
       }
 
       if( typeof date_param == 'string' ) {
-        date = ISO2Date( date_param );
+        date = ISOString2Date( date_param );
         if( date ) return date;
       }
     }
@@ -1250,19 +1267,19 @@ export function PickerBase() {
 
   /**
    * @desc
-   * Tries to convert `iso_date` in a valid Date object (always in local time).
+   * Tries to convert a date string in ISO format `iso_date` in a valid Date object in local time.
    * Accepted values are 'HHHH-MM-DD' and 'HHHH-MM-DDTHH:mm:ss''.
    *
-   * @param {string} iso_date Date string
+   * @param {string} iso_date Date string in ISO format
    * @return {Date|null} `Date` if `iso_date` had a right pattern and was a valid date, `null` otherwise
    *
    * @see {@link https://css-tricks.com/everything-you-need-to-know-about-date-in-javascript/|Everything you need to know about date in JavaScript}
    */
-  function ISO2Date( iso_date ) {
+  function ISOString2Date( iso_date ) {
     let date = null;
     const arr = iso_date.match( /^(\d{4})-(\d{2})-(\d{2})(T(\d{2}):(\d{2}):(\d{2}))?$/ );
 
-    // If `iso_date` has the right pattern and it's a valid date (i.e. new Date doesn't return NaN)
+    // If `iso_date` has the right pattern and it's a valid date (otherwise new Date returns NaN)
     if( arr && +new Date( arr[0] ) ) {
       const year = arr[1];
       const month = arr[2] - 1;

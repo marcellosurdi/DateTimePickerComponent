@@ -51,8 +51,9 @@ export function DatePicker( id, settings = {} ) {
   const first_date = ( settings.first_date ) ? settings.first_date : null;
   const last_date = ( settings.last_date ) ? settings.last_date : null;
   const first_day_no = ( typeof settings.first_day_no !== 'undefined' ) ? settings.first_day_no : 0;
+  const change_handler = ( typeof settings.change_handler === 'function' ) ? settings.change_handler : null;
   const styles = ( settings.styles ) ? settings.styles : {};
-  this.setStartPickerProps( id, start_date, first_date, last_date, first_day_no );
+  this.setStartPickerProps( id, start_date, first_date, last_date, first_day_no, change_handler );
 
 
   // Start date

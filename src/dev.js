@@ -13,6 +13,7 @@ new DatePicker( 'select_date_2', {
   last_date: new Date( 2030, 0, 29 ),
   first_day_no: 1,
   date_output: "timestamp",
+  change_handler: function( new_date, old_date ) { console.log( new_date ); console.log( old_date ); },
   styles: {
     active_background: '#e34c26',
     active_color: '#fff'

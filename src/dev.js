@@ -13,7 +13,6 @@ new DatePicker( 'select_date_2', {
   last_date: new Date( 2030, 0, 29 ),
   first_day_no: 1,
   date_output: "timestamp",
-  change_handler: function( new_date, old_date ) { console.log( new_date ); console.log( old_date ); },
   styles: {
     active_background: '#e34c26',
     active_color: '#fff'
@@ -96,6 +95,12 @@ new DateTimeRangePicker( 'start_date_time', 'end_date_time', {
   end_date: "2030-01-06T18:00:00",
   last_date: new Date( 2030, 0, 29, 14, 0 ),
   first_day_no: 1,
+  change_handler: function( new_date, old_date, mode ) {
+    document.getElementById( 'output' ).innerHTML =
+    '<strong>new_date</strong>: ' + new_date + '<br>' +
+    '<strong>old_date</strong>: ' + old_date + '<br>' +
+    '<strong>mode</strong>: ' + mode;
+  },
   round_to: 5,
   date_output: "timestamp",
   styles: {

@@ -21,3 +21,5 @@ span.code-label.js { background-color: #f1e05a; color: #000; }
 div.collapsible-element { border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; background-color: #f6f8fa; max-height: 0; padding: 0 10px; overflow: hidden; transition: all .25s ease-out }
 a.collapse { display: inline-block; padding: 5px 10px 5px 5px; }
 a.collapse.active { border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; background-color: #f6f8fa; }
+
+div.output { background-color: #ffc; padding: 10px; }

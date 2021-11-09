@@ -215,6 +215,12 @@ start_date: "2030-01-05T16:00:00",
 end_date: "2030-01-06T18:00:00",
 last_date: new Date( 2030, 0, 29, 14, 0 ),
 first_day_no: 1,
+change_handler: function( new_date, old_date, mode ) {
+  document.getElementById( 'output' ).innerHTML =
+  '&lt;strong&gt;new_date&lt;/strong&gt;: ' + new_date + '&lt;br&gt;' +
+  '&lt;strong&gt;old_date&lt;/strong&gt;: ' + old_date + '&lt;br&gt;' +
+  '&lt;strong&gt;mode&lt;/strong&gt;: ' + mode;
+},
 round_to: 5,
 date_output: "timestamp",
 styles: {
@@ -233,6 +239,7 @@ min_range_hours: 18
 &lt;div id="end_date_time"&gt;
 &lt;input type="hidden" class="date_output" value="2030-01-07T16:00:00"&gt;
 &lt;/div&gt;
+&lt;div id="output" class="output"&gt;&lt;/div&gt;
 </pre>
       </code>
     </div><!-- /.collapsible-element -->
@@ -245,6 +252,7 @@ min_range_hours: 18
     <div id="end_date_time">
       <input type="hidden" class="date_output" value="2030-01-07T16:00:00">
     </div>
+    <div id="output" class="output"></div>
 
     <div id="footer">
       &copy 2021 <a href="https://github.com/marcellosurdi">Marcello Surdi</a> - <a href="https://github.com/marcellosurdi/DateTimePickerComponent/blob/master/LICENSE">MIT License</a>

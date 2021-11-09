@@ -625,12 +625,15 @@ export function PickerBase() {
       minutes.textContent = `:${ ( '0' + date.getMinutes() ).slice( -2 ) }`;
     }
 
+    // Executes a custom handler when date changes
     if( this.change_handler ) {
       const current_output = div.querySelector( 'input.date_output' ).value;
-      let old_date = ISO2Date( current_output );
-      if( !old_date ) old_date = new Date( +current_output * 1000 );
-      console.log( old_date );
-      // change_handler( date );
+      if( current_output ) {
+        let old_date = ISO2Date( current_output );
+        if( !old_date ) old_date = new Date( +current_output * 1000 );
+
+        this.change_handler( date, old_date, mode );
+      }
     }
 
     // Outputs date and time according to this.date_output

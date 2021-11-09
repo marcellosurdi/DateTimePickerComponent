@@ -111,6 +111,12 @@
     first_day_no: 1,
     round_to: 5,
     date_output: "timestamp",
+    change_handler: function( new_date, old_date, mode ) {
+      document.getElementById( 'output' ).innerHTML =
+      '<strong>new_date</strong>: ' + new_date + '<br>' +
+      '<strong>old_date</strong>: ' + old_date + '<br>' +
+      '<strong>mode</strong>: ' + mode;
+    },
     styles: {
       active_background: '#e34c26',
       active_color: '#fff',

@@ -24,7 +24,7 @@
   "author": "Marcello Surdi <marcello.surdi@gmail.com> (https://www.marcellosurdi.name)",
   "license": "MIT",
   "scripts": {
-    "dev": "webpack serve --config config/webpack.dev.js --open chrome",
+    "dev": "webpack serve --config config/webpack.dev.js --open brave-browser",
     "build": "webpack --config config/webpack.prod.js",
     "jsdoc": "jsdoc -r src -d docs -R README.md -c jsdoc.json"
   },
@@ -49,6 +49,5 @@
     "webpack-cli": "^4.7.0",
     "webpack-dev-server": "^3.11.2",
     "webpack-merge": "^5.7.3"
-  },
-  "dependencies": {}
+  }
 }

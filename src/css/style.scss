@@ -11,10 +11,8 @@ $arrow_end: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width=
 
 
 
-
-
 // Top level containers
-div.datetime-container, div.datetime-container * { box-sizing: border-box; font-family: arial, sans-serif; color: $active_color; }
+div.datetime-container, div.datetime-container * { box-sizing: border-box; font-family: arial, sans-serif; }
 .fix-float::after { content: ''; display: table; clear: both; }
 div.datetime-container {
   position: relative;
@@ -78,6 +76,7 @@ div.datetime-container {
           margin: 0 auto;
           border-collapse: collapse;
           width: 100%;
+          color: #000;
         }
 
         table a {

@@ -3,16 +3,16 @@
   "description": "DateTimePickerComponent is a very lightweight and dependency-free web component written in pure JavaScript.",
   "version": "1.1.8",
   "keywords": [
-    "date",
+    "lightweight",
     "time",
+    "date",
+    "calendar",
+    "vanilla-javascript",
     "range",
     "picker",
-    "calendar",
-    "lightweight",
-    "mobile-friendly",
-    "vanilla-javascript"
+    "mobile-friendly"
   ],
-  "main": "dist/js/date-time-picker-component.js",
+  "main": "dist/js/date-time-picker-component.min.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/marcellosurdi/DateTimePickerComponent.git"

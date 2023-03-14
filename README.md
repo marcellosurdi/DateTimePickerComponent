@@ -4,8 +4,8 @@
 ## Description
 DateTimePickerComponent is a very lightweight (just over 20KB) and dependency-free web component written in pure JavaScript. It supports localization, date formats, range selections and disabled dates. [See the online demo](https://www.marcellosurdi.name/demo/date-time-picker-component_1.1.2/index.html).
 
-![Date picker](https://www.marcellosurdi.name/demo/date-time-picker-component/img/screenshot-date-picker.png "Date picker")
-![Time picker](https://www.marcellosurdi.name/demo/date-time-picker-component/img/screenshot-time-picker.png "Time picker")
+![Date picker](https://www.marcellosurdi.name/demo/date-time-picker-component@latest/img/screenshot-date-picker.png "Date picker")
+![Time picker](https://www.marcellosurdi.name/demo/date-time-picker-component@latest/img/screenshot-time-picker.png "Time picker")
 
 ## Motivation
 Some time ago, during the development of some booking applications, I needed a date time picker that didn't require any heavy dependencies. I didn't find anything that met all my needs and browser's native implementations are currently inconsistent, so I developed mine.
@@ -245,7 +245,7 @@ new DateTimeRangePicker( 'start_date_time', 'end_date_time', {
 } );
 ```
 
-![Alternative time picker](https://www.marcellosurdi.name/demo/date-time-picker-component/img/screenshot-alternative-time-picker.png "Alternative time picker")
+![Alternative time picker](https://www.marcellosurdi.name/demo/date-time-picker-component@latest/img/screenshot-alternative-time-picker.png "Alternative time picker")
 
 ### Localization (i10n)
 All classes support the `settings.l10n` property to localize the component in your language. You just have to pass an object like the one below to that property.
@@ -324,7 +324,7 @@ new DateTimeRangePicker( 'start_date_time', 'end_date_time', {
 
 All you need to do is to use `active_background`, `active_color`, `inactive_background` and `inactive_color` properties like above. Active colors denote the clicked buttons and the day/hour you're setting, inactive colors the other day in the range. Date\*Picker classes of course don't support inactive_\* properties because there isn't a range.
 
-![Color scheme](https://www.marcellosurdi.name/demo/date-time-picker-component/img/screenshot-color-scheme.png "Color scheme")
+![Color scheme](https://www.marcellosurdi.name/demo/date-time-picker-component@latest/img/screenshot-color-scheme.png "Color scheme")
 
 ### Maintaining state
 To set date time default or to retain the date time selection after a page reload due, for instance, to a failed validation, you can add by yourself the `input.date_output` inside the top level `div` in this way:
@@ -356,6 +356,7 @@ To compile DateTimePickerComponent by yourself, make sure that you have [Node.js
 2. From the command line go to the local DateTimePickerComponent folder.
 3. Run `npm install` and wait for the necessary modules installation. [Webpack](https://webpack.js.org/guides/installation/#root) will be installed, look at the other dev dependencies in the `package.json` file.
 4. The `npm run dev` command opens a new Chrome window for developing purposes, `npm run build` compiles in `dist` folder.
+4. The `npm run jsdoc` command generates the code documentation in `docs` folder.
 
 That's it!
 
@@ -363,6 +364,5 @@ That's it!
 Let me know [with a link](mailto:marcellosurdi@gmail.com) if you've used DateTimePickerComponent in some interesting way, or on a popular site.
 
 ## Links
-1. [Online demo](https://www.marcellosurdi.name/demo/date-time-picker-component_1.1.2/index.html)
-2. [Source code documentation](https://www.marcellosurdi.name/docs/date-time-picker-component_1.1.2/)
-3. [Changelog](https://github.com/marcellosurdi/DateTimePickerComponent/blob/master/CHANGELOG.md)
+1. [Online demo](https://www.marcellosurdi.name/demo/date-time-picker-component@latest/index.html)
+2. [Changelog](https://github.com/marcellosurdi/DateTimePickerComponent/blob/master/CHANGELOG.md)

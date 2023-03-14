@@ -1,7 +1,6 @@
 const path = require( 'path' );
 const paths = require( './project-paths' );
 const { CleanWebpackPlugin } = require( 'clean-webpack-plugin' );
-const CopyWebpackPlugin = require( 'copy-webpack-plugin' );
 
 
 const config = {
@@ -53,19 +52,6 @@ const config = {
 
   plugins: [
     new CleanWebpackPlugin( {} ),
-
-    new CopyWebpackPlugin({
-      patterns: [
-        {
-          from: paths.static + '/css',
-          to: paths.build + '/css'
-        },
-        {
-          from: paths.static + '/js',
-          to: paths.build + '/js'
-        },
-      ],
-    }),
   ],
 };
 

@@ -2,7 +2,7 @@
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/marcellosurdi/DateTimePickerComponent)
 
 ## Description
-DateTimePickerComponent is a very lightweight (just over 20KB) and dependency-free web component written in pure JavaScript. It supports localization, date formats, range selections and disabled dates. [See the online demo](https://www.marcellosurdi.name/demo/date-time-picker-component_1.1.2/index.html).
+DateTimePickerComponent is a very lightweight (just over 20KB) and dependency-free web component written in pure JavaScript. It supports localization, date formats, range selections and disabled dates. [See the online demo](https://www.marcellosurdi.name/demo/date-time-picker-component@latest/index.html).
 
 ![Date picker](https://www.marcellosurdi.name/demo/date-time-picker-component@latest/img/screenshot-date-picker.png "Date picker")
 ![Time picker](https://www.marcellosurdi.name/demo/date-time-picker-component@latest/img/screenshot-time-picker.png "Time picker")
@@ -114,7 +114,7 @@ let selection = document.querySelector( 'div#select_date input.date_output' ).va
 See the settings section below to know supported date time formats.
 
 ### Date*Picker classes
-DatePicker and DateTimePicker classes allow to select a date or a date/time respectively, [see the online demo](https://www.marcellosurdi.name/demo/date-time-picker-component_1.1.2/index.html).
+DatePicker and DateTimePicker classes allow to select a date or a date/time respectively, [see the online demo](https://www.marcellosurdi.name/demo/date-time-picker-component@latest/index.html).
 
 #### Params
 | Property | Type | Default | Description |
@@ -153,7 +153,7 @@ And the corresponding HTML:
 ```
 
 ### Date*RangePicker classes
-DateRangePicker and DateTimeRangePicker classes allow to select a date range or a date/time range respectively, [see the online demo](https://www.marcellosurdi.name/demo/date-time-picker-component_1.1.2/index.html#example5).
+DateRangePicker and DateTimeRangePicker classes allow to select a date range or a date/time range respectively, [see the online demo](https://www.marcellosurdi.name/demo/date-time-picker-component@latest/index.html#example5).
 
 #### Params
 | Property | Type | Default | Description |

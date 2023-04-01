@@ -843,7 +843,6 @@ export function PickerBase() {
    * @param {number} start_hour The first hour displayed in the time selector. Accepted range values are 0-23 where 0 means 00:00 (12AM) and 23 means 23:00 (11PM)
    * @param {number} end_hour The last hour displayed in the time selector. Accepted range values are 1-24 where 1 means 01:00 (1AM) and 24 means 24:00 (12AM)
    * @param {number} time_increment The length of time in minutes between times displayed in the time selector. E.g. 30 -> 30 minutes, 60 -> 1 hour. Accepted range values are 5-360
-   * @param {boolean} military_time
    *
    * @see {@link module:js/picker-base.PickerBase~getDateBetween|getDateBetween}
    * @see {@link module:js/picker-base.PickerBase~roundMinutes|roundMinutes}

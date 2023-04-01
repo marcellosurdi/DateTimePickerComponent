@@ -53,9 +53,12 @@ export function DateTimePicker( id, settings = {} ) {
   const start_date = ( settings.start_date ) ? settings.start_date : null;
   const first_date = ( settings.first_date ) ? settings.first_date : null;
   const last_date = ( settings.last_date ) ? settings.last_date : null;
+  const start_hour = ( settings.start_hour ) ? settings.start_hour : null;
+  const end_hour = ( settings.end_hour ) ? settings.end_hour : null;
+  const time_increment = ( settings.time_increment ) ? settings.time_increment : null;
   const first_day_no = ( typeof settings.first_day_no !== 'undefined' ) ? settings.first_day_no : 0;
   const styles = ( settings.styles ) ? settings.styles : {};
-  this.setStartPickerProps( id, start_date, first_date, last_date, first_day_no );
+  this.setStartPickerProps( id, start_date, first_date, last_date, first_day_no, start_hour, end_hour, time_increment );
 
 
   // Start date

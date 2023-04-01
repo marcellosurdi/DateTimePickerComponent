@@ -158,6 +158,9 @@ export function PickerBase() {
    * - `end_date` must always be less than `last_date`.
    * - `start_date` plus `min_range` must always be less or equal than `end_date`;
    * - `end_date` minus `min_range` must always be greater or equal than `start_date`;
+   * - `start_hour` must be a number between 0 and 23.
+   * - `end_hour` must be a number between 1 and 24, and greater than end hour.
+   * - `time_increment` must be a number between 5 and 360.
    *
    * It's used by both {@link module:js/picker-base.PickerBase#selectDay|selectDay}
    * and {@link module:js/picker-base.PickerBase#selectHour|selectHour} methods.
@@ -206,6 +209,25 @@ export function PickerBase() {
         if( end_date_ms >= last_date_ms ) {
           this.end_date.setHours( this.last_date.getHours(), this.last_date.getMinutes(), 0, 0 );
         }
+      }
+    }
+
+    // Make sure the hours fall within specified range
+    if (this.start_hour) {
+      if (this.start_hour < 0) {
+        this.start_hour = 0;
+      } else if (this.start_hour > 23) {
+        this.start_hour = 23;
+      }
+    }
+    if (this.end_hour) {
+      if (this.end_hour < 1) {
+        this.start_hour = 1;
+      } else if (this.start_hour > 24) {
+        this.start_hour = 24;
+      }
+      if (this.end_hour <= this.start_hour) {
+        this.end_hour++;
       }
     }
   }
@@ -575,7 +597,6 @@ export function PickerBase() {
         o.hour = arr[0] == 12 ? 12 : parseInt(arr[0]) + 12;
       }
       o.minute = arr[1];
-      // [ o.hour, o.minute ] = o.text.split(':');
     } else {
       o.prev_month = t.classList.contains('prev-month');
       o.next_month = t.classList.contains('next-month');
@@ -841,12 +862,16 @@ export function PickerBase() {
    * @param {Date|string|null} first_date_setting First selectable date from settings
    * @param {Date|string|null} last_date_setting Last selectable date from settings
    * @param {number} first_day_no Day the week must start with. Similarly to the returned values of `Date.getDate` method, accepted range values are 0-6 where 0 means Sunday, 1 means Monday and so on
+   * @param {number} start_hour The first hour displayed in the time selector. Accepted range values are 0-23 where 0 means 00:00 (12AM) and 23 means 23:00 (11PM)
+   * @param {number} end_hour The last hour displayed in the time selector. Accepted range values are 1-24 where 1 means 01:00 (1AM) and 24 means 24:00 (12AM)
+   * @param {number} time_increment The length of time in minutes between times displayed in the time selector. E.g. 30 -> 30 minutes, 60 -> 1 hour. Accepted range values are 5-360
    *
    * @see {@link module:js/picker-base.PickerBase~getDateBetween|getDateBetween}
    * @see {@link module:js/picker-base.PickerBase~roundMinutes|roundMinutes}
    * @see {@link module:js/picker-base.PickerBase~setDaysOrder|setDaysOrder}
    */
-  this.setStartPickerProps = function( id, start_date_setting, first_date_setting, last_date_setting, first_day_no ) {
+  this.setStartPickerProps = function( id, start_date_setting, first_date_setting, last_date_setting,
+                                       first_day_no, start_hour, end_hour, time_increment) {
     const el = document.getElementById( id );
     if( el == null || el.nodeName != 'DIV' ) {
       throw new Error( `Does div#${ id } exist? Please, check your HTML code` );
@@ -885,6 +910,9 @@ export function PickerBase() {
     this.start_date = start_date;
     this.first_date = first_date;
     this.last_date = last_date;
+    this.start_hour = start_hour;
+    this.end_hour = end_hour;
+    this.time_increment = time_increment;
   }
 
 
@@ -1133,25 +1161,43 @@ export function PickerBase() {
    * @see {@link module:js/picker-base.PickerBase#addOnSelectEvent|addOnSelectEvent}
    */
   this.showTimePicker = function( picker, day ) {
-    const hours = [
-      '00:00', '00:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:30', '04:00', '04:30', '05:00', '05:30', '06:00', '06:30', '07:00', '07:30',
-      '08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30',
-      '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30', '22:00', '22:30', '23:00', '23:30'
-    ];
+    const times = [];
+    // Populate 'times' array with specified times
+    const start = this.start_hour * 60|| 0;
+    const end = this.end_hour * 60 || 1440;
+    const time_inc = this.time_increment || 30;
+    for (let i = start; i < end; i += time_inc) {
+      let hours = Math.floor(i / 60);
+      let minutes = i % 60;
+      let am_pm = hours >= 12 ? 'PM' : 'AM';
+      if (hours > 12) {
+        hours -= 12;
+      } else if (hours == 0) {
+        hours = 12;
+      }
+      minutes = minutes < 10 ? '0' + minutes : minutes;
+      times.push(`${hours}:${minutes} ${am_pm}`);
+    }
 
     let i = 0, html = '', class_name;
 
-    // Nine rows
-    for( let j = 1; j < 9; j++ ) {
+    // If 12 times or less, use 4 columns. Otherwise, use 6
+    const numCols = times.length > 12 ? 6 : 3;
+
+    // Find number of rows needed
+    const numRows = Math.ceil(times.length / numCols) + 1;
+
+    // Rows
+    for( let j = 1; j < numRows; j++ ) {
       html += "<tr>";
 
-      // Six columns
-      for( i = 1 * i ; i < 6 * j; i++ ) {
-        if( hours[ i ] ) {
+      // Columns
+      for( i = 1 * i ; i < numCols * j; i++ ) {
+        if( times[ i ] ) {
           class_name = ''
-          class_name = this.getHourClassName( hours[ i ], day );
+          class_name = this.getHourClassName( times[ i ], day );
 
-          html += `<td class="${ class_name }">${ hours[ i ] }</td>`;
+          html += `<td class="${ class_name }">${ times[ i ] }</td>`;
         } else {
           html += `<td class="white-background disabled"></td>`;
         }

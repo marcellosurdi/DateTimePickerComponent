@@ -323,11 +323,14 @@ export function PickerBase() {
   this.getHourClassName = function( hour, date ) {
     const selected_hour = ( '0' + date.getHours() ).slice( -2 ) + ':' + ( '0' + date.getMinutes() ).slice( -2 );
 
-    const arr = hour.split( ':' );
-    const h = arr[ 0 ];
-    const m = arr[ 1 ];
-    // const [ h, m ] = hour.split( ':' );
-
+    const arr = hour.split(/:| /);
+    const m = arr[1];
+    let h = '';
+    if (arr[2] == 'AM') {
+      h = arr[0] == 12 ? 0 : arr[0];
+    } else {
+      h = arr[0] == 12 ? 12 : parseInt(arr[0]) + 12;
+    }
     const _curr_day = new Date( date );
     _curr_day.setHours( h, m, 0, 0 );
 

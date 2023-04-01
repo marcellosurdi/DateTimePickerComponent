@@ -158,9 +158,6 @@ export function PickerBase() {
    * - `end_date` must always be less than `last_date`.
    * - `start_date` plus `min_range` must always be less or equal than `end_date`;
    * - `end_date` minus `min_range` must always be greater or equal than `start_date`;
-   * - `start_hour` must be a number between 0 and 23.
-   * - `end_hour` must be a number between 1 and 24, and greater than end hour.
-   * - `time_increment` must be a number between 5 and 360.
    *
    * It's used by both {@link module:js/picker-base.PickerBase#selectDay|selectDay}
    * and {@link module:js/picker-base.PickerBase#selectHour|selectHour} methods.
@@ -184,50 +181,31 @@ export function PickerBase() {
       const end_date_ms = this.end_date.getTime();
 
       // start mode
-      if( mode == 'start' ) {
-        if( ( start_date_ms + this.min_range ) >= end_date_ms ) {
-          if( ( start_date_ms + this.min_range ) >= last_date_ms ) {
-            this.start_date.setTime( last_date_ms - this.min_range );
+      if (mode == 'start') {
+        if ((start_date_ms + this.min_range) >= end_date_ms) {
+          if ((start_date_ms + this.min_range) >= last_date_ms) {
+            this.start_date.setTime(last_date_ms - this.min_range);
           }
 
-          this.end_date.setTime( this.start_date.getTime() + this.min_range );
-          this.printDateAndTime( this.end_container, this.end_date );
+          this.end_date.setTime(this.start_date.getTime() + this.min_range);
+          this.printDateAndTime(this.end_container, this.end_date);
         }
       }
 
       // end mode
       else {
-        if( ( end_date_ms - this.min_range ) <= start_date_ms ) {
-          if( ( end_date_ms - this.min_range ) <= first_date_ms ) {
-            this.end_date.setTime( first_date_ms + this.min_range );
+        if ((end_date_ms - this.min_range) <= start_date_ms) {
+          if ((end_date_ms - this.min_range) <= first_date_ms) {
+            this.end_date.setTime(first_date_ms + this.min_range);
           }
 
-          this.start_date.setTime( this.end_date.getTime() - this.min_range );
-          this.printDateAndTime( this.start_container, this.start_date );
+          this.start_date.setTime(this.end_date.getTime() - this.min_range);
+          this.printDateAndTime(this.start_container, this.start_date);
         }
 
-        if( end_date_ms >= last_date_ms ) {
-          this.end_date.setHours( this.last_date.getHours(), this.last_date.getMinutes(), 0, 0 );
+        if (end_date_ms >= last_date_ms) {
+          this.end_date.setHours(this.last_date.getHours(), this.last_date.getMinutes(), 0, 0);
         }
-      }
-    }
-
-    // Make sure the hours fall within specified range
-    if (this.start_hour) {
-      if (this.start_hour < 0) {
-        this.start_hour = 0;
-      } else if (this.start_hour > 23) {
-        this.start_hour = 23;
-      }
-    }
-    if (this.end_hour) {
-      if (this.end_hour < 1) {
-        this.start_hour = 1;
-      } else if (this.start_hour > 24) {
-        this.start_hour = 24;
-      }
-      if (this.end_hour <= this.start_hour) {
-        this.end_hour++;
       }
     }
   }
@@ -865,6 +843,7 @@ export function PickerBase() {
    * @param {number} start_hour The first hour displayed in the time selector. Accepted range values are 0-23 where 0 means 00:00 (12AM) and 23 means 23:00 (11PM)
    * @param {number} end_hour The last hour displayed in the time selector. Accepted range values are 1-24 where 1 means 01:00 (1AM) and 24 means 24:00 (12AM)
    * @param {number} time_increment The length of time in minutes between times displayed in the time selector. E.g. 30 -> 30 minutes, 60 -> 1 hour. Accepted range values are 5-360
+   * @param {boolean} military_time
    *
    * @see {@link module:js/picker-base.PickerBase~getDateBetween|getDateBetween}
    * @see {@link module:js/picker-base.PickerBase~roundMinutes|roundMinutes}
@@ -905,6 +884,34 @@ export function PickerBase() {
     this.roundMinutes( [ start_date, first_date, last_date ] );
 
     setDaysOrder( first_day_no );
+
+    // Make sure set hours fall within specified range
+    if (start_hour) {
+      if (start_hour < 0) {
+        start_hour = 0;
+      } else if (start_hour > 23) {
+        start_hour = 23;
+      }
+    }
+    if (end_hour) {
+      if (end_hour < 1) {
+        end_hour = 1;
+      } else if (end_hour > 24) {
+        end_hour = 24;
+      }
+      if (end_hour <= start_hour) {
+        end_hour = start_hour + 1;
+      }
+    }
+
+    // Make sure time_increment is in specified range
+    if (time_increment) {
+      if (time_increment < 5) {
+        time_increment = 5;
+      } else if (time_increment > 360) {
+        time_increment = 360;
+      }
+    }
 
     this.start_container = el;
     this.start_date = start_date;

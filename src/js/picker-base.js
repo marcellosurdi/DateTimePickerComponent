@@ -568,8 +568,12 @@ export function PickerBase() {
     }
 
     if( if_hour ) {
-      let arr = o.text.split(':');
-      o.hour = arr[0];
+      const arr = o.text.split(/:| /);
+      if (arr[2] == 'AM') {
+        o.hour = arr[0] == 12 ? 0 : arr[0];
+      } else {
+        o.hour = arr[0] == 12 ? 12 : parseInt(arr[0]) + 12;
+      }
       o.minute = arr[1];
       // [ o.hour, o.minute ] = o.text.split(':');
     } else {
@@ -617,12 +621,20 @@ export function PickerBase() {
     const button_time = div.querySelector( 'button.time' );
     if( button_time ) {
       const time_coll = button_time.querySelectorAll( 'span' );
-      const hours = time_coll[ 0 ];
-      const minutes = time_coll[ 1 ];
-      // const [ hours, minutes ] = button_time.querySelectorAll( 'span' );
+      const displayTime = time_coll[ 0 ];
+      const displayAmPm = time_coll[ 1 ];
+      let amPm = '';
+      let displayHours = '';
+      if (date.getHours() >= 12) {
+        amPm = 'PM';
+        displayHours = date.getHours() == 12 ? 12 : date.getHours() - 12;
+      } else {
+        amPm = 'AM';
+        displayHours = date.getHours() == 0 ? 12 : date.getHours();
+      }
 
-      hours.textContent = ( '0' + date.getHours() ).slice( -2 );
-      minutes.textContent = `:${ ( '0' + date.getMinutes() ).slice( -2 ) }`;
+      displayTime.textContent = `${displayHours}:${ ( '0' + date.getMinutes() ).slice( -2 ) }`;
+      displayAmPm.textContent = amPm;
     }
 
 

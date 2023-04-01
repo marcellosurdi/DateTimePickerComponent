@@ -47,14 +47,21 @@ div.datetime-container {
 
     button > span { display: inline-block; margin: 0 -2px; }
     button span.week-day{ text-align: right; font-size: 14px; }
-    button span.month-day, button span.hours {
+    button span.month-day {
       width: 45px;
+      text-align: center;
+      font-size: 36px;
+    }
+    button span.hours {
       text-align: center;
       font-size: 36px;
     }
     button span.month-year { text-align: left; font-size: 16px; }
     span.month-year span { position: relative; top: 2px; font-weight: bold; font-size: 14px; }
-    button span.minutes { font-size: 18px; }
+    button span.minutes {
+      font-size: 18px;
+      margin-left: 2px;
+    }
 }
 
 

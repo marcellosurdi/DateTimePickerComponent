@@ -181,30 +181,30 @@ export function PickerBase() {
       const end_date_ms = this.end_date.getTime();
 
       // start mode
-      if( mode == 'start' ) {
-        if( ( start_date_ms + this.min_range ) >= end_date_ms ) {
-          if( ( start_date_ms + this.min_range ) >= last_date_ms ) {
-            this.start_date.setTime( last_date_ms - this.min_range );
+      if (mode == 'start') {
+        if ((start_date_ms + this.min_range) >= end_date_ms) {
+          if ((start_date_ms + this.min_range) >= last_date_ms) {
+            this.start_date.setTime(last_date_ms - this.min_range);
           }
 
-          this.end_date.setTime( this.start_date.getTime() + this.min_range );
-          this.printDateAndTime( this.end_container, this.end_date );
+          this.end_date.setTime(this.start_date.getTime() + this.min_range);
+          this.printDateAndTime(this.end_container, this.end_date);
         }
       }
 
       // end mode
       else {
-        if( ( end_date_ms - this.min_range ) <= start_date_ms ) {
-          if( ( end_date_ms - this.min_range ) <= first_date_ms ) {
-            this.end_date.setTime( first_date_ms + this.min_range );
+        if ((end_date_ms - this.min_range) <= start_date_ms) {
+          if ((end_date_ms - this.min_range) <= first_date_ms) {
+            this.end_date.setTime(first_date_ms + this.min_range);
           }
 
-          this.start_date.setTime( this.end_date.getTime() - this.min_range );
-          this.printDateAndTime( this.start_container, this.start_date );
+          this.start_date.setTime(this.end_date.getTime() - this.min_range);
+          this.printDateAndTime(this.start_container, this.start_date);
         }
 
-        if( end_date_ms >= last_date_ms ) {
-          this.end_date.setHours( this.last_date.getHours(), this.last_date.getMinutes(), 0, 0 );
+        if (end_date_ms >= last_date_ms) {
+          this.end_date.setHours(this.last_date.getHours(), this.last_date.getMinutes(), 0, 0);
         }
       }
     }
@@ -323,11 +323,14 @@ export function PickerBase() {
   this.getHourClassName = function( hour, date ) {
     const selected_hour = ( '0' + date.getHours() ).slice( -2 ) + ':' + ( '0' + date.getMinutes() ).slice( -2 );
 
-    const arr = hour.split( ':' );
-    const h = arr[ 0 ];
-    const m = arr[ 1 ];
-    // const [ h, m ] = hour.split( ':' );
-
+    const arr = hour.split(/:| /);
+    const m = arr[1];
+    let h = '';
+    if (arr[2] == 'AM') {
+      h = arr[0] == 12 ? 0 : arr[0];
+    } else {
+      h = arr[0] == 12 ? 12 : parseInt(arr[0]) + 12;
+    }
     const _curr_day = new Date( date );
     _curr_day.setHours( h, m, 0, 0 );
 
@@ -568,10 +571,13 @@ export function PickerBase() {
     }
 
     if( if_hour ) {
-      let arr = o.text.split(':');
-      o.hour = arr[0];
+      const arr = o.text.split(/:| /);
+      if (arr[2] == 'AM') {
+        o.hour = arr[0] == 12 ? 0 : arr[0];
+      } else {
+        o.hour = arr[0] == 12 ? 12 : parseInt(arr[0]) + 12;
+      }
       o.minute = arr[1];
-      // [ o.hour, o.minute ] = o.text.split(':');
     } else {
       o.prev_month = t.classList.contains('prev-month');
       o.next_month = t.classList.contains('next-month');
@@ -617,12 +623,20 @@ export function PickerBase() {
     const button_time = div.querySelector( 'button.time' );
     if( button_time ) {
       const time_coll = button_time.querySelectorAll( 'span' );
-      const hours = time_coll[ 0 ];
-      const minutes = time_coll[ 1 ];
-      // const [ hours, minutes ] = button_time.querySelectorAll( 'span' );
+      const displayTime = time_coll[ 0 ];
+      const displayAmPm = time_coll[ 1 ];
+      let amPm = '';
+      let displayHours = '';
+      if (date.getHours() >= 12) {
+        amPm = 'PM';
+        displayHours = date.getHours() == 12 ? 12 : date.getHours() - 12;
+      } else {
+        amPm = 'AM';
+        displayHours = date.getHours() == 0 ? 12 : date.getHours();
+      }
 
-      hours.textContent = ( '0' + date.getHours() ).slice( -2 );
-      minutes.textContent = `:${ ( '0' + date.getMinutes() ).slice( -2 ) }`;
+      displayTime.textContent = `${displayHours}:${ ( '0' + date.getMinutes() ).slice( -2 ) }`;
+      displayAmPm.textContent = amPm;
     }
 
 
@@ -829,12 +843,16 @@ export function PickerBase() {
    * @param {Date|string|null} first_date_setting First selectable date from settings
    * @param {Date|string|null} last_date_setting Last selectable date from settings
    * @param {number} first_day_no Day the week must start with. Similarly to the returned values of `Date.getDate` method, accepted range values are 0-6 where 0 means Sunday, 1 means Monday and so on
+   * @param {number} start_hour The first hour displayed in the time selector. Accepted range values are 0-23 where 0 means 00:00 (12AM) and 23 means 23:00 (11PM)
+   * @param {number} end_hour The last hour displayed in the time selector. Accepted range values are 1-24 where 1 means 01:00 (1AM) and 24 means 24:00 (12AM)
+   * @param {number} time_increment The length of time in minutes between times displayed in the time selector. E.g. 30 -> 30 minutes, 60 -> 1 hour. Accepted range values are 5-360
    *
    * @see {@link module:js/picker-base.PickerBase~getDateBetween|getDateBetween}
    * @see {@link module:js/picker-base.PickerBase~roundMinutes|roundMinutes}
    * @see {@link module:js/picker-base.PickerBase~setDaysOrder|setDaysOrder}
    */
-  this.setStartPickerProps = function( id, start_date_setting, first_date_setting, last_date_setting, first_day_no ) {
+  this.setStartPickerProps = function( id, start_date_setting, first_date_setting, last_date_setting,
+                                       first_day_no, start_hour, end_hour, time_increment) {
     const el = document.getElementById( id );
     if( el == null || el.nodeName != 'DIV' ) {
       throw new Error( `Does div#${ id } exist? Please, check your HTML code` );
@@ -869,10 +887,41 @@ export function PickerBase() {
 
     setDaysOrder( first_day_no );
 
+    // Make sure set hours fall within specified range
+    if (start_hour) {
+      if (start_hour < 0) {
+        start_hour = 0;
+      } else if (start_hour > 23) {
+        start_hour = 23;
+      }
+    }
+    if (end_hour) {
+      if (end_hour < 1) {
+        end_hour = 1;
+      } else if (end_hour > 24) {
+        end_hour = 24;
+      }
+      if (end_hour <= start_hour) {
+        end_hour = start_hour + 1;
+      }
+    }
+
+    // Make sure time_increment is in specified range
+    if (time_increment) {
+      if (time_increment < 5) {
+        time_increment = 5;
+      } else if (time_increment > 360) {
+        time_increment = 360;
+      }
+    }
+
     this.start_container = el;
     this.start_date = start_date;
     this.first_date = first_date;
     this.last_date = last_date;
+    this.start_hour = start_hour;
+    this.end_hour = end_hour;
+    this.time_increment = time_increment;
   }
 
 
@@ -1121,25 +1170,43 @@ export function PickerBase() {
    * @see {@link module:js/picker-base.PickerBase#addOnSelectEvent|addOnSelectEvent}
    */
   this.showTimePicker = function( picker, day ) {
-    const hours = [
-      '00:00', '00:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:30', '04:00', '04:30', '05:00', '05:30', '06:00', '06:30', '07:00', '07:30',
-      '08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30',
-      '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30', '22:00', '22:30', '23:00', '23:30'
-    ];
+    const times = [];
+    // Populate 'times' array with specified times
+    const start = this.start_hour * 60|| 0;
+    const end = this.end_hour * 60 || 1440;
+    const time_inc = this.time_increment || 30;
+    for (let i = start; i < end; i += time_inc) {
+      let hours = Math.floor(i / 60);
+      let minutes = i % 60;
+      let am_pm = hours >= 12 ? 'PM' : 'AM';
+      if (hours > 12) {
+        hours -= 12;
+      } else if (hours == 0) {
+        hours = 12;
+      }
+      minutes = minutes < 10 ? '0' + minutes : minutes;
+      times.push(`${hours}:${minutes} ${am_pm}`);
+    }
 
     let i = 0, html = '', class_name;
 
-    // Nine rows
-    for( let j = 1; j < 9; j++ ) {
+    // If 12 times or less, use 4 columns. Otherwise, use 6
+    const numCols = times.length > 12 ? 6 : 3;
+
+    // Find number of rows needed
+    const numRows = Math.ceil(times.length / numCols) + 1;
+
+    // Rows
+    for( let j = 1; j < numRows; j++ ) {
       html += "<tr>";
 
-      // Six columns
-      for( i = 1 * i ; i < 6 * j; i++ ) {
-        if( hours[ i ] ) {
+      // Columns
+      for( i = 1 * i ; i < numCols * j; i++ ) {
+        if( times[ i ] ) {
           class_name = ''
-          class_name = this.getHourClassName( hours[ i ], day );
+          class_name = this.getHourClassName( times[ i ], day );
 
-          html += `<td class="${ class_name }">${ hours[ i ] }</td>`;
+          html += `<td class="${ class_name }">${ times[ i ] }</td>`;
         } else {
           html += `<td class="white-background disabled"></td>`;
         }
